@@ -1,0 +1,22 @@
+{
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "forgot_password": "Forgot Password",
+    "send_link": "Send Link",
+    "dont_have_account": "Dont have an account? Register!",
+    "have_account": "Have an account? Login!",
+    "back_to_login": "Back to Login",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "verify_password": "Verify Password",
+    "logout_confirmation": "Are you sure to logout?",
+
+    "preferred_language": "Preferred Language",
+    "manage_account": "Manage Account",
+    "terms_privacy": "Terms & Privacy",
+    "change_account": "Change Account",
+    "account": "Account",
+    "reports": "Reports",
+    "cancel": "Cancel"
+}

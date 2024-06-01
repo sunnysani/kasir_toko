@@ -1,0 +1,22 @@
+{
+    "login": "Masuk",
+    "logout": "Keluar",
+    "register": "Daftar",
+    "forgot_password": "Lupa Password",
+    "send_link": "Kirim Link",
+    "dont_have_account": "Tidak punya akun? Daftar!",
+    "have_account": "Punya akun? Masuk!",
+    "back_to_login": "Kembali ke Masuk",
+    "first_name": "Nama Depan",
+    "last_name": "Nama Belakang",
+    "verify_password": "Verifikasi Password",
+    "logout_confirmation": "Apakah kamu yakin untuk keluar?",
+
+    "preferred_language": "Bahasa Pilihan",
+    "manage_account": "Kelola Akun",
+    "terms_privacy": "Syarat & Privasi",
+    "change_account": "Ganti Akun",
+    "account": "Akun",
+    "reports": "Laporan",
+    "cancel": "Batal"
+}
