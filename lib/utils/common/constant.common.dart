@@ -31,10 +31,10 @@ class Palette {
 
 class ButtonTextStyle {
   static const secondaryButtonStyle = ButtonStyle(
-    textStyle: MaterialStatePropertyAll(
+    textStyle: WidgetStatePropertyAll(
       TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
     ),
-    foregroundColor: MaterialStatePropertyAll(AppColors.mainColor),
-    backgroundColor: MaterialStatePropertyAll(AppColors.secondaryMainColor),
+    foregroundColor: WidgetStatePropertyAll(AppColors.mainColor),
+    backgroundColor: WidgetStatePropertyAll(AppColors.secondaryMainColor),
   );
 }

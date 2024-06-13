@@ -9,6 +9,7 @@ class PosTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Make below component reusable as in report_tab
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(

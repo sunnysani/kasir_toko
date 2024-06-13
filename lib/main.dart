@@ -16,6 +16,7 @@ import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_tax
 import 'package:kasir_toko/frontend/screens/pos_screens/pos_main_screen.dart';
 import 'package:kasir_toko/frontend/screens/pos_screens/pos_proceed_payment_screen.dart';
 import 'package:kasir_toko/frontend/screens/pos_screens/pos_proceed_receipt_screen.dart';
+import 'package:kasir_toko/frontend/screens/report_screens/report_main_screen.dart';
 import 'package:kasir_toko/frontend/screens/tab_screen/tab_screen.dart';
 import 'package:kasir_toko/l10n/l10n.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
@@ -155,6 +156,7 @@ class MyApp extends StatelessWidget {
                 const PosProceedPaymentScreen(),
             PosProceedReceiptScreen.routeName: (ctx) =>
                 const PosProceedReceiptScreen(),
+            ReportMainScreen.routeName: (ctx) => const ReportMainScreen(),
           },
           supportedLocales: L10n.supportedLanguages,
           localizationsDelegates: const [

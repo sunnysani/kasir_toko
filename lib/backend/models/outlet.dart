@@ -2,7 +2,8 @@ import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/backend/models/product.dart';
 import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:objectbox/objectbox.dart';
+import 'package:kasir_toko/objectbox.g.dart';
+import 'package:kasir_toko/utils/start_configs/static_db.dart';
 
 @Entity(uid: 2542198763334326311)
 class Outlet {
@@ -92,5 +93,20 @@ class Outlet {
     if (getAllActiveSortedPaymentMethods().isEmpty) return false;
 
     return true;
+  }
+
+  List<OrderRow> getOrderRowList(DateTime date) {
+    final startDayTime =
+        DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
+    final endDayTime =
+        DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
+
+    Query<OrderRow> query = StaticDB.orderRowBox
+        .query((OrderRow_.timeStamp.betweenDate(startDayTime, endDayTime)))
+        .build();
+    List<OrderRow> orderRowList = query.find();
+    query.close();
+
+    return orderRowList;
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:kasir_toko/backend/models/order_row.dart';
+import 'package:kasir_toko/backend/models/order_row_item.dart';
 import 'package:kasir_toko/backend/models/outlet.dart';
 import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/backend/models/product.dart';
@@ -16,6 +17,7 @@ class StaticDB {
   static late Box<Product> productBox;
   static late Box<PaymentMethod> paymentMethodBox;
   static late Box<OrderRow> orderRowBox;
+  static late Box<OrderRowItem> orderRowItemBox;
 
   static const singletonOutletId = 1;
 
@@ -32,6 +34,7 @@ class StaticDB {
     productBox = store.box<Product>();
     paymentMethodBox = store.box<PaymentMethod>();
     orderRowBox = store.box<OrderRow>();
+    orderRowItemBox = store.box<OrderRowItem>();
     // Order Item
     // productCategoryBox = store.box<ProductCategory>();
 
