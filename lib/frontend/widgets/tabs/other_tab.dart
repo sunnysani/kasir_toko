@@ -5,6 +5,7 @@ class OtherTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Build Other Tab');
     return const Placeholder();
   }
 }

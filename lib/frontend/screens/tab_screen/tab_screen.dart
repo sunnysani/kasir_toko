@@ -54,7 +54,6 @@ class _TabScreenState extends State<TabScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.storefront_outlined),
             label: 'Toko',
-            
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.point_of_sale),

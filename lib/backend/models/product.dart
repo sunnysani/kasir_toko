@@ -8,7 +8,7 @@ class Product implements Comparable<Product> {
   @Id()
   int id = 0;
   bool active;
-  // TODO: If there is new revision with existing item (same price), use that one instead of creating new product
+  @Backlink('product')
   final revisions = ToMany<ProductRevision>();
   final categories = ToMany<ProductCategory>();
   final outlet = ToOne<Outlet>();

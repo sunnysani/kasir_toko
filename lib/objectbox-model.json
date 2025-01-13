@@ -4,50 +4,6 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:2542198763334326311",
-      "lastPropertyId": "7:4459593711385785577",
-      "name": "Outlet",
-      "properties": [
-        {
-          "id": "1:6933070741095145811",
-          "name": "id",
-          "type": 6,
-          "flags": 129
-        },
-        {
-          "id": "2:1872052628146773427",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:2563186051625754433",
-          "name": "address",
-          "type": 9
-        },
-        {
-          "id": "4:6227155981172291115",
-          "name": "phoneNumber",
-          "type": 9
-        },
-        {
-          "id": "5:965984936511391196",
-          "name": "receiptMessage",
-          "type": 9
-        },
-        {
-          "id": "6:5661030839249149419",
-          "name": "activeTax",
-          "type": 1
-        },
-        {
-          "id": "7:4459593711385785577",
-          "name": "taxPercentage",
-          "type": 8
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "2:2539012349328530",
       "lastPropertyId": "5:4391943279528832848",
       "name": "PaymentMethod",
@@ -132,11 +88,6 @@
       ],
       "relations": [
         {
-          "id": "1:8930154353795273874",
-          "name": "revisions",
-          "targetId": "5:12846973592481"
-        },
-        {
           "id": "2:236069021593903646",
           "name": "categories",
           "targetId": "4:6617611348773466436"
@@ -177,7 +128,7 @@
     },
     {
       "id": "5:12846973592481",
-      "lastPropertyId": "6:4912880876948582691",
+      "lastPropertyId": "7:4455426604934092435",
       "name": "ProductRevision",
       "properties": [
         {
@@ -195,6 +146,14 @@
           "id": "4:7201161724556323480",
           "name": "price",
           "type": 8
+        },
+        {
+          "id": "7:4455426604934092435",
+          "name": "productId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "9:846710663453206054",
+          "relationTarget": "Product"
         }
       ],
       "relations": []
@@ -341,21 +300,84 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "10:2542198763334126311",
+      "lastPropertyId": "7:3377237826965667898",
+      "name": "Outlet",
+      "properties": [
+        {
+          "id": "1:5174283431022853019",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:1121591388550441851",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:5333370120388955754",
+          "name": "address",
+          "type": 9
+        },
+        {
+          "id": "4:474586892130838890",
+          "name": "phoneNumber",
+          "type": 9
+        },
+        {
+          "id": "5:1001330471433499191",
+          "name": "receiptMessage",
+          "type": 9
+        },
+        {
+          "id": "6:6824525921531499007",
+          "name": "activeTax",
+          "type": 1
+        },
+        {
+          "id": "7:3377237826965667898",
+          "name": "taxPercentage",
+          "type": 8
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "8:4805377593213751",
-  "lastIndexId": "8:2207489330736101344",
+  "lastEntityId": "10:2542198763334126311",
+  "lastIndexId": "9:846710663453206054",
   "lastRelationId": "4:5697342907911373828",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    2542198763334326311,
+    3207224150785922877
+  ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
     3859835816503269585,
     2390428648715422367,
-    4912880876948582691
+    4912880876948582691,
+    6933070741095145811,
+    1872052628146773427,
+    2563186051625754433,
+    6227155981172291115,
+    965984936511391196,
+    5661030839249149419,
+    4459593711385785577,
+    8962473758731357556,
+    4409864400498076608,
+    6249709944924276547,
+    6767596588166861664,
+    5166805166751715899,
+    5637540551721854729,
+    5175937979182934318
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    8930154353795273874
+  ],
   "version": 1
 }

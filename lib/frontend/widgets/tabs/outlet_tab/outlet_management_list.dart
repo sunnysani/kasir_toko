@@ -53,13 +53,13 @@ class _OutletManagementListState extends State<OutletManagementList> {
           refreshData: _refreshData,
         ),
         const SizedBox(height: 40),
-        OutletManagementTab(
-          title: 'Atur Perpajakan',
-          subtitle: 'Status Perpajakan: ${activeTax ? 'Aktif' : 'Nonaktif'}',
-          navigatorRoute: OutletTaxManagementScreen.routeName,
-          refreshData: _refreshData,
-        ),
-        const SizedBox(height: 40),
+        // OutletManagementTab(
+        //   title: 'Atur Perpajakan',
+        //   subtitle: 'Status Perpajakan: ${activeTax ? 'Aktif' : 'Nonaktif'}',
+        //   navigatorRoute: OutletTaxManagementScreen.routeName,
+        //   refreshData: _refreshData,
+        // ),
+        // const SizedBox(height: 40),
       ],
     );
   }

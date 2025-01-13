@@ -77,9 +77,8 @@ class _PosMainScreenState extends State<PosMainScreen> {
     productIdQuantityControllerMap.forEach((key, value) {
       int quantity = int.parse(value.text);
       if (quantity > 0) {
-        orderRow.addOrderRowItem(
-          OrderRowItem(relatedProductId: key, quantity: quantity),
-        );
+        orderRow.addOrderRowItem(OrderRowItem(quantity: quantity)
+          ..setProduct(StaticDB.productBox.get(key)!.id));
       }
     });
 

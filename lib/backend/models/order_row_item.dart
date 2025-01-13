@@ -13,16 +13,17 @@ class OrderRowItem implements Comparable<OrderRowItem> {
   final product = ToOne<Product>();
   final productRevision = ToOne<ProductRevision>();
   late final int quantity;
-  late final double totalPriceItem;
+  double totalPriceItem = 0;
 
   // Applied Discount
   // final discounts = ToMany<Discount>();
 
   OrderRowItem({
-    int? relatedProductId,
     required this.quantity,
-  }) {
-    product.target = StaticDB.productBox.get(relatedProductId ?? -1);
+  });
+
+  void setProduct(int relatedProductId) {
+    product.target = StaticDB.productBox.get(relatedProductId);
     productRevision.target = product.target?.getLatestRevision();
     totalPriceItem = quantity * productRevision.target!.price;
   }

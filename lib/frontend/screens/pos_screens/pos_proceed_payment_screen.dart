@@ -37,7 +37,10 @@ class PosProceedPaymentScreen extends StatelessWidget {
 
     // TODO: Find best way to include this function
     orderRow.timeStamp = DateTime.now();
-    print(StaticDB.orderRowItemBox.get(29));
+    for (final item in orderRow.orderRowItem) {
+      print(StaticDB.orderRowItemBox.put(item));
+    }
+    print("orderID: ${StaticDB.orderRowBox.put(orderRow)}");
 
     Navigator.of(context)
         .pushNamed(PosProceedReceiptScreen.routeName, arguments: orderRow)

@@ -54,18 +54,15 @@ class _PosTemplateState extends State<PosTemplate> {
               Align(
                 alignment: widget.childAlignment,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
+                  padding: EdgeInsets.fromLTRB(
+                    CommonFunction.getHorizontalPaddingForMaxWidth(
                         maxWidth: 550, context: context),
+                    20,
+                    CommonFunction.getHorizontalPaddingForMaxWidth(
+                        maxWidth: 550, context: context),
+                    90,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      bottom:
-                          90, // Predictive number to avoid widget.bottomSheetWidget
-                    ),
-                    child: widget.child,
-                  ),
+                  child: widget.child,
                 ),
               ),
               Align(

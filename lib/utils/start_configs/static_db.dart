@@ -6,6 +6,7 @@ import 'package:kasir_toko/backend/models/outlet.dart';
 import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/backend/models/product.dart';
 import 'package:kasir_toko/backend/models/product_category.dart';
+import 'package:kasir_toko/backend/models/product_revision.dart';
 import 'package:kasir_toko/objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,6 +16,7 @@ class StaticDB {
   static late Box<Outlet> outletBox;
   static late Box<ProductCategory> productCategoryBox;
   static late Box<Product> productBox;
+  static late Box<ProductRevision> productRevisionBox;
   static late Box<PaymentMethod> paymentMethodBox;
   static late Box<OrderRow> orderRowBox;
   static late Box<OrderRowItem> orderRowItemBox;
@@ -32,6 +34,7 @@ class StaticDB {
     outletBox = store.box<Outlet>();
     productCategoryBox = store.box<ProductCategory>();
     productBox = store.box<Product>();
+    productRevisionBox = store.box<ProductRevision>();
     paymentMethodBox = store.box<PaymentMethod>();
     orderRowBox = store.box<OrderRow>();
     orderRowItemBox = store.box<OrderRowItem>();

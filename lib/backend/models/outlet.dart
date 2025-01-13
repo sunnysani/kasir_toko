@@ -2,10 +2,11 @@ import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/backend/models/product.dart';
 import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/objectbox.g.dart';
+import 'package:kasir_toko/objectbox.g.dart' as generated_object_box;
+import 'package:objectbox/objectbox.dart';
 import 'package:kasir_toko/utils/start_configs/static_db.dart';
 
-@Entity(uid: 2542198763334326311)
+@Entity(uid: 2542198763334126311)
 class Outlet {
   @Id(assignable: true)
   int id = 0;
@@ -102,7 +103,8 @@ class Outlet {
         DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
 
     Query<OrderRow> query = StaticDB.orderRowBox
-        .query((OrderRow_.timeStamp.betweenDate(startDayTime, endDayTime)))
+        .query((generated_object_box.OrderRow_.timeStamp
+            .betweenDate(startDayTime, endDayTime)))
         .build();
     List<OrderRow> orderRowList = query.find();
     query.close();

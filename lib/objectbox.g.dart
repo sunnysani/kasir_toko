@@ -28,63 +28,6 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 2542198763334326311),
-      name: 'Outlet',
-      lastPropertyId: const obx_int.IdUid(7, 4459593711385785577),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 6933070741095145811),
-            name: 'id',
-            type: 6,
-            flags: 129),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 1872052628146773427),
-            name: 'name',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2563186051625754433),
-            name: 'address',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 6227155981172291115),
-            name: 'phoneNumber',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 965984936511391196),
-            name: 'receiptMessage',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 5661030839249149419),
-            name: 'activeTax',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 4459593711385785577),
-            name: 'taxPercentage',
-            type: 8,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[
-        obx_int.ModelBacklink(
-            name: 'paymentMethods',
-            srcEntity: 'PaymentMethod',
-            srcField: 'outlet'),
-        obx_int.ModelBacklink(
-            name: 'productCategories',
-            srcEntity: 'ProductCategory',
-            srcField: 'outlet'),
-        obx_int.ModelBacklink(
-            name: 'products', srcEntity: 'Product', srcField: 'outlet'),
-        obx_int.ModelBacklink(
-            name: 'orders', srcEntity: 'OrderRow', srcField: 'outlet')
-      ]),
-  obx_int.ModelEntity(
       id: const obx_int.IdUid(2, 2539012349328530),
       name: 'PaymentMethod',
       lastPropertyId: const obx_int.IdUid(5, 4391943279528832848),
@@ -166,15 +109,16 @@ final _entities = <obx_int.ModelEntity>[
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
-            id: const obx_int.IdUid(1, 8930154353795273874),
-            name: 'revisions',
-            targetId: const obx_int.IdUid(5, 12846973592481)),
-        obx_int.ModelRelation(
             id: const obx_int.IdUid(2, 236069021593903646),
             name: 'categories',
             targetId: const obx_int.IdUid(4, 6617611348773466436))
       ],
-      backlinks: <obx_int.ModelBacklink>[]),
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'revisions',
+            srcEntity: 'ProductRevision',
+            srcField: 'product')
+      ]),
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 6617611348773466436),
       name: 'ProductCategory',
@@ -212,7 +156,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 12846973592481),
       name: 'ProductRevision',
-      lastPropertyId: const obx_int.IdUid(6, 4912880876948582691),
+      lastPropertyId: const obx_int.IdUid(7, 4455426604934092435),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -229,7 +173,14 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(4, 7201161724556323480),
             name: 'price',
             type: 8,
-            flags: 0)
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 4455426604934092435),
+            name: 'productId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(9, 846710663453206054),
+            relationTarget: 'Product')
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
@@ -369,7 +320,64 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[])
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(10, 2542198763334126311),
+      name: 'Outlet',
+      lastPropertyId: const obx_int.IdUid(7, 3377237826965667898),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5174283431022853019),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 1121591388550441851),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5333370120388955754),
+            name: 'address',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 474586892130838890),
+            name: 'phoneNumber',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 1001330471433499191),
+            name: 'receiptMessage',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 6824525921531499007),
+            name: 'activeTax',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 3377237826965667898),
+            name: 'taxPercentage',
+            type: 8,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'paymentMethods',
+            srcEntity: 'PaymentMethod',
+            srcField: 'outlet'),
+        obx_int.ModelBacklink(
+            name: 'productCategories',
+            srcEntity: 'ProductCategory',
+            srcField: 'outlet'),
+        obx_int.ModelBacklink(
+            name: 'products', srcEntity: 'Product', srcField: 'outlet'),
+        obx_int.ModelBacklink(
+            name: 'orders', srcEntity: 'OrderRow', srcField: 'outlet')
+      ])
 ];
 
 /// Shortcut for [Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -407,25 +415,340 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(8, 4805377593213751),
-      lastIndexId: const obx_int.IdUid(8, 2207489330736101344),
+      lastEntityId: const obx_int.IdUid(10, 2542198763334126311),
+      lastIndexId: const obx_int.IdUid(9, 846710663453206054),
       lastRelationId: const obx_int.IdUid(4, 5697342907911373828),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [],
+      retiredEntityUids: const [2542198763334326311, 3207224150785922877],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
         3859835816503269585,
         2390428648715422367,
-        4912880876948582691
+        4912880876948582691,
+        6933070741095145811,
+        1872052628146773427,
+        2563186051625754433,
+        6227155981172291115,
+        965984936511391196,
+        5661030839249149419,
+        4459593711385785577,
+        8962473758731357556,
+        4409864400498076608,
+        6249709944924276547,
+        6767596588166861664,
+        5166805166751715899,
+        5637540551721854729,
+        5175937979182934318
       ],
-      retiredRelationUids: const [],
+      retiredRelationUids: const [8930154353795273874],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, obx_int.EntityDefinition>{
-    Outlet: obx_int.EntityDefinition<Outlet>(
+    PaymentMethod: obx_int.EntityDefinition<PaymentMethod>(
         model: _entities[0],
+        toOneRelations: (PaymentMethod object) => [object.outlet],
+        toManyRelations: (PaymentMethod object) => {
+              obx_int.RelInfo<PaymentMethod>.toMany(4, object.id): object.orders
+            },
+        getId: (PaymentMethod object) => object.id,
+        setId: (PaymentMethod object, int id) {
+          object.id = id;
+        },
+        objectToFB: (PaymentMethod object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addBool(2, object.sameAsAmount);
+          fbb.addBool(3, object.active);
+          fbb.addInt64(4, object.outlet.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final sameAsAmountParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
+          final activeParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
+          final object = PaymentMethod(
+              name: nameParam,
+              sameAsAmount: sameAsAmountParam,
+              active: activeParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.outlet.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          object.outlet.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<PaymentMethod>(object.orders,
+              store, obx_int.RelInfo<PaymentMethod>.toMany(4, object.id));
+          return object;
+        }),
+    Product: obx_int.EntityDefinition<Product>(
+        model: _entities[1],
+        toOneRelations: (Product object) => [object.outlet],
+        toManyRelations: (Product object) => {
+              obx_int.RelInfo<Product>.toMany(2, object.id): object.categories,
+              obx_int.RelInfo<ProductRevision>.toOneBacklink(7, object.id,
+                      (ProductRevision srcObject) => srcObject.product):
+                  object.revisions
+            },
+        getId: (Product object) => object.id,
+        setId: (Product object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Product object, fb.Builder fbb) {
+          final nameInReceiptOffset = object.nameInReceipt == null
+              ? null
+              : fbb.writeString(object.nameInReceipt!);
+          final nameOffset = fbb.writeString(object.name);
+          final codeOffset =
+              object.code == null ? null : fbb.writeString(object.code!);
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addBool(1, object.active);
+          fbb.addInt64(2, object.outlet.targetId);
+          fbb.addOffset(3, nameInReceiptOffset);
+          fbb.addOffset(4, nameOffset);
+          fbb.addOffset(5, codeOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 12, '');
+          final activeParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false);
+          final nameInReceiptParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 10);
+          final codeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 14);
+          final object = Product(
+              name: nameParam,
+              active: activeParam,
+              nameInReceipt: nameInReceiptParam,
+              code: codeParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.outlet.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          object.outlet.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<Product>(object.categories,
+              store, obx_int.RelInfo<Product>.toMany(2, object.id));
+          obx_int.InternalToManyAccess.setRelInfo<Product>(
+              object.revisions,
+              store,
+              obx_int.RelInfo<ProductRevision>.toOneBacklink(7, object.id,
+                  (ProductRevision srcObject) => srcObject.product));
+          return object;
+        }),
+    ProductCategory: obx_int.EntityDefinition<ProductCategory>(
+        model: _entities[2],
+        toOneRelations: (ProductCategory object) => [object.outlet],
+        toManyRelations: (ProductCategory object) => {
+              obx_int.RelInfo<Product>.toManyBacklink(2, object.id):
+                  object.products
+            },
+        getId: (ProductCategory object) => object.id,
+        setId: (ProductCategory object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ProductCategory object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addBool(2, object.active);
+          fbb.addInt64(3, object.outlet.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final activeParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
+          final object = ProductCategory(name: nameParam, active: activeParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.outlet.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          object.outlet.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<ProductCategory>(
+              object.products,
+              store,
+              obx_int.RelInfo<Product>.toManyBacklink(2, object.id));
+          return object;
+        }),
+    ProductRevision: obx_int.EntityDefinition<ProductRevision>(
+        model: _entities[3],
+        toOneRelations: (ProductRevision object) => [object.product],
+        toManyRelations: (ProductRevision object) => {},
+        getId: (ProductRevision object) => object.id,
+        setId: (ProductRevision object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ProductRevision object, fb.Builder fbb) {
+          fbb.startTable(8);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.numberOfRevision);
+          fbb.addFloat64(3, object.price);
+          fbb.addInt64(6, object.product.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final numberOfRevisionParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          final priceParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final object = ProductRevision(
+              numberOfRevision: numberOfRevisionParam, price: priceParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.product.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          object.product.attach(store);
+          return object;
+        }),
+    Discount: obx_int.EntityDefinition<Discount>(
+        model: _entities[4],
+        toOneRelations: (Discount object) => [],
+        toManyRelations: (Discount object) => {},
+        getId: (Discount object) => object.id,
+        setId: (Discount object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Discount object, fb.Builder fbb) {
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addFloat64(1, object.discountPercentage);
+          fbb.addFloat64(2, object.discountPrice);
+          fbb.addFloat64(3, object.fixedPrice);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = Discount()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..discountPercentage =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0)
+            ..discountPrice =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0)
+            ..fixedPrice =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
+
+          return object;
+        }),
+    OrderRow: obx_int.EntityDefinition<OrderRow>(
+        model: _entities[5],
+        toOneRelations: (OrderRow object) =>
+            [object.outlet, object.paymentMethod],
+        toManyRelations: (OrderRow object) => {
+              obx_int.RelInfo<OrderRow>.toMany(3, object.id):
+                  object.orderRowItem
+            },
+        getId: (OrderRow object) => object.id,
+        setId: (OrderRow object, int id) {
+          object.id = id;
+        },
+        objectToFB: (OrderRow object, fb.Builder fbb) {
+          fbb.startTable(10);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.timeStamp.microsecondsSinceEpoch * 1000);
+          fbb.addFloat64(2, object.payAmount);
+          fbb.addBool(3, object.isTaxActive);
+          fbb.addFloat64(4, object.taxPercentage);
+          fbb.addFloat64(5, object.totalPrice);
+          fbb.addInt64(6, object.totalItem);
+          fbb.addInt64(7, object.outlet.targetId);
+          fbb.addInt64(8, object.paymentMethod.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final isTaxActiveParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
+          final taxPercentageParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final object = OrderRow(
+              isTaxActive: isTaxActiveParam, taxPercentage: taxPercentageParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..timeStamp = DateTime.fromMicrosecondsSinceEpoch(
+                (const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0) /
+                        1000)
+                    .round())
+            ..payAmount =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0)
+            ..totalPrice =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0)
+            ..totalItem =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          object.outlet.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
+          object.outlet.attach(store);
+          object.paymentMethod.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+          object.paymentMethod.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<OrderRow>(object.orderRowItem,
+              store, obx_int.RelInfo<OrderRow>.toMany(3, object.id));
+          return object;
+        }),
+    OrderRowItem: obx_int.EntityDefinition<OrderRowItem>(
+        model: _entities[6],
+        toOneRelations: (OrderRowItem object) =>
+            [object.orderRow, object.product, object.productRevision],
+        toManyRelations: (OrderRowItem object) => {},
+        getId: (OrderRowItem object) => object.id,
+        setId: (OrderRowItem object, int id) {
+          object.id = id;
+        },
+        objectToFB: (OrderRowItem object, fb.Builder fbb) {
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.orderRow.targetId);
+          fbb.addInt64(2, object.product.targetId);
+          fbb.addInt64(3, object.productRevision.targetId);
+          fbb.addInt64(4, object.quantity);
+          fbb.addFloat64(5, object.totalPriceItem);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final quantityParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final object = OrderRowItem(quantity: quantityParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..totalPriceItem =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          object.orderRow.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          object.orderRow.attach(store);
+          object.product.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          object.product.attach(store);
+          object.productRevision.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          object.productRevision.attach(store);
+          return object;
+        }),
+    Outlet: obx_int.EntityDefinition<Outlet>(
+        model: _entities[7],
         toOneRelations: (Outlet object) => [],
         toManyRelations: (Outlet object) => {
               obx_int.RelInfo<PaymentMethod>.toOneBacklink(5, object.id,
@@ -506,334 +829,231 @@ obx_int.ModelDefinition getObjectBoxModel() {
               obx_int.RelInfo<OrderRow>.toOneBacklink(
                   8, object.id, (OrderRow srcObject) => srcObject.outlet));
           return object;
-        }),
-    PaymentMethod: obx_int.EntityDefinition<PaymentMethod>(
-        model: _entities[1],
-        toOneRelations: (PaymentMethod object) => [object.outlet],
-        toManyRelations: (PaymentMethod object) => {
-              obx_int.RelInfo<PaymentMethod>.toMany(4, object.id): object.orders
-            },
-        getId: (PaymentMethod object) => object.id,
-        setId: (PaymentMethod object, int id) {
-          object.id = id;
-        },
-        objectToFB: (PaymentMethod object, fb.Builder fbb) {
-          final nameOffset = fbb.writeString(object.name);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, nameOffset);
-          fbb.addBool(2, object.sameAsAmount);
-          fbb.addBool(3, object.active);
-          fbb.addInt64(4, object.outlet.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final sameAsAmountParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
-          final activeParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
-          final object = PaymentMethod(
-              name: nameParam,
-              sameAsAmount: sameAsAmountParam,
-              active: activeParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          object.outlet.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          object.outlet.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<PaymentMethod>(object.orders,
-              store, obx_int.RelInfo<PaymentMethod>.toMany(4, object.id));
-          return object;
-        }),
-    Product: obx_int.EntityDefinition<Product>(
-        model: _entities[2],
-        toOneRelations: (Product object) => [object.outlet],
-        toManyRelations: (Product object) => {
-              obx_int.RelInfo<Product>.toMany(1, object.id): object.revisions,
-              obx_int.RelInfo<Product>.toMany(2, object.id): object.categories
-            },
-        getId: (Product object) => object.id,
-        setId: (Product object, int id) {
-          object.id = id;
-        },
-        objectToFB: (Product object, fb.Builder fbb) {
-          final nameInReceiptOffset = object.nameInReceipt == null
-              ? null
-              : fbb.writeString(object.nameInReceipt!);
-          final nameOffset = fbb.writeString(object.name);
-          final codeOffset =
-              object.code == null ? null : fbb.writeString(object.code!);
-          fbb.startTable(7);
-          fbb.addInt64(0, object.id);
-          fbb.addBool(1, object.active);
-          fbb.addInt64(2, object.outlet.targetId);
-          fbb.addOffset(3, nameInReceiptOffset);
-          fbb.addOffset(4, nameOffset);
-          fbb.addOffset(5, codeOffset);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 12, '');
-          final activeParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false);
-          final nameInReceiptParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 10);
-          final codeParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 14);
-          final object = Product(
-              name: nameParam,
-              active: activeParam,
-              nameInReceipt: nameInReceiptParam,
-              code: codeParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          object.outlet.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          object.outlet.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<Product>(object.revisions,
-              store, obx_int.RelInfo<Product>.toMany(1, object.id));
-          obx_int.InternalToManyAccess.setRelInfo<Product>(object.categories,
-              store, obx_int.RelInfo<Product>.toMany(2, object.id));
-          return object;
-        }),
-    ProductCategory: obx_int.EntityDefinition<ProductCategory>(
-        model: _entities[3],
-        toOneRelations: (ProductCategory object) => [object.outlet],
-        toManyRelations: (ProductCategory object) => {
-              obx_int.RelInfo<Product>.toManyBacklink(2, object.id):
-                  object.products
-            },
-        getId: (ProductCategory object) => object.id,
-        setId: (ProductCategory object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ProductCategory object, fb.Builder fbb) {
-          final nameOffset = fbb.writeString(object.name);
-          fbb.startTable(5);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, nameOffset);
-          fbb.addBool(2, object.active);
-          fbb.addInt64(3, object.outlet.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final activeParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
-          final object = ProductCategory(name: nameParam, active: activeParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          object.outlet.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          object.outlet.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<ProductCategory>(
-              object.products,
-              store,
-              obx_int.RelInfo<Product>.toManyBacklink(2, object.id));
-          return object;
-        }),
-    ProductRevision: obx_int.EntityDefinition<ProductRevision>(
-        model: _entities[4],
-        toOneRelations: (ProductRevision object) => [],
-        toManyRelations: (ProductRevision object) => {},
-        getId: (ProductRevision object) => object.id,
-        setId: (ProductRevision object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ProductRevision object, fb.Builder fbb) {
-          fbb.startTable(7);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.numberOfRevision);
-          fbb.addFloat64(3, object.price);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final numberOfRevisionParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
-          final priceParam =
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          final object = ProductRevision(
-              numberOfRevision: numberOfRevisionParam, price: priceParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-
-          return object;
-        }),
-    Discount: obx_int.EntityDefinition<Discount>(
-        model: _entities[5],
-        toOneRelations: (Discount object) => [],
-        toManyRelations: (Discount object) => {},
-        getId: (Discount object) => object.id,
-        setId: (Discount object, int id) {
-          object.id = id;
-        },
-        objectToFB: (Discount object, fb.Builder fbb) {
-          fbb.startTable(5);
-          fbb.addInt64(0, object.id);
-          fbb.addFloat64(1, object.discountPercentage);
-          fbb.addFloat64(2, object.discountPrice);
-          fbb.addFloat64(3, object.fixedPrice);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-
-          final object = Discount()
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..discountPercentage =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0)
-            ..discountPrice =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0)
-            ..fixedPrice =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
-
-          return object;
-        }),
-    OrderRow: obx_int.EntityDefinition<OrderRow>(
-        model: _entities[6],
-        toOneRelations: (OrderRow object) =>
-            [object.outlet, object.paymentMethod],
-        toManyRelations: (OrderRow object) => {
-              obx_int.RelInfo<OrderRow>.toMany(3, object.id):
-                  object.orderRowItem
-            },
-        getId: (OrderRow object) => object.id,
-        setId: (OrderRow object, int id) {
-          object.id = id;
-        },
-        objectToFB: (OrderRow object, fb.Builder fbb) {
-          fbb.startTable(10);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.timeStamp.microsecondsSinceEpoch * 1000);
-          fbb.addFloat64(2, object.payAmount);
-          fbb.addBool(3, object.isTaxActive);
-          fbb.addFloat64(4, object.taxPercentage);
-          fbb.addFloat64(5, object.totalPrice);
-          fbb.addInt64(6, object.totalItem);
-          fbb.addInt64(7, object.outlet.targetId);
-          fbb.addInt64(8, object.paymentMethod.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final isTaxActiveParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
-          final taxPercentageParam =
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          final object = OrderRow(
-              isTaxActive: isTaxActiveParam, taxPercentage: taxPercentageParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..timeStamp = DateTime.fromMicrosecondsSinceEpoch(
-                (const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0) /
-                        1000)
-                    .round())
-            ..payAmount =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0)
-            ..totalPrice =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0)
-            ..totalItem =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
-          object.outlet.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
-          object.outlet.attach(store);
-          object.paymentMethod.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
-          object.paymentMethod.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<OrderRow>(object.orderRowItem,
-              store, obx_int.RelInfo<OrderRow>.toMany(3, object.id));
-          return object;
-        }),
-    OrderRowItem: obx_int.EntityDefinition<OrderRowItem>(
-        model: _entities[7],
-        toOneRelations: (OrderRowItem object) =>
-            [object.orderRow, object.product, object.productRevision],
-        toManyRelations: (OrderRowItem object) => {},
-        getId: (OrderRowItem object) => object.id,
-        setId: (OrderRowItem object, int id) {
-          object.id = id;
-        },
-        objectToFB: (OrderRowItem object, fb.Builder fbb) {
-          fbb.startTable(7);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.orderRow.targetId);
-          fbb.addInt64(2, object.product.targetId);
-          fbb.addInt64(3, object.productRevision.targetId);
-          fbb.addInt64(4, object.quantity);
-          fbb.addFloat64(5, object.totalPriceItem);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final quantityParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          final object = OrderRowItem(quantity: quantityParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..totalPriceItem =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
-          object.orderRow.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
-          object.orderRow.attach(store);
-          object.product.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          object.product.attach(store);
-          object.productRevision.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          object.productRevision.attach(store);
-          return object;
         })
   };
 
   return obx_int.ModelDefinition(model, bindings);
 }
 
+/// [PaymentMethod] entity fields to define ObjectBox queries.
+class PaymentMethod_ {
+  /// see [PaymentMethod.id]
+  static final id =
+      obx.QueryIntegerProperty<PaymentMethod>(_entities[0].properties[0]);
+
+  /// see [PaymentMethod.name]
+  static final name =
+      obx.QueryStringProperty<PaymentMethod>(_entities[0].properties[1]);
+
+  /// see [PaymentMethod.sameAsAmount]
+  static final sameAsAmount =
+      obx.QueryBooleanProperty<PaymentMethod>(_entities[0].properties[2]);
+
+  /// see [PaymentMethod.active]
+  static final active =
+      obx.QueryBooleanProperty<PaymentMethod>(_entities[0].properties[3]);
+
+  /// see [PaymentMethod.outlet]
+  static final outlet =
+      obx.QueryRelationToOne<PaymentMethod, Outlet>(_entities[0].properties[4]);
+
+  /// see [PaymentMethod.orders]
+  static final orders = obx.QueryRelationToMany<PaymentMethod, OrderRow>(
+      _entities[0].relations[0]);
+}
+
+/// [Product] entity fields to define ObjectBox queries.
+class Product_ {
+  /// see [Product.id]
+  static final id =
+      obx.QueryIntegerProperty<Product>(_entities[1].properties[0]);
+
+  /// see [Product.active]
+  static final active =
+      obx.QueryBooleanProperty<Product>(_entities[1].properties[1]);
+
+  /// see [Product.outlet]
+  static final outlet =
+      obx.QueryRelationToOne<Product, Outlet>(_entities[1].properties[2]);
+
+  /// see [Product.nameInReceipt]
+  static final nameInReceipt =
+      obx.QueryStringProperty<Product>(_entities[1].properties[3]);
+
+  /// see [Product.name]
+  static final name =
+      obx.QueryStringProperty<Product>(_entities[1].properties[4]);
+
+  /// see [Product.code]
+  static final code =
+      obx.QueryStringProperty<Product>(_entities[1].properties[5]);
+
+  /// see [Product.categories]
+  static final categories = obx.QueryRelationToMany<Product, ProductCategory>(
+      _entities[1].relations[0]);
+
+  /// see [Product.revisions]
+  static final revisions = obx.QueryBacklinkToMany<ProductRevision, Product>(
+      ProductRevision_.product);
+}
+
+/// [ProductCategory] entity fields to define ObjectBox queries.
+class ProductCategory_ {
+  /// see [ProductCategory.id]
+  static final id =
+      obx.QueryIntegerProperty<ProductCategory>(_entities[2].properties[0]);
+
+  /// see [ProductCategory.name]
+  static final name =
+      obx.QueryStringProperty<ProductCategory>(_entities[2].properties[1]);
+
+  /// see [ProductCategory.active]
+  static final active =
+      obx.QueryBooleanProperty<ProductCategory>(_entities[2].properties[2]);
+
+  /// see [ProductCategory.outlet]
+  static final outlet = obx.QueryRelationToOne<ProductCategory, Outlet>(
+      _entities[2].properties[3]);
+}
+
+/// [ProductRevision] entity fields to define ObjectBox queries.
+class ProductRevision_ {
+  /// see [ProductRevision.id]
+  static final id =
+      obx.QueryIntegerProperty<ProductRevision>(_entities[3].properties[0]);
+
+  /// see [ProductRevision.numberOfRevision]
+  static final numberOfRevision =
+      obx.QueryIntegerProperty<ProductRevision>(_entities[3].properties[1]);
+
+  /// see [ProductRevision.price]
+  static final price =
+      obx.QueryDoubleProperty<ProductRevision>(_entities[3].properties[2]);
+
+  /// see [ProductRevision.product]
+  static final product = obx.QueryRelationToOne<ProductRevision, Product>(
+      _entities[3].properties[3]);
+}
+
+/// [Discount] entity fields to define ObjectBox queries.
+class Discount_ {
+  /// see [Discount.id]
+  static final id =
+      obx.QueryIntegerProperty<Discount>(_entities[4].properties[0]);
+
+  /// see [Discount.discountPercentage]
+  static final discountPercentage =
+      obx.QueryDoubleProperty<Discount>(_entities[4].properties[1]);
+
+  /// see [Discount.discountPrice]
+  static final discountPrice =
+      obx.QueryDoubleProperty<Discount>(_entities[4].properties[2]);
+
+  /// see [Discount.fixedPrice]
+  static final fixedPrice =
+      obx.QueryDoubleProperty<Discount>(_entities[4].properties[3]);
+}
+
+/// [OrderRow] entity fields to define ObjectBox queries.
+class OrderRow_ {
+  /// see [OrderRow.id]
+  static final id =
+      obx.QueryIntegerProperty<OrderRow>(_entities[5].properties[0]);
+
+  /// see [OrderRow.timeStamp]
+  static final timeStamp =
+      obx.QueryDateNanoProperty<OrderRow>(_entities[5].properties[1]);
+
+  /// see [OrderRow.payAmount]
+  static final payAmount =
+      obx.QueryDoubleProperty<OrderRow>(_entities[5].properties[2]);
+
+  /// see [OrderRow.isTaxActive]
+  static final isTaxActive =
+      obx.QueryBooleanProperty<OrderRow>(_entities[5].properties[3]);
+
+  /// see [OrderRow.taxPercentage]
+  static final taxPercentage =
+      obx.QueryDoubleProperty<OrderRow>(_entities[5].properties[4]);
+
+  /// see [OrderRow.totalPrice]
+  static final totalPrice =
+      obx.QueryDoubleProperty<OrderRow>(_entities[5].properties[5]);
+
+  /// see [OrderRow.totalItem]
+  static final totalItem =
+      obx.QueryIntegerProperty<OrderRow>(_entities[5].properties[6]);
+
+  /// see [OrderRow.outlet]
+  static final outlet =
+      obx.QueryRelationToOne<OrderRow, Outlet>(_entities[5].properties[7]);
+
+  /// see [OrderRow.paymentMethod]
+  static final paymentMethod = obx.QueryRelationToOne<OrderRow, PaymentMethod>(
+      _entities[5].properties[8]);
+
+  /// see [OrderRow.orderRowItem]
+  static final orderRowItem = obx.QueryRelationToMany<OrderRow, OrderRowItem>(
+      _entities[5].relations[0]);
+}
+
+/// [OrderRowItem] entity fields to define ObjectBox queries.
+class OrderRowItem_ {
+  /// see [OrderRowItem.id]
+  static final id =
+      obx.QueryIntegerProperty<OrderRowItem>(_entities[6].properties[0]);
+
+  /// see [OrderRowItem.orderRow]
+  static final orderRow = obx.QueryRelationToOne<OrderRowItem, OrderRow>(
+      _entities[6].properties[1]);
+
+  /// see [OrderRowItem.product]
+  static final product =
+      obx.QueryRelationToOne<OrderRowItem, Product>(_entities[6].properties[2]);
+
+  /// see [OrderRowItem.productRevision]
+  static final productRevision =
+      obx.QueryRelationToOne<OrderRowItem, ProductRevision>(
+          _entities[6].properties[3]);
+
+  /// see [OrderRowItem.quantity]
+  static final quantity =
+      obx.QueryIntegerProperty<OrderRowItem>(_entities[6].properties[4]);
+
+  /// see [OrderRowItem.totalPriceItem]
+  static final totalPriceItem =
+      obx.QueryDoubleProperty<OrderRowItem>(_entities[6].properties[5]);
+}
+
 /// [Outlet] entity fields to define ObjectBox queries.
 class Outlet_ {
   /// see [Outlet.id]
   static final id =
-      obx.QueryIntegerProperty<Outlet>(_entities[0].properties[0]);
+      obx.QueryIntegerProperty<Outlet>(_entities[7].properties[0]);
 
   /// see [Outlet.name]
   static final name =
-      obx.QueryStringProperty<Outlet>(_entities[0].properties[1]);
+      obx.QueryStringProperty<Outlet>(_entities[7].properties[1]);
 
   /// see [Outlet.address]
   static final address =
-      obx.QueryStringProperty<Outlet>(_entities[0].properties[2]);
+      obx.QueryStringProperty<Outlet>(_entities[7].properties[2]);
 
   /// see [Outlet.phoneNumber]
   static final phoneNumber =
-      obx.QueryStringProperty<Outlet>(_entities[0].properties[3]);
+      obx.QueryStringProperty<Outlet>(_entities[7].properties[3]);
 
   /// see [Outlet.receiptMessage]
   static final receiptMessage =
-      obx.QueryStringProperty<Outlet>(_entities[0].properties[4]);
+      obx.QueryStringProperty<Outlet>(_entities[7].properties[4]);
 
   /// see [Outlet.activeTax]
   static final activeTax =
-      obx.QueryBooleanProperty<Outlet>(_entities[0].properties[5]);
+      obx.QueryBooleanProperty<Outlet>(_entities[7].properties[5]);
 
   /// see [Outlet.taxPercentage]
   static final taxPercentage =
-      obx.QueryDoubleProperty<Outlet>(_entities[0].properties[6]);
+      obx.QueryDoubleProperty<Outlet>(_entities[7].properties[6]);
 
   /// see [Outlet.paymentMethods]
   static final paymentMethods =
@@ -850,190 +1070,4 @@ class Outlet_ {
   /// see [Outlet.orders]
   static final orders =
       obx.QueryBacklinkToMany<OrderRow, Outlet>(OrderRow_.outlet);
-}
-
-/// [PaymentMethod] entity fields to define ObjectBox queries.
-class PaymentMethod_ {
-  /// see [PaymentMethod.id]
-  static final id =
-      obx.QueryIntegerProperty<PaymentMethod>(_entities[1].properties[0]);
-
-  /// see [PaymentMethod.name]
-  static final name =
-      obx.QueryStringProperty<PaymentMethod>(_entities[1].properties[1]);
-
-  /// see [PaymentMethod.sameAsAmount]
-  static final sameAsAmount =
-      obx.QueryBooleanProperty<PaymentMethod>(_entities[1].properties[2]);
-
-  /// see [PaymentMethod.active]
-  static final active =
-      obx.QueryBooleanProperty<PaymentMethod>(_entities[1].properties[3]);
-
-  /// see [PaymentMethod.outlet]
-  static final outlet =
-      obx.QueryRelationToOne<PaymentMethod, Outlet>(_entities[1].properties[4]);
-
-  /// see [PaymentMethod.orders]
-  static final orders = obx.QueryRelationToMany<PaymentMethod, OrderRow>(
-      _entities[1].relations[0]);
-}
-
-/// [Product] entity fields to define ObjectBox queries.
-class Product_ {
-  /// see [Product.id]
-  static final id =
-      obx.QueryIntegerProperty<Product>(_entities[2].properties[0]);
-
-  /// see [Product.active]
-  static final active =
-      obx.QueryBooleanProperty<Product>(_entities[2].properties[1]);
-
-  /// see [Product.outlet]
-  static final outlet =
-      obx.QueryRelationToOne<Product, Outlet>(_entities[2].properties[2]);
-
-  /// see [Product.nameInReceipt]
-  static final nameInReceipt =
-      obx.QueryStringProperty<Product>(_entities[2].properties[3]);
-
-  /// see [Product.name]
-  static final name =
-      obx.QueryStringProperty<Product>(_entities[2].properties[4]);
-
-  /// see [Product.code]
-  static final code =
-      obx.QueryStringProperty<Product>(_entities[2].properties[5]);
-
-  /// see [Product.revisions]
-  static final revisions = obx.QueryRelationToMany<Product, ProductRevision>(
-      _entities[2].relations[0]);
-
-  /// see [Product.categories]
-  static final categories = obx.QueryRelationToMany<Product, ProductCategory>(
-      _entities[2].relations[1]);
-}
-
-/// [ProductCategory] entity fields to define ObjectBox queries.
-class ProductCategory_ {
-  /// see [ProductCategory.id]
-  static final id =
-      obx.QueryIntegerProperty<ProductCategory>(_entities[3].properties[0]);
-
-  /// see [ProductCategory.name]
-  static final name =
-      obx.QueryStringProperty<ProductCategory>(_entities[3].properties[1]);
-
-  /// see [ProductCategory.active]
-  static final active =
-      obx.QueryBooleanProperty<ProductCategory>(_entities[3].properties[2]);
-
-  /// see [ProductCategory.outlet]
-  static final outlet = obx.QueryRelationToOne<ProductCategory, Outlet>(
-      _entities[3].properties[3]);
-}
-
-/// [ProductRevision] entity fields to define ObjectBox queries.
-class ProductRevision_ {
-  /// see [ProductRevision.id]
-  static final id =
-      obx.QueryIntegerProperty<ProductRevision>(_entities[4].properties[0]);
-
-  /// see [ProductRevision.numberOfRevision]
-  static final numberOfRevision =
-      obx.QueryIntegerProperty<ProductRevision>(_entities[4].properties[1]);
-
-  /// see [ProductRevision.price]
-  static final price =
-      obx.QueryDoubleProperty<ProductRevision>(_entities[4].properties[2]);
-}
-
-/// [Discount] entity fields to define ObjectBox queries.
-class Discount_ {
-  /// see [Discount.id]
-  static final id =
-      obx.QueryIntegerProperty<Discount>(_entities[5].properties[0]);
-
-  /// see [Discount.discountPercentage]
-  static final discountPercentage =
-      obx.QueryDoubleProperty<Discount>(_entities[5].properties[1]);
-
-  /// see [Discount.discountPrice]
-  static final discountPrice =
-      obx.QueryDoubleProperty<Discount>(_entities[5].properties[2]);
-
-  /// see [Discount.fixedPrice]
-  static final fixedPrice =
-      obx.QueryDoubleProperty<Discount>(_entities[5].properties[3]);
-}
-
-/// [OrderRow] entity fields to define ObjectBox queries.
-class OrderRow_ {
-  /// see [OrderRow.id]
-  static final id =
-      obx.QueryIntegerProperty<OrderRow>(_entities[6].properties[0]);
-
-  /// see [OrderRow.timeStamp]
-  static final timeStamp =
-      obx.QueryDateNanoProperty<OrderRow>(_entities[6].properties[1]);
-
-  /// see [OrderRow.payAmount]
-  static final payAmount =
-      obx.QueryDoubleProperty<OrderRow>(_entities[6].properties[2]);
-
-  /// see [OrderRow.isTaxActive]
-  static final isTaxActive =
-      obx.QueryBooleanProperty<OrderRow>(_entities[6].properties[3]);
-
-  /// see [OrderRow.taxPercentage]
-  static final taxPercentage =
-      obx.QueryDoubleProperty<OrderRow>(_entities[6].properties[4]);
-
-  /// see [OrderRow.totalPrice]
-  static final totalPrice =
-      obx.QueryDoubleProperty<OrderRow>(_entities[6].properties[5]);
-
-  /// see [OrderRow.totalItem]
-  static final totalItem =
-      obx.QueryIntegerProperty<OrderRow>(_entities[6].properties[6]);
-
-  /// see [OrderRow.outlet]
-  static final outlet =
-      obx.QueryRelationToOne<OrderRow, Outlet>(_entities[6].properties[7]);
-
-  /// see [OrderRow.paymentMethod]
-  static final paymentMethod = obx.QueryRelationToOne<OrderRow, PaymentMethod>(
-      _entities[6].properties[8]);
-
-  /// see [OrderRow.orderRowItem]
-  static final orderRowItem = obx.QueryRelationToMany<OrderRow, OrderRowItem>(
-      _entities[6].relations[0]);
-}
-
-/// [OrderRowItem] entity fields to define ObjectBox queries.
-class OrderRowItem_ {
-  /// see [OrderRowItem.id]
-  static final id =
-      obx.QueryIntegerProperty<OrderRowItem>(_entities[7].properties[0]);
-
-  /// see [OrderRowItem.orderRow]
-  static final orderRow = obx.QueryRelationToOne<OrderRowItem, OrderRow>(
-      _entities[7].properties[1]);
-
-  /// see [OrderRowItem.product]
-  static final product =
-      obx.QueryRelationToOne<OrderRowItem, Product>(_entities[7].properties[2]);
-
-  /// see [OrderRowItem.productRevision]
-  static final productRevision =
-      obx.QueryRelationToOne<OrderRowItem, ProductRevision>(
-          _entities[7].properties[3]);
-
-  /// see [OrderRowItem.quantity]
-  static final quantity =
-      obx.QueryIntegerProperty<OrderRowItem>(_entities[7].properties[4]);
-
-  /// see [OrderRowItem.totalPriceItem]
-  static final totalPriceItem =
-      obx.QueryDoubleProperty<OrderRowItem>(_entities[7].properties[5]);
 }
