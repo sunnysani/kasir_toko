@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_proceed_receipt/select_esc_printer_widget.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:kasir_toko/utils/common/function.common.dart';
 import 'package:provider/provider.dart';
 
 class PosReceiptColumn extends StatelessWidget {
   const PosReceiptColumn(this.orderRow, {super.key});
 
   final OrderRow orderRow;
-
-  void showEscPrinterConnectModal(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: SelectEscPrinterWidget(context),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +50,8 @@ class PosReceiptColumn extends StatelessWidget {
           children: [
             const Text('Status printer: '),
             TextButton(
-              onPressed: () => showEscPrinterConnectModal(context),
+              onPressed: () =>
+                  CommonFunction.showEscPrinterConnectModal(context),
               child: Text(
                   '${Provider.of<EscPrinter>(context).selectedDevice?.name ?? 'Tidak Terhubung'} (${Provider.of<EscPrinter>(context).printing ? 'Mencetak' : 'Diam'})'),
             )

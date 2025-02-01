@@ -1,59 +1,104 @@
-import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
+// String sel = select as String;
+// if (sel == "permission bluetooth granted") {
+//   bool status = await PrintBluetoothThermal.isPermissionBluetoothGranted;
+//   setState(() {
+//     _info = "permission bluetooth granted: $status";
+//   });
+//   //open setting permision if not granted permision
+// } else if (sel == "bluetooth enabled") {
+//   bool state = await PrintBluetoothThermal.bluetoothEnabled;
+//   setState(() {
+//     _info = "Bluetooth enabled: $state";
+//   });
+// } else if (sel == "update info") {
+//   initPlatformState();
+// } else if (sel == "connection status") {
+//   final bool result = await PrintBluetoothThermal.connectionStatus;
+//   connected = result;
+//   setState(() {
+//     _info = "connection status: $result";
+//   });
+// }
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/models/order_row_item.dart';
+import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
 import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class EscPrinter with ChangeNotifier {
-  static final PrinterBluetoothManager _printerManager =
-      PrinterBluetoothManager();
-  static List<PrinterBluetooth> _availableDevices = [];
-  static PrinterBluetooth? _selectedDevice;
+  static final PrintBluetoothThermal _printerManager = PrintBluetoothThermal();
+  static List<BluetoothInfo> _availableDevices = [];
+  static BluetoothInfo? _selectedDevice;
   bool printing = false;
   // TODO: Make this dynamic data
   static PaperSize paperSize = PaperSize.mm58;
 
-  List<PrinterBluetooth> get availableDevices {
+  List<BluetoothInfo> get availableDevices {
     return _availableDevices;
   }
 
-  PrinterBluetooth? get selectedDevice {
+  BluetoothInfo? get selectedDevice {
     return _selectedDevice;
   }
 
-  set selectedDevice(PrinterBluetooth? device) {
+  set selectedDevice(BluetoothInfo? device) {
     _selectedDevice = device;
-    notifyListeners();
+    if (device != null) {
+      PrintBluetoothThermal.connect(macPrinterAddress: device.macAdress);
+      notifyListeners();
+    }
   }
 
-  PrinterBluetoothManager get printerManager {
+  PrintBluetoothThermal get printerManager {
     return _printerManager;
   }
 
   Future<void> startScanDevices() async {
-    // TODO: Check if device scan is allowed
-    _availableDevices = [];
+    if (!(await Permission.bluetoothScan.isGranted) ||
+        !(await Permission.bluetoothConnect.isGranted)) {
+      final scanPermission = await Permission.bluetoothScan.request();
+      final connectPermssion = await Permission.bluetoothScan.request();
+      if (scanPermission != PermissionStatus.granted ||
+          connectPermssion != PermissionStatus.granted) {
+        return;
+      }
+    }
 
-    printerManager.startScan(const Duration(seconds: 4));
+    if (!(await Permission.bluetoothConnect.isGranted)) {
+      final permisisonRequest = await Permission.bluetoothConnect.request();
+      if (permisisonRequest != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _availableDevices = await PrintBluetoothThermal.pairedBluetooths;
+
     notifyListeners();
 
-    printerManager.scanResults.listen((event) async {
-      _availableDevices = event;
-      notifyListeners();
-    });
+    // // TODO: Check if device scan is allowed
+    // _availableDevices = [];
+
+    // printerManager.startScan(const Duration(seconds: 4));
+    // notifyListeners();
+
+    // printerManager.scanResults.listen((event) async {
+    //   _availableDevices = event;
+    //   notifyListeners();
+    // });
   }
 
-  void stopScanDevices() {
-    printerManager.stopScan();
-  }
+  // void stopScanDevices() {
+  //   printerManager.stopScan();
+  // }
 
-  Future<void> printOrder(
-    BuildContext context,
-    OrderRow orderRow,
-  ) async {
+  bool initialCheckPrintPass(BuildContext context) {
     if (_selectedDevice == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -61,7 +106,7 @@ class EscPrinter with ChangeNotifier {
           backgroundColor: AppColors.negativeColor,
         ),
       );
-      return;
+      return false;
     }
 
     if (printing) {
@@ -71,19 +116,72 @@ class EscPrinter with ChangeNotifier {
           backgroundColor: AppColors.negativeColor,
         ),
       );
-      return;
+      return false;
     }
 
-    _printerManager.selectPrinter(_selectedDevice!);
+    return true;
+  }
+
+  Future<void> printOrder(
+    BuildContext context,
+    OrderRow orderRow,
+  ) async {
+    if (!initialCheckPrintPass(context)) return;
+
     printing = true;
     notifyListeners();
-    await printerManager.printTicket(await getPrintBytes(orderRow));
+    await PrintBluetoothThermal.writeBytes(
+        await getPrintOrderRowBytes(orderRow));
     await Future.delayed(const Duration(milliseconds: 2000));
     printing = false;
     notifyListeners();
   }
 
-  Future<List<int>> getPrintBytes(OrderRow orderRow) async {
+  Future<void> printEJournal(
+    BuildContext context,
+    DateTime date,
+    TimeOfDay start,
+    TimeOfDay end,
+  ) async {
+    if (!initialCheckPrintPass(context)) return;
+
+    List<OrderRow> orderList =
+        StaticDB.outlet.getOrderRowListBetweenTime(date, start, end);
+
+    printing = true;
+    notifyListeners();
+    await PrintBluetoothThermal.writeBytes(
+      await getPrintEJournalBytes(orderList,
+          "${DateFormat("d MMMM yyyy").format(date)} @ ${start.format(context)} - ${end.format(context)}"),
+    );
+    await Future.delayed(const Duration(milliseconds: 2000));
+    printing = false;
+    notifyListeners();
+  }
+
+  Future<void> printProudctSales(
+    BuildContext context,
+    DateTime date,
+    TimeOfDay start,
+    TimeOfDay end,
+  ) async {
+    if (!initialCheckPrintPass(context)) return;
+
+    List<OrderRow> orderList =
+        StaticDB.outlet.getOrderRowListBetweenTime(date, start, end);
+
+    printing = true;
+    notifyListeners();
+    await PrintBluetoothThermal.writeBytes(
+      await getPrintProductSalesBytes(orderList,
+          "${DateFormat("d MMMM yyyy").format(date)} @ ${start.format(context)} - ${end.format(context)}"),
+    );
+    await Future.delayed(const Duration(milliseconds: 2000));
+    printing = false;
+    notifyListeners();
+  }
+
+  Future<List<int>> getPrintOrderRowBytes(OrderRow orderRow) async {
     final profile = await CapabilityProfile.load();
 
     final Generator ticket = Generator(paperSize, profile);
@@ -198,7 +296,7 @@ class EscPrinter with ChangeNotifier {
     // Print PaymentMethod
     bytes += ticket.row([
       PosColumn(
-        text: 'Metode Pembayaran',
+        text: 'Metode',
         width: 6,
         styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
       ),
@@ -257,6 +355,226 @@ class EscPrinter with ChangeNotifier {
 
     ticket.feed(2);
     ticket.cut();
+    return bytes;
+  }
+
+  Future<List<int>> getPrintEJournalBytes(
+      List<OrderRow> orderList, String dateString) async {
+    final profile = await CapabilityProfile.load();
+
+    final Generator ticket = Generator(paperSize, profile);
+    List<int> bytes = [];
+
+    // Print Date
+    bytes += ticket.hr(ch: '-');
+    bytes += ticket.text(
+      dateString,
+      styles: const PosStyles(
+        align: PosAlign.center,
+        fontType: PosFontType.fontA,
+      ),
+    );
+    bytes += ticket.hr(ch: '-', linesAfter: 1);
+
+    // key: paymentMethod.TargetId
+    // value: total
+    Map<int, double> totalIncomeMapping = {};
+
+    for (OrderRow orderRow in orderList) {
+      if (totalIncomeMapping[orderRow.paymentMethod.targetId] == null) {
+        totalIncomeMapping[orderRow.paymentMethod.targetId] = 0;
+      }
+
+      totalIncomeMapping[orderRow.paymentMethod.targetId] =
+          totalIncomeMapping[orderRow.paymentMethod.targetId]! +
+              orderRow.totalPrice;
+
+      bytes += ticket.row([
+        PosColumn(
+          text: DateFormat("d MMMM yyyy @ HH:mm").format(orderRow.timeStamp),
+          width: 12,
+          styles: const PosStyles(
+              bold: false, fontType: PosFontType.fontA, align: PosAlign.left),
+        ),
+      ]);
+      for (OrderRowItem orderRowItem in orderRow.orderRowItem) {
+        bytes += ticket.row([
+          PosColumn(
+            text: orderRowItem.product.target!.name,
+            width: 12,
+            styles: const PosStyles(
+                bold: false, fontType: PosFontType.fontA, align: PosAlign.left),
+          ),
+        ]);
+
+        bytes += ticket.row([
+          PosColumn(
+            text: '${orderRowItem.quantity.toString()}pcs',
+            width: 2,
+            styles: const PosStyles(bold: false, align: PosAlign.left),
+          ),
+          PosColumn(
+            text: 'x',
+            width: 1,
+            styles: const PosStyles(bold: false, align: PosAlign.left),
+          ),
+          PosColumn(
+            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+                .format(orderRowItem.product.target!.getLatestRevision().price),
+            width: 4,
+            styles: const PosStyles(bold: false, align: PosAlign.left),
+          ),
+          PosColumn(
+            text: '=',
+            width: 1,
+            styles: const PosStyles(bold: false, align: PosAlign.left),
+          ),
+          PosColumn(
+            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+                .format(orderRowItem.totalPriceItem),
+            width: 4,
+            styles: const PosStyles(
+                bold: false,
+                align: PosAlign.center,
+                fontType: PosFontType.fontA),
+          ),
+        ]);
+      }
+
+      bytes += ticket.row([
+        PosColumn(
+          text: orderRow.paymentMethod.target!.name,
+          width: 6,
+          styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+        ),
+        PosColumn(
+          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+              .format(orderRow.totalPrice),
+          width: 6,
+          styles: const PosStyles(
+              bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
+        ),
+      ]);
+
+      bytes += ticket.hr(ch: '-');
+    }
+
+    bytes += ticket.row([
+      PosColumn(
+        text: "TOTAL PENDAPATAN",
+        width: 12,
+        styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+      )
+    ]);
+    for (final entry in totalIncomeMapping.entries) {
+      bytes += ticket.row([
+        PosColumn(
+          text: StaticDB.paymentMethodBox.get(entry.key)!.name,
+          width: 6,
+          styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+        ),
+        PosColumn(
+          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+              .format(entry.value),
+          width: 6,
+          styles: const PosStyles(
+              bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
+        ),
+      ]);
+    }
+
+    ticket.feed(2);
+    ticket.cut();
+    return bytes;
+  }
+
+  Future<List<int>> getPrintProductSalesBytes(
+      List<OrderRow> orderList, String dateString) async {
+    final profile = await CapabilityProfile.load();
+
+    final Generator ticket = Generator(paperSize, profile);
+    List<int> bytes = [];
+
+    // Print Date
+    bytes += ticket.hr(ch: '-');
+    bytes += ticket.text(
+      dateString,
+      styles: const PosStyles(
+        align: PosAlign.center,
+        fontType: PosFontType.fontA,
+      ),
+    );
+    bytes += ticket.hr(ch: '-', linesAfter: 1);
+
+    // key: productRevision.TargetId
+    // value: qty
+    Map<int, int> itemQtyMapping = {};
+
+    double totalIncome = 0;
+
+    for (OrderRow orderRow in orderList) {
+      totalIncome += orderRow.totalPrice;
+      for (OrderRowItem orderRowItem in orderRow.orderRowItem) {
+        if (itemQtyMapping[orderRowItem.productRevision.targetId] == null) {
+          itemQtyMapping[orderRowItem.productRevision.targetId] = 0;
+        }
+
+        itemQtyMapping[orderRowItem.productRevision.targetId] =
+            itemQtyMapping[orderRowItem.productRevision.targetId]! +
+                orderRowItem.quantity;
+      }
+    }
+
+// Sort the entries by value in descending order
+    var sortedEntries = itemQtyMapping.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    // Iterate over the sorted entries
+    for (var entry in sortedEntries) {
+      final productRevision = StaticDB.productRevisionBox.get(entry.key)!;
+      final product = productRevision.product.target!;
+
+      bytes += ticket.row([
+        PosColumn(
+          text: product.name,
+          width: 8,
+          styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+        ),
+        PosColumn(
+          text: "${entry.value} qty",
+          width: 4,
+          styles: const PosStyles(
+              bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
+        ),
+      ]);
+      bytes += ticket.row([
+        PosColumn(
+          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+              .format(productRevision.price * entry.value),
+          width: 12,
+          styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
+        ),
+      ]);
+
+      ticket.feed(1);
+    }
+
+    bytes += ticket.row([
+      PosColumn(
+        text: "Pendapatan",
+        width: 6,
+        styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
+      ),
+      PosColumn(
+        text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+            .format(totalIncome),
+        width: 6,
+        styles: const PosStyles(
+            bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
+      ),
+    ]);
+
+    bytes += ticket.feed(2);
     return bytes;
   }
 }

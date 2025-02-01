@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
 import 'package:provider/provider.dart';
 
 class SelectEscPrinterWidget extends StatelessWidget {
@@ -37,38 +36,36 @@ class SelectEscPrinterWidget extends StatelessWidget {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               title: Text(Provider.of<EscPrinter>(context)
-                      .availableDevices[index]
-                      .name ??
-                  'Tidak bernama'),
+                  .availableDevices[index]
+                  .name),
               subtitle: Text(Provider.of<EscPrinter>(context)
-                      .availableDevices[index]
-                      .address ??
-                  'Tidak beralamat'),
+                  .availableDevices[index]
+                  .macAdress),
             ),
           ),
         ),
-        floatingActionButton: StreamBuilder<bool>(
-          stream:
-              Provider.of<EscPrinter>(context).printerManager.isScanningStream,
-          initialData: false,
-          builder: (c, snapshot) {
-            if (snapshot.data!) {
-              return FloatingActionButton(
-                backgroundColor: AppColors.mainColor,
-                onPressed: Provider.of<EscPrinter>(context, listen: false)
-                    .stopScanDevices,
-                child: const Icon(Icons.stop),
-              );
-            } else {
-              return FloatingActionButton(
-                backgroundColor: AppColors.mainColor,
-                onPressed: Provider.of<EscPrinter>(context, listen: false)
-                    .startScanDevices,
-                child: const Icon(Icons.search),
-              );
-            }
-          },
-        ),
+        // floatingActionButton: StreamBuilder<bool>(
+        //   stream:
+        //       Provider.of<EscPrinter>(context).printerManager.,
+        //   initialData: false,
+        //   builder: (c, snapshot) {
+        //     // if (snapshot.data!) {
+        //     //   return FloatingActionButton(
+        //     //     backgroundColor: AppColors.mainColor,
+        //     //     onPressed: Provider.of<EscPrinter>(context, listen: false)
+        //     //         .stopScanDevices,
+        //     //     child: const Icon(Icons.stop),
+        //     //   );
+        //     // } else {
+        //       return FloatingActionButton(
+        //         backgroundColor: AppColors.mainColor,
+        //         onPressed: Provider.of<EscPrinter>(context, listen: false)
+        //             .startScanDevices,
+        //         child: const Icon(Icons.search),
+        //       );
+        //     // }
+        //   },
+        // ),
       ),
     );
   }

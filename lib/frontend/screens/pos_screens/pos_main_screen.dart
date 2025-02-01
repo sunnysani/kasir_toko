@@ -97,10 +97,10 @@ class _PosMainScreenState extends State<PosMainScreen> {
         .then((value) {
       if (value == null) return;
       if (value as bool) {
-        notifyChangedQuantity();
         productIdQuantityControllerMap.forEach((key, value) {
           value.text = '0';
         });
+        notifyChangedQuantity();
       }
     });
   }

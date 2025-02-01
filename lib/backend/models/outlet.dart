@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/backend/models/product.dart';
@@ -96,11 +97,28 @@ class Outlet {
     return true;
   }
 
-  List<OrderRow> getOrderRowList(DateTime date) {
+  List<OrderRow> getOrderRowListBasedOnDate(DateTime date) {
     final startDayTime =
         DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
     final endDayTime =
         DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
+
+    Query<OrderRow> query = StaticDB.orderRowBox
+        .query((generated_object_box.OrderRow_.timeStamp
+            .betweenDate(startDayTime, endDayTime)))
+        .build();
+    List<OrderRow> orderRowList = query.find();
+    query.close();
+
+    return orderRowList;
+  }
+
+  List<OrderRow> getOrderRowListBetweenTime(
+      DateTime date, TimeOfDay start, TimeOfDay end) {
+    final startDayTime = DateTime(
+        date.year, date.month, date.day, start.hour, start.minute, 0, 0, 0);
+    final endDayTime = DateTime(
+        date.year, date.month, date.day, end.hour, end.minute, 59, 999, 999);
 
     Query<OrderRow> query = StaticDB.orderRowBox
         .query((generated_object_box.OrderRow_.timeStamp

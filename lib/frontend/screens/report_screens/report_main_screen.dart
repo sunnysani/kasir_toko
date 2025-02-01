@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kasir_toko/backend/models/order_row.dart';
+import 'package:kasir_toko/frontend/widgets/report_screens.dart/report_print_select_method_bottomsheet.dart';
 import 'package:kasir_toko/utils/common/function.common.dart';
 import 'package:kasir_toko/utils/start_configs/static_db.dart';
 
@@ -32,28 +33,30 @@ class ReportMainScreen extends StatelessWidget {
                     ListView(
                       shrinkWrap: true,
                     ),
-                    DataTable(columns: const [
-                      DataColumn(label: Text('Deskripsi')),
-                      DataColumn(label: Text('Kuantitas')),
-                      DataColumn(label: Text('Harga')),
-                    ], rows: [
-                      ...orderRow.orderRowItem.map((item) => DataRow(cells: [
-                            DataCell(ConstrainedBox(
-                                constraints:
-                                    const BoxConstraints(maxWidth: 250),
-                                child: Text(item.product.target!.name))),
-                            DataCell(Center(
-                              child: Text(item.quantity.toString()),
-                            )),
-                            DataCell(Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(NumberFormat.currency(
-                                      symbol: 'Rp ', decimalDigits: 0)
-                                  .format(item.productRevision.target!.price *
-                                      item.quantity)),
-                            )),
-                          ]))
-                    ]),
+                    Center(
+                      child: DataTable(columns: const [
+                        DataColumn(label: Text('Deskripsi')),
+                        DataColumn(label: Text('Kuantitas')),
+                        DataColumn(label: Text('Harga')),
+                      ], rows: [
+                        ...orderRow.orderRowItem.map((item) => DataRow(cells: [
+                              DataCell(ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 250),
+                                  child: Text(item.product.target!.name))),
+                              DataCell(Center(
+                                child: Text(item.quantity.toString()),
+                              )),
+                              DataCell(Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(NumberFormat.currency(
+                                        symbol: 'Rp ', decimalDigits: 0)
+                                    .format(item.productRevision.target!.price *
+                                        item.quantity)),
+                              )),
+                            ]))
+                      ]),
+                    ),
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 16),
@@ -227,23 +230,25 @@ class ReportMainScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const Divider(),
-                  Scrollbar(
-                    controller: scrollController1,
-                    thumbVisibility: true,
-                    child: SingleChildScrollView(
+                  Center(
+                    child: Scrollbar(
                       controller: scrollController1,
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                          columns: const [
-                            DataColumn(label: Text('Metode Pembayaran')),
-                            DataColumn(label: Text('Jumlah Pemasukan')),
-                          ],
-                          rows: constructedPaymentMethodItems
-                              .map((item) => DataRow(cells: [
-                                    DataCell((Text(item[0]))),
-                                    DataCell((Text(item[1]))),
-                                  ]))
-                              .toList()),
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: scrollController1,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                            columns: const [
+                              DataColumn(label: Text('Metode Pembayaran')),
+                              DataColumn(label: Text('Jumlah Pemasukan')),
+                            ],
+                            rows: constructedPaymentMethodItems
+                                .map((item) => DataRow(cells: [
+                                      DataCell((Text(item[0]))),
+                                      DataCell((Text(item[1]))),
+                                    ]))
+                                .toList()),
+                      ),
                     ),
                   ),
 
@@ -256,27 +261,29 @@ class ReportMainScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const Divider(),
-                  Scrollbar(
-                    controller: scrollController2,
-                    thumbVisibility: true,
-                    child: SingleChildScrollView(
+                  Center(
+                    child: Scrollbar(
                       controller: scrollController2,
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                          columns: const [
-                            DataColumn(label: Text('Deskripsi')),
-                            DataColumn(label: Text('Kuantitas')),
-                            DataColumn(label: Text('Harga Satuan')),
-                            DataColumn(label: Text('Total Harga')),
-                          ],
-                          rows: constructedOrderItems
-                              .map((item) => DataRow(cells: [
-                                    DataCell((Text(item[0]))),
-                                    DataCell((Text(item[1]))),
-                                    DataCell((Text(item[2]))),
-                                    DataCell((Text(item[3]))),
-                                  ]))
-                              .toList()),
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: scrollController2,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                            columns: const [
+                              DataColumn(label: Text('Deskripsi')),
+                              DataColumn(label: Text('Kuantitas')),
+                              DataColumn(label: Text('Harga Satuan')),
+                              DataColumn(label: Text('Total Harga')),
+                            ],
+                            rows: constructedOrderItems
+                                .map((item) => DataRow(cells: [
+                                      DataCell((Text(item[0]))),
+                                      DataCell((Text(item[1]))),
+                                      DataCell((Text(item[2]))),
+                                      DataCell((Text(item[3]))),
+                                    ]))
+                                .toList()),
+                      ),
                     ),
                   ),
 
@@ -291,14 +298,27 @@ class ReportMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime args = ModalRoute.of(context)!.settings.arguments as DateTime;
-    List<OrderRow> orderList = StaticDB.outlet.getOrderRowList(args);
+    List<OrderRow> orderList = StaticDB.outlet.getOrderRowListBasedOnDate(args);
     double totalSale = 0;
     for (OrderRow order in orderList) {
       totalSale += order.totalPrice;
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Laporan Harian')),
+      appBar: AppBar(
+        title: const Text('Laporan Harian'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) =>
+                      ReportPrintSelectMethodBottomsheet(args),
+                );
+              },
+              icon: const Icon(Icons.print_outlined))
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: Stack(
