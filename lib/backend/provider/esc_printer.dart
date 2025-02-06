@@ -109,6 +109,60 @@ class EscPrinter with ChangeNotifier {
     return true;
   }
 
+  Future<void> printTesting(
+    BuildContext context,
+  ) async {
+    if (!initialCheckPrintPass(context)) return;
+
+    printing = true;
+    notifyListeners();
+
+    final profile = await CapabilityProfile.load();
+    final Generator ticket = Generator(paperSize, profile);
+    List<int> bytes = [];
+
+    bytes += ticket.text(
+      'Tokkoo PoS',
+      styles: const PosStyles(
+        align: PosAlign.center,
+        height: PosTextSize.size1,
+        width: PosTextSize.size1,
+        fontType: PosFontType.fontB,
+      ),
+      linesAfter: 1,
+    );
+
+    bytes += ticket.text(
+      "Waktu: ${DateFormat("d MMM yyyy HH:mm:ss").format(DateTime.now())}",
+      styles: const PosStyles(
+        align: PosAlign.center,
+        height: PosTextSize.size1,
+        width: PosTextSize.size1,
+        fontType: PosFontType.fontB,
+      ),
+      linesAfter: 1,
+    );
+
+    bytes += ticket.text(
+      "Tes mencektak berhasil",
+      styles: const PosStyles(
+        align: PosAlign.center,
+        height: PosTextSize.size1,
+        width: PosTextSize.size1,
+        fontType: PosFontType.fontB,
+      ),
+      linesAfter: 1,
+    );
+
+    bytes += ticket.cut();
+    bytes += ticket.drawer();
+
+    await PrintBluetoothThermal.writeBytes(bytes);
+    await Future.delayed(const Duration(milliseconds: 2000));
+    printing = false;
+    notifyListeners();
+  }
+
   Future<void> printOrder(
     BuildContext context,
     OrderRow orderRow,
@@ -341,6 +395,7 @@ class EscPrinter with ChangeNotifier {
     );
 
     bytes += ticket.feed(2);
+    bytes += ticket.drawer();
     return bytes;
   }
 

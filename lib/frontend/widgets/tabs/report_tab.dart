@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kasir_toko/frontend/screens/report_screens/report_main_screen.dart';
+import 'package:kasir_toko/frontend/widgets/common/hideable_text_form_field.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
 import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:kasir_toko/utils/start_configs/app_settings.dart';
 
 class ReportTab extends StatefulWidget {
   const ReportTab({super.key});
@@ -12,9 +14,9 @@ class ReportTab extends StatefulWidget {
 }
 
 class _ReportTabState extends State<ReportTab> {
-  DateTime? selectedDate;
-  TextEditingController textFieldDateSelectorController =
-      TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  TextEditingController textFieldDateSelectorController = TextEditingController(
+      text: DateFormat('yyyy MM dd').format(DateTime.now()));
   TextEditingController textFieldCodeAccessController = TextEditingController();
 
   Future<void> selectDate(BuildContext context) async {
@@ -24,77 +26,73 @@ class _ReportTabState extends State<ReportTab> {
         firstDate: DateTime(2024),
         lastDate: DateTime.now());
 
+    if (newSelectedDate == null) return;
+
     setState(() => selectedDate = newSelectedDate);
-    textFieldDateSelectorController.text = newSelectedDate == null
-        ? ""
-        : DateFormat('yyyy MM dd').format(newSelectedDate);
+    // ignore: unnecessary_null_comparison
+    textFieldDateSelectorController.text =
+        DateFormat('yyyy MM dd').format(newSelectedDate);
   }
 
   Future<void> seeReport(BuildContext context) async {
-    if (selectedDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Pilihan tanggal kosong'),
-          backgroundColor: AppColors.negativeColor,
-        ),
-      );
-      return;
-    }
-    await showDialog(
-      context: context,
-      builder: (ctx) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          shrinkWrap: true,
-          children: [
-            const Text(
-              'Konfirmasi Kode',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1.05,
+    final reportAccessKey =
+        AppSettings.sharedPreferences.getString("REPORT_ACCESS_KEY");
+
+    if (reportAccessKey == null || reportAccessKey.isEmpty) {
+      Navigator.of(context)
+          .pushNamed(ReportMainScreen.routeName, arguments: selectedDate!);
+    } else {
+      await showDialog(
+        context: context,
+        builder: (ctx) => Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            shrinkWrap: true,
+            children: [
+              const Text(
+                'Konfirmasi Kode',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.05,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: textFieldCodeAccessController,
-              decoration: const InputDecoration(
+              const SizedBox(height: 20),
+              HideableTextFormField(
+                controller: textFieldCodeAccessController,
                 labelText: 'Kode Akses',
               ),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-                onPressed: () {
-                  if (textFieldCodeAccessController.text ==
-                      'LaporanTinuk2019') {
-                    Navigator.of(ctx).pop();
-                    Navigator.of(context).pushNamed(ReportMainScreen.routeName,
-                        arguments: selectedDate!);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Kode Salah!'),
-                        backgroundColor: AppColors.negativeColor,
-                      ),
-                    );
-                    Navigator.of(ctx).pop();
-                  }
-                },
-                child: const Text('Konfirmasi Kode'))
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton(
+                  onPressed: () {
+                    if (textFieldCodeAccessController.text == reportAccessKey) {
+                      Navigator.of(ctx).pop();
+                      Navigator.of(context).pushNamed(
+                          ReportMainScreen.routeName,
+                          arguments: selectedDate!);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Kode Salah!'),
+                          backgroundColor: AppColors.negativeColor,
+                        ),
+                      );
+                      Navigator.of(ctx).pop();
+                    }
+                  },
+                  child: const Text('Konfirmasi Kode'))
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Make below component reusable as in pos_tab
     return Center(
         child: Padding(
       padding: EdgeInsets.symmetric(
@@ -110,7 +108,7 @@ class _ReportTabState extends State<ReportTab> {
               onTap: () => selectDate(context),
               child: TextField(
                 controller: textFieldDateSelectorController,
-                enabled: false,
+                readOnly: true,
                 decoration: InputDecoration(
                   labelText: 'Pilih Tanggal',
                   disabledBorder: OutlineInputBorder(

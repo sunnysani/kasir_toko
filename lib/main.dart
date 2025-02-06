@@ -110,6 +110,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             inputDecorationTheme: InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIconColor: AppColors.mainColor,
               focusColor: AppColors.mainColor,
               fillColor: const Color.fromARGB(30, 124, 146, 153),

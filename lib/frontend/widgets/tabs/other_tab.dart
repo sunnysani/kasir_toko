@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kasir_toko/frontend/widgets/other/information/other_information_printer_dialog.dart';
 import 'package:kasir_toko/frontend/widgets/other/information/other_information_usage_dialog.dart';
+import 'package:kasir_toko/frontend/widgets/other/setting/other_setting_manage_data_access_code_dialog.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
 import 'package:kasir_toko/utils/common/function.common.dart';
 
@@ -45,7 +46,14 @@ class OtherTab extends StatelessWidget {
             label: "Pengaturan",
             children: [
               OtherTabItemChild(
-                  label: "Atur Kode Akses Data Penjualan", onTap: () {}),
+                label: "Atur Kode Akses Data Penjualan",
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          const OtherSettingManageDataAccessCodeDialog());
+                },
+              ),
             ],
           ),
           OtherTabItem(

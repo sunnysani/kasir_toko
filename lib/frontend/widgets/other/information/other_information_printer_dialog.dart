@@ -1,6 +1,10 @@
 import 'package:app_settings/app_settings.dart' as appSetting;
 import 'package:flutter/material.dart';
+import 'package:kasir_toko/backend/provider/esc_printer.dart';
 import 'package:kasir_toko/frontend/widgets/common/carousel_with_dot_navigator.dart';
+import 'package:kasir_toko/frontend/widgets/common/printer_status.dart';
+import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:provider/provider.dart';
 
 class OtherInformationPrinterDialogItemBottomAction {
   final String label;
@@ -17,7 +21,7 @@ class OtherInformationPrinterDialogItem {
   final String title;
   final Widget? titleTrailing;
   final Widget description;
-  final OtherInformationPrinterDialogItemBottomAction? bottomAction;
+  final dynamic bottomAction;
 
   OtherInformationPrinterDialogItem({
     required this.header,
@@ -55,18 +59,17 @@ class OtherInformationPrinterDialog extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           CarouselWithDotNavigator(
-              height: 380,
+              height: 420,
               items: [
                 OtherInformationPrinterDialogItem(
-                  header: Image.asset("assets/images/printers.jpg"),
-                  title: "Sediakan Perangkat",
+                  header: Image.asset("assets/images/printer-tutorial-1.jpeg"),
+                  title: "1. Sediakan Perangkat",
                   description: const Text(
                       'Perangkat yang dibutuhkan adalah Thermal Printer yang memiliki fitur Bluetooth dengan lebar kertas 58mm'),
                 ),
                 OtherInformationPrinterDialogItem(
-                  header: Image.asset(
-                      "assets/images/printers-pairing-bluetooth.jpg"),
-                  title: "Hubungkan Perangkat",
+                  header: Image.asset("assets/images/printer-tutorial-2.jpeg"),
+                  title: "2. Hubungkan Perangkat",
                   description: const Text(
                       'Buka pengaturan dan pasangkan dengan perangkat Thermal Printer'),
                   bottomAction: OtherInformationPrinterDialogItemBottomAction(
@@ -75,25 +78,66 @@ class OtherInformationPrinterDialog extends StatelessWidget {
                         type: appSetting.AppSettingsType.bluetooth),
                   ),
                 ),
+                OtherInformationPrinterDialogItem(
+                  header: Image.asset("assets/images/printer-tutorial-3.jpeg"),
+                  title: "3. Hubungkan Printer",
+                  description: const Text(
+                      'Klik tombol teks "Tidak Terhubung (Diam)". Untuk menghubungkan'),
+                  bottomAction: const PrinterStatus(),
+                ),
+                OtherInformationPrinterDialogItem(
+                  header: Image.asset("assets/images/printer-tutorial-4.jpeg"),
+                  title: "4. Pilih perangkat",
+                  description: const Text(
+                      'Pilih perangkat sesuai dengan nama dan MacAddress'),
+                  bottomAction: const PrinterStatus(),
+                ),
+                OtherInformationPrinterDialogItem(
+                    header:
+                        Image.asset("assets/images/printer-tutorial-5.jpeg"),
+                    title: "5. Perangkat berhasil terhubung",
+                    description: const Text(
+                        'Saat status printer menampilkan nama, perangkat berhasil terhubung. Klik tombol "Cetak" untuk mencetak'),
+                    bottomAction: Column(
+                      children: [
+                        const PrinterStatus(),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            onPressed: () =>
+                                Provider.of<EscPrinter>(context, listen: false)
+                                    .printTesting(context),
+                            style: ButtonTextStyle.secondaryButtonStyle,
+                            child: const Text('Tes Cetak'),
+                          ),
+                        ),
+                      ],
+                    )),
               ]
                   .map((item) => ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         children: [
-                          SizedBox(height: 240, child: item.header),
+                          SizedBox(height: 200, child: item.header),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                item.title,
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              Expanded(
+                                child: Text(
+                                  item.title,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                               if (item.titleTrailing != null)
                                 item.titleTrailing!,
                             ],
                           ),
                           item.description,
-                          if (item.bottomAction != null)
+                          if (item.bottomAction is Widget)
+                            item.bottomAction
+                          else if (item.bottomAction
+                              is OtherInformationPrinterDialogItemBottomAction)
                             TextButton(
                               onPressed: item.bottomAction!.onTap,
                               child: Text(item.bottomAction!.label),

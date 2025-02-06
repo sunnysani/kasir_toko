@@ -16,7 +16,7 @@ class _PrinterStatusState extends State<PrinterStatus> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<EscPrinter>(context, listen: false).tryConnectLastConnected();
+      // Provider.of<EscPrinter>(context, listen: false).tryConnectLastConnected();
       setState(
           () async => batteryLevel = await PrintBluetoothThermal.batteryLevel);
     });
