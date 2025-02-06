@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kasir_toko/backend/provider/esc_printer.dart';
 import 'package:kasir_toko/backend/provider/preferred_language.dart';
+import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_management_screen.dart';
 import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_payment_method_creation_screen.dart';
 import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_payment_method_management_screen.dart';
 import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_product_category_creation_screen.dart';
@@ -41,6 +42,8 @@ void main() async {
     runApp(const MyApp());
   }, (error, stack) {
     print(error);
+    debugPrint(error.toString(), wrapWidth: 4);
+    debugPrintStack(stackTrace: stack);
   });
 }
 
@@ -77,9 +80,7 @@ class MyApp extends StatelessWidget {
               onSecondary: Colors.white,
               error: AppColors.negativeColor,
               onError: Colors.white,
-              background: AppColors.backgroundBaseColor,
-              onBackground: Colors.black,
-              surface: Colors.white,
+              surface: AppColors.backgroundBaseColor,
               onSurface: Colors.black,
             ),
             useMaterial3: true,
@@ -97,13 +98,13 @@ class MyApp extends StatelessWidget {
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
-                textStyle: MaterialStateProperty.all<TextStyle>(
+                textStyle: WidgetStateProperty.all<TextStyle>(
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 ),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(AppColors.mainColor),
-                minimumSize: MaterialStateProperty.all<Size>(
+                    WidgetStateProperty.all<Color>(AppColors.mainColor),
+                minimumSize: WidgetStateProperty.all<Size>(
                   const Size(500, 50),
                 ),
               ),
@@ -137,6 +138,8 @@ class MyApp extends StatelessWidget {
           ),
           routes: {
             TabScreen.routeName: (ctx) => const TabScreen(),
+            OutletManagementScreen.routeName: (ctx) =>
+                const OutletManagementScreen(),
             OutletProductCategoryCreationScreen.routeName: (ctx) =>
                 const OutletProductCategoryCreationScreen(),
             OutletProductCategoryManagementScreen.routeName: (ctx) =>

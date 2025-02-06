@@ -39,7 +39,6 @@ class _OutletTabState extends State<OutletTab> {
 
   @override
   Widget build(BuildContext context) {
-    print('Build Outlet Tab');
     return Scaffold(
       body: SingleChildScrollView(
         controller: scrollController,

@@ -27,7 +27,7 @@ class ReportMainScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Waktu: ${DateFormat('yyyy-MM-dd / hh:mm:ss').format(orderRow.timeStamp)}',
+                      'Waktu: ${DateFormat('yyyy-MM-dd / HH:mm:ss').format(orderRow.timeStamp)}',
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                     ListView(
@@ -356,7 +356,7 @@ class ReportMainScreen extends StatelessWidget {
                                     .format(orderList[index].totalPrice),
                               ),
                               subtitle: Text(
-                                  'Pukul: ${DateFormat('hh:mm').format(orderList[index].timeStamp)}'),
+                                  'Pukul: ${DateFormat('HH:mm').format(orderList[index].timeStamp)}'),
                             ),
                           ))
                 ],

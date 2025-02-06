@@ -4,7 +4,9 @@ import 'package:kasir_toko/frontend/widgets/common/modified_text_form_field.dart
 import 'package:kasir_toko/utils/start_configs/static_db.dart';
 
 class OutletGeneralForm extends StatefulWidget {
-  const OutletGeneralForm({super.key});
+  const OutletGeneralForm({super.key, this.hideHeaderTitle = false});
+
+  final bool hideHeaderTitle;
 
   @override
   State<OutletGeneralForm> createState() => _OutletGeneralFormState();
@@ -48,11 +50,12 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          'INFORMASI UMUM',
-          style: TextStyle(
-              fontFamily: 'Montserrat', wordSpacing: 10, fontSize: 20),
-        ),
+        if (!widget.hideHeaderTitle)
+          const Text(
+            'INFORMASI UMUM',
+            style: TextStyle(
+                fontFamily: 'Montserrat', wordSpacing: 10, fontSize: 20),
+          ),
         const SizedBox(height: 20),
         Form(
           child: Column(

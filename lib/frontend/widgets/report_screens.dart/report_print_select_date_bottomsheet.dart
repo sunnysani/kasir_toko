@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/provider/esc_printer.dart';
+import 'package:kasir_toko/frontend/widgets/common/printer_status.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
 import 'package:kasir_toko/utils/common/function.common.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +60,7 @@ class _ReportPrintSelectDateBottomsheetState
                   initialEntryMode: TimePickerEntryMode.dialOnly,
                 );
                 if (selectedTime != null) {
-                  setState(() => selectedEndTime = selectedTime);
+                  setState(() => selectedStartTime = selectedTime);
                 }
               },
             ),
@@ -83,18 +83,7 @@ class _ReportPrintSelectDateBottomsheetState
             ),
           ),
         ]),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Status printer: '),
-            TextButton(
-              onPressed: () =>
-                  CommonFunction.showEscPrinterConnectModal(context),
-              child: Text(
-                  '${Provider.of<EscPrinter>(context).selectedDevice?.name ?? 'Tidak Terhubung'} (${Provider.of<EscPrinter>(context).printing ? 'Mencetak' : 'Diam'})'),
-            )
-          ],
-        ),
+        const PrinterStatus(),
         ElevatedButton(
           onPressed: () {
             if (selectedEndTime.compareTo(selectedStartTime) <= 0) {

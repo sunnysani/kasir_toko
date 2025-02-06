@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/frontend/screens/pos_screens/pos_proceed_receipt_screen.dart';
 import 'package:kasir_toko/frontend/widgets/pos/pos_proceed_payment/pos_order_summary.dart';
@@ -35,19 +34,16 @@ class PosProceedPaymentScreen extends StatelessWidget {
       return;
     }
 
-    // TODO: Find best way to include this function
     orderRow.timeStamp = DateTime.now();
     for (final item in orderRow.orderRowItem) {
-      print(StaticDB.orderRowItemBox.put(item));
+      StaticDB.orderRowItemBox.put(item);
     }
-    print("orderID: ${StaticDB.orderRowBox.put(orderRow)}");
+    StaticDB.orderRowBox.put(orderRow);
 
-    Navigator.of(context)
-        .pushNamed(PosProceedReceiptScreen.routeName, arguments: orderRow)
-        .then((value) {
-      if (value == null) return;
-      if (value as bool) Navigator.pop(context, true);
-    });
+    Navigator.of(context).pushReplacementNamed(
+        PosProceedReceiptScreen.routeName,
+        result: true,
+        arguments: orderRow);
   }
 
   @override

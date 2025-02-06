@@ -19,48 +19,51 @@ class OutletManagementCreationTemplate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Stack(
-          fit: StackFit.expand,
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
+      body: SafeArea(
+        child: Center(
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal:
+                          CommonFunction.getHorizontalPaddingForMaxWidth(
+                              maxWidth: 550, context: context),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        child,
+                        const SizedBox(height: 90)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
                         maxWidth: 550, context: context),
                   ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      child,
-                      const SizedBox(height: 90)
-                    ],
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: submit,
+                      child: Text(isCreation ? 'Tambah' : 'Simpan'),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-                      maxWidth: 550, context: context),
-                ),
-                child: Container(
-                  height: 50,
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: submit,
-                    child: Text(isCreation ? 'Tambah' : 'Simpan'),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

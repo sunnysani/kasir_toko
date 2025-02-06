@@ -80,7 +80,9 @@ class Outlet {
         address == null ||
         address!.isEmpty ||
         phoneNumber == null ||
-        phoneNumber!.isEmpty) return false;
+        phoneNumber!.isEmpty) {
+      return false;
+    }
 
     return true;
   }

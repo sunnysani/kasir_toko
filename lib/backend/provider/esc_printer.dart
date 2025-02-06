@@ -1,33 +1,10 @@
-// String sel = select as String;
-// if (sel == "permission bluetooth granted") {
-//   bool status = await PrintBluetoothThermal.isPermissionBluetoothGranted;
-//   setState(() {
-//     _info = "permission bluetooth granted: $status";
-//   });
-//   //open setting permision if not granted permision
-// } else if (sel == "bluetooth enabled") {
-//   bool state = await PrintBluetoothThermal.bluetoothEnabled;
-//   setState(() {
-//     _info = "Bluetooth enabled: $state";
-//   });
-// } else if (sel == "update info") {
-//   initPlatformState();
-// } else if (sel == "connection status") {
-//   final bool result = await PrintBluetoothThermal.connectionStatus;
-//   connected = result;
-//   setState(() {
-//     _info = "connection status: $result";
-//   });
-// }
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:kasir_toko/backend/models/order_row.dart';
 import 'package:kasir_toko/backend/models/order_row_item.dart';
-import 'package:kasir_toko/backend/models/payment_method.dart';
 import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:kasir_toko/utils/start_configs/app_settings.dart';
 import 'package:kasir_toko/utils/start_configs/static_db.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
@@ -37,7 +14,7 @@ class EscPrinter with ChangeNotifier {
   static List<BluetoothInfo> _availableDevices = [];
   static BluetoothInfo? _selectedDevice;
   bool printing = false;
-  // TODO: Make this dynamic data
+
   static PaperSize paperSize = PaperSize.mm58;
 
   List<BluetoothInfo> get availableDevices {
@@ -48,12 +25,37 @@ class EscPrinter with ChangeNotifier {
     return _selectedDevice;
   }
 
-  set selectedDevice(BluetoothInfo? device) {
-    _selectedDevice = device;
-    if (device != null) {
-      PrintBluetoothThermal.connect(macPrinterAddress: device.macAdress);
-      notifyListeners();
+  void tryConnectLastConnected() {
+    if (selectedDevice == null) {
+      final latestConnectedPrinterMacAddress = AppSettings.sharedPreferences
+          .getString("LATEST_CONNECTED_PRINTER_MAC_ADDRESS");
+      final latestConnectedPrinterName = AppSettings.sharedPreferences
+          .getString("LATEST_CONNECTED_PRINTER_NAME");
+
+      if (latestConnectedPrinterMacAddress != null &&
+          latestConnectedPrinterName != null) {
+        selectDevice(BluetoothInfo(
+            name: latestConnectedPrinterName,
+            macAdress: latestConnectedPrinterMacAddress));
+      }
     }
+  }
+
+  Future<bool> selectDevice(BluetoothInfo device) async {
+    final connected = await PrintBluetoothThermal.connect(
+        macPrinterAddress: device.macAdress);
+
+    if (connected) {
+      _selectedDevice = device;
+      notifyListeners();
+      await AppSettings.sharedPreferences
+          .setString("LATEST_CONNECTED_PRINTER_MAC_ADDRESS", device.macAdress);
+      await AppSettings.sharedPreferences
+          .setString("LATEST_CONNECTED_PRINTER_NAME", device.name);
+      return true;
+    }
+
+    return false;
   }
 
   PrintBluetoothThermal get printerManager {
@@ -81,22 +83,7 @@ class EscPrinter with ChangeNotifier {
     _availableDevices = await PrintBluetoothThermal.pairedBluetooths;
 
     notifyListeners();
-
-    // // TODO: Check if device scan is allowed
-    // _availableDevices = [];
-
-    // printerManager.startScan(const Duration(seconds: 4));
-    // notifyListeners();
-
-    // printerManager.scanResults.listen((event) async {
-    //   _availableDevices = event;
-    //   notifyListeners();
-    // });
   }
-
-  // void stopScanDevices() {
-  //   printerManager.stopScan();
-  // }
 
   bool initialCheckPrintPass(BuildContext context) {
     if (_selectedDevice == null) {
@@ -353,8 +340,7 @@ class EscPrinter with ChangeNotifier {
       linesAfter: 2,
     );
 
-    ticket.feed(2);
-    ticket.cut();
+    bytes += ticket.feed(2);
     return bytes;
   }
 
@@ -364,6 +350,16 @@ class EscPrinter with ChangeNotifier {
 
     final Generator ticket = Generator(paperSize, profile);
     List<int> bytes = [];
+
+    bytes += ticket.text(
+      "Journal",
+      styles: const PosStyles(
+        align: PosAlign.center,
+        fontType: PosFontType.fontA,
+        width: PosTextSize.size2,
+        height: PosTextSize.size2,
+      ),
+    );
 
     // Print Date
     bytes += ticket.hr(ch: '-');
@@ -483,8 +479,8 @@ class EscPrinter with ChangeNotifier {
       ]);
     }
 
-    ticket.feed(2);
-    ticket.cut();
+    bytes += ticket.feed(2);
+
     return bytes;
   }
 
@@ -494,6 +490,16 @@ class EscPrinter with ChangeNotifier {
 
     final Generator ticket = Generator(paperSize, profile);
     List<int> bytes = [];
+
+    bytes += ticket.text(
+      "Penjualan Produk",
+      styles: const PosStyles(
+        align: PosAlign.center,
+        fontType: PosFontType.fontA,
+        width: PosTextSize.size2,
+        height: PosTextSize.size2,
+      ),
+    );
 
     // Print Date
     bytes += ticket.hr(ch: '-');
@@ -525,7 +531,7 @@ class EscPrinter with ChangeNotifier {
       }
     }
 
-// Sort the entries by value in descending order
+    // Sort the entries by value in descending order
     var sortedEntries = itemQtyMapping.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -575,6 +581,7 @@ class EscPrinter with ChangeNotifier {
     ]);
 
     bytes += ticket.feed(2);
+
     return bytes;
   }
 }

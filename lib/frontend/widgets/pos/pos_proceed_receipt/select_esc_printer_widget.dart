@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kasir_toko/backend/provider/esc_printer.dart';
+import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:provider/provider.dart';
 
 class SelectEscPrinterWidget extends StatelessWidget {
@@ -9,63 +11,73 @@ class SelectEscPrinterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Pilih Printer'),
-          actions: [
-            IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.close),
-            )
-          ],
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(
+          vertical: 16,
         ),
-        body: ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: Provider.of<EscPrinter>(context).availableDevices.length,
-          itemBuilder: (BuildContext context, int index) => InkWell(
-            onTap: () {
-              Provider.of<EscPrinter>(context, listen: false).selectedDevice =
-                  Provider.of<EscPrinter>(context, listen: false)
-                      .availableDevices[index];
-              Navigator.of(context).pop();
-            },
-            child: ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              title: Text(Provider.of<EscPrinter>(context)
-                  .availableDevices[index]
-                  .name),
-              subtitle: Text(Provider.of<EscPrinter>(context)
-                  .availableDevices[index]
-                  .macAdress),
+        children: [
+          const Text(
+            'Perangkat yang Dikenali',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
-        ),
-        // floatingActionButton: StreamBuilder<bool>(
-        //   stream:
-        //       Provider.of<EscPrinter>(context).printerManager.,
-        //   initialData: false,
-        //   builder: (c, snapshot) {
-        //     // if (snapshot.data!) {
-        //     //   return FloatingActionButton(
-        //     //     backgroundColor: AppColors.mainColor,
-        //     //     onPressed: Provider.of<EscPrinter>(context, listen: false)
-        //     //         .stopScanDevices,
-        //     //     child: const Icon(Icons.stop),
-        //     //   );
-        //     // } else {
-        //       return FloatingActionButton(
-        //         backgroundColor: AppColors.mainColor,
-        //         onPressed: Provider.of<EscPrinter>(context, listen: false)
-        //             .startScanDevices,
-        //         child: const Icon(Icons.search),
-        //       );
-        //     // }
-        //   },
-        // ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 450,
+            child: FutureBuilder(
+                future: PrintBluetoothThermal.pairedBluetooths,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.data == null) return const SizedBox();
+
+                  return Scrollbar(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final item = snapshot.data![index];
+
+                        return ListTile(
+                          onTap: () async {
+                            final connected = await Provider.of<EscPrinter>(
+                                    context,
+                                    listen: false)
+                                .selectDevice(item);
+
+                            if (connected == false) {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('Gagal menghubungkan perangkat'),
+                                  backgroundColor: AppColors.negativeColor,
+                                ),
+                              );
+                            }
+
+                            if (context.mounted && connected) {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          title: Text(item.name),
+                          subtitle: Text(item.macAdress),
+                        );
+                      },
+                    ),
+                  );
+                }),
+          ),
+        ],
       ),
     );
   }

@@ -35,7 +35,7 @@ class _OutletProductCategoryManagementScreenState
       loadData: loadData,
       showSubtitle: true,
       creationRoute: OutletProductCategoryCreationScreen.routeName,
-      appBarTitle: 'Produk',
+      appBarTitle: 'Kategori Produk',
       searchBarText: 'Temukan Produk berdasarkan nama atau kode',
       dataList: categories,
     );

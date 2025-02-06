@@ -54,7 +54,7 @@ class PosBottomSheet extends StatelessWidget {
             ElevatedButton(
                 style: ButtonStyle(
                   minimumSize:
-                      MaterialStateProperty.all<Size>(const Size(80, 50)),
+                      WidgetStateProperty.all<Size>(const Size(80, 50)),
                 ),
                 onPressed: submit,
                 child: const Text('Lanjut Pembayaran'))
