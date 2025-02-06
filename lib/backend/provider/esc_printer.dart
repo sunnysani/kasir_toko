@@ -15,6 +15,7 @@ class EscPrinter with ChangeNotifier {
   static List<BluetoothInfo> _availableDevices = [];
   static BluetoothInfo? _selectedDevice;
   bool printing = false;
+  bool connecting = false;
 
   static PaperSize paperSize = PaperSize.mm58;
 
@@ -43,6 +44,10 @@ class EscPrinter with ChangeNotifier {
   }
 
   Future<bool> selectDevice(BluetoothInfo device) async {
+    if (selectedDevice != null) {
+      await PrintBluetoothThermal.disconnect;
+    }
+
     final connected = await PrintBluetoothThermal.connect(
         macPrinterAddress: device.macAdress);
 
