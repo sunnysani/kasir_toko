@@ -1,8 +1,8 @@
-import 'package:kasir_toko/backend/models/payment_method.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/backend/models/product_revision.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/payment_method.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_revision.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class DBFunction {
   static void saveOutlet({

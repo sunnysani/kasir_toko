@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/widgets/common/hideable_text_form_field.dart';
-import 'package:kasir_toko/frontend/widgets/common/modified_text_form_field.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/start_configs/app_settings.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/hideable_text_form_field.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
 
 class OtherSettingManageDataAccessCodeDialog extends StatefulWidget {
   const OtherSettingManageDataAccessCodeDialog({super.key});

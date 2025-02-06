@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/frontend/widgets/report_screens.dart/report_print_select_method_bottomsheet.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/report_screens.dart/report_print_select_method_bottomsheet.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class ReportMainScreen extends StatelessWidget {
   const ReportMainScreen({super.key});

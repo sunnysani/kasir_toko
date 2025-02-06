@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/payment_method.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/objectbox.g.dart' as generated_object_box;
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/payment_method.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/objectbox.g.dart' as generated_object_box;
 import 'package:objectbox/objectbox.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 @Entity(uid: 2542198763334126311)
 class Outlet {

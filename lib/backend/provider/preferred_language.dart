@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/utils/start_configs/app_settings.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
 
 class PreferredLanguage with ChangeNotifier {
   String? _selectedLanguage;

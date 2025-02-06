@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/other_tab.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/outlet_tab.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/pos_tab.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/report_tab.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/other/information/other_information_usage_dialog.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/other_tab.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/outlet_tab.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/pos_tab.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/report_tab.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
@@ -36,6 +38,46 @@ class _TabScreenState extends State<TabScreen> {
     } else {
       _selectPage(0);
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final firstTimeStart =
+          AppSettings.sharedPreferences.getBool("FIRST_TIME_START");
+      if (firstTimeStart == true) return;
+
+      AppSettings.sharedPreferences.setBool("FIRST_TIME_START", true);
+
+      showDialog(
+          context: context,
+          builder: (context) => Dialog(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  children: [
+                    const Text('Selamat Datang',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    const Text(
+                        'Halo! Terima kasih telah mengunduh Tokkoo PoS. Kami siap membantu Anda mendapatkan pengalaman terbaik. Mari mulai!'),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                        onPressed: () {
+                          _selectPage(3);
+                          Navigator.of(context).pop();
+
+                          showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const OtherInformationUsageDialog());
+                        },
+                        child: const Text('Pelajar Aplikasi'))
+                  ],
+                ),
+              ));
+    });
+
     super.initState();
   }
 

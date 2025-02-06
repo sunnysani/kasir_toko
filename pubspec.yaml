@@ -1,4 +1,4 @@
-name: kasir_toko
+name: tokkoo_pos_lite
 description: "Solusi aplikasi kasir simpel untuk toko Anda"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -22,6 +22,7 @@ environment:
   sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
+  flutter_launcher_icons: ^0.14.3
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -78,6 +79,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/icons/
 
   fonts:
     - family: Roboto

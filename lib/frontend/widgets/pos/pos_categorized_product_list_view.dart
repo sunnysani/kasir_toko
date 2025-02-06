@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_product_list_view.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_product_list_view.dart';
 
 class PosCaregorizedProductsListView extends StatelessWidget {
   const PosCaregorizedProductsListView({

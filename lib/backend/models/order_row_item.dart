@@ -1,7 +1,7 @@
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/backend/models/product_revision.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_revision.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity(uid: 4805377593213751)

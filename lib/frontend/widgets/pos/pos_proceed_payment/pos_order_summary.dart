@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/order_row_item.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row_item.dart';
 
 class PosOrderSummary extends StatelessWidget {
   const PosOrderSummary({

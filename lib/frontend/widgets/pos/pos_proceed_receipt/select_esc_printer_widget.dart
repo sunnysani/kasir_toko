@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:provider/provider.dart';
 

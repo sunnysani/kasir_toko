@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
 
 class PosFilterDrawer extends StatelessWidget {
   const PosFilterDrawer({

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_product_category_creation_screen.dart';
-import 'package:kasir_toko/frontend/widgets/outlet_management/outlet_management_template.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_product_category_creation_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/outlet_management/outlet_management_template.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class OutletProductCategoryManagementScreen extends StatefulWidget {
   const OutletProductCategoryManagementScreen({super.key});

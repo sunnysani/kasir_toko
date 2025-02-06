@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/frontend/screens/pos_screens/pos_proceed_receipt_screen.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_proceed_payment/pos_order_summary.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_proceed_payment/pos_payment_option.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_proceed_payment/pos_proceed_bottom_sheet.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_template.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/pos_screens/pos_proceed_receipt_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_proceed_payment/pos_order_summary.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_proceed_payment/pos_payment_option.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_proceed_payment/pos_proceed_bottom_sheet.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_template.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class PosProceedPaymentScreen extends StatelessWidget {
   const PosProceedPaymentScreen({super.key});

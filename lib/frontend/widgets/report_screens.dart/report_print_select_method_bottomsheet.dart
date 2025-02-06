@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/widgets/report_screens.dart/report_print_select_date_bottomsheet.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/report_screens.dart/report_print_select_date_bottomsheet.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class ReportPrintSelectMethodBottomsheet extends StatelessWidget {
   const ReportPrintSelectMethodBottomsheet(this.date, {super.key});

@@ -1,11 +1,12 @@
+import 'package:app_settings/app_settings.dart' as app_settings_lib;
 import 'package:flutter/material.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/order_row_item.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/start_configs/app_settings.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row_item.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
@@ -62,27 +63,34 @@ class EscPrinter with ChangeNotifier {
     return _printerManager;
   }
 
-  Future<void> startScanDevices() async {
+  Future<bool> startScanDevices() async {
     if (!(await Permission.bluetoothScan.isGranted) ||
         !(await Permission.bluetoothConnect.isGranted)) {
       final scanPermission = await Permission.bluetoothScan.request();
       final connectPermssion = await Permission.bluetoothScan.request();
+
+      if (scanPermission.isPermanentlyDenied ||
+          connectPermssion.isPermanentlyDenied) {
+        app_settings_lib.AppSettings.openAppSettings(
+            type: app_settings_lib.AppSettingsType.settings);
+        return false;
+      }
+
       if (scanPermission != PermissionStatus.granted ||
           connectPermssion != PermissionStatus.granted) {
-        return;
+        return false;
       }
     }
 
-    if (!(await Permission.bluetoothConnect.isGranted)) {
-      final permisisonRequest = await Permission.bluetoothConnect.request();
-      if (permisisonRequest != PermissionStatus.granted) {
-        return;
-      }
+    if (!(await PrintBluetoothThermal.bluetoothEnabled)) {
+      return false;
     }
 
     _availableDevices = await PrintBluetoothThermal.pairedBluetooths;
 
     notifyListeners();
+
+    return true;
   }
 
   bool initialCheckPrintPass(BuildContext context) {

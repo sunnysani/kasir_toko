@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/frontend/widgets/common/printer_status.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/printer_status.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:provider/provider.dart';
 
 enum ReportPrintType {

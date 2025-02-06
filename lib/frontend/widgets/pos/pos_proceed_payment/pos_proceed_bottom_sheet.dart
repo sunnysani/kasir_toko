@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PosProceedBottomSheet extends StatelessWidget {
   const PosProceedBottomSheet({

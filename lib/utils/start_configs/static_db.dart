@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/order_row_item.dart';
-import 'package:kasir_toko/backend/models/outlet.dart';
-import 'package:kasir_toko/backend/models/payment_method.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/backend/models/product_revision.dart';
-import 'package:kasir_toko/objectbox.g.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row_item.dart';
+import 'package:tokkoo_pos_lite/backend/models/outlet.dart';
+import 'package:tokkoo_pos_lite/backend/models/payment_method.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_revision.dart';
+import 'package:tokkoo_pos_lite/objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
 class StaticDB {

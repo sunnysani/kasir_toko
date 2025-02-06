@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/payment_method.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/payment_method.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class PosPaymentOption extends StatefulWidget {
   const PosPaymentOption({
@@ -110,7 +110,7 @@ class SpaceEvenRow extends StatelessWidget {
       children: [
         Text(
           description,
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         Text(NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
             .format(value))

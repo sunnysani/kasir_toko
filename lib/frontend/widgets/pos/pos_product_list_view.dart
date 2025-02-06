@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 
 class PosProductListView extends StatelessWidget {
   const PosProductListView({

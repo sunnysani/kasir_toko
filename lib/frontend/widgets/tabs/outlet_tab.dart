@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/outlet_tab/outlet_general_form.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/outlet_tab/outlet_management_list.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/outlet_tab/outlet_general_form.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/outlet_tab/outlet_management_list.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class OutletTab extends StatefulWidget {
   const OutletTab({super.key});

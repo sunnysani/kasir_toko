@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kasir_toko/frontend/widgets/common/text_alert.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/text_alert.dart';
 
 class ModifiedTextFormField extends StatefulWidget {
   const ModifiedTextFormField({

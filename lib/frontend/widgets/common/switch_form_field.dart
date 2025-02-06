@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 
 class SwitchFormField extends StatelessWidget {
   const SwitchFormField({

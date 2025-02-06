@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:provider/provider.dart';
+import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PrinterStatus extends StatefulWidget {
   const PrinterStatus({super.key});
@@ -16,7 +16,7 @@ class _PrinterStatusState extends State<PrinterStatus> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Provider.of<EscPrinter>(context, listen: false).tryConnectLastConnected();
+      Provider.of<EscPrinter>(context, listen: false).tryConnectLastConnected();
       setState(
           () async => batteryLevel = await PrintBluetoothThermal.batteryLevel);
     });

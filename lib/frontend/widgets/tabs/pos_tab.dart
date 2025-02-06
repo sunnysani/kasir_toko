@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/screens/pos_screens/pos_main_screen.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/pos_screens/pos_main_screen.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class PosTab extends StatelessWidget {
   const PosTab({super.key});

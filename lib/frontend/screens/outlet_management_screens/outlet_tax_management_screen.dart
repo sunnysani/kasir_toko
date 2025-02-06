@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kasir_toko/backend/db/function.db.dart';
-import 'package:kasir_toko/frontend/widgets/common/modified_text_form_field.dart';
-import 'package:kasir_toko/frontend/widgets/common/switch_form_field.dart';
-import 'package:kasir_toko/frontend/widgets/outlet_management/outlet_management_creation_template.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/db/function.db.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/modified_text_form_field.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/switch_form_field.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/outlet_management/outlet_management_creation_template.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class OutletTaxManagementScreen extends StatefulWidget {
   const OutletTaxManagementScreen({super.key});

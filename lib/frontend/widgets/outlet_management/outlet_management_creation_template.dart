@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class OutletManagementCreationTemplate extends StatelessWidget {
   const OutletManagementCreationTemplate({
@@ -56,7 +56,10 @@ class OutletManagementCreationTemplate extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 20),
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: submit,
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        submit();
+                      },
                       child: Text(isCreation ? 'Tambah' : 'Simpan'),
                     ),
                   ),

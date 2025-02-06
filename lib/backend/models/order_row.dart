@@ -1,6 +1,6 @@
-import 'package:kasir_toko/backend/models/order_row_item.dart';
-import 'package:kasir_toko/backend/models/outlet.dart';
-import 'package:kasir_toko/backend/models/payment_method.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row_item.dart';
+import 'package:tokkoo_pos_lite/backend/models/outlet.dart';
+import 'package:tokkoo_pos_lite/backend/models/payment_method.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity(uid: 128477593751)

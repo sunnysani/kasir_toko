@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_payment_method_management_screen.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_product_category_management_screen.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_product_management.dart';
-import 'package:kasir_toko/frontend/widgets/tabs/outlet_tab/outlet_management_tab.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_payment_method_management_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_product_category_management_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_product_management.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/tabs/outlet_tab/outlet_management_tab.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class OutletManagementList extends StatefulWidget {
   const OutletManagementList({super.key});

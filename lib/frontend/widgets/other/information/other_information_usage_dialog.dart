@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_management_screen.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_payment_method_management_screen.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_product_category_management_screen.dart';
-import 'package:kasir_toko/frontend/screens/outlet_management_screens/outlet_product_management.dart';
-import 'package:kasir_toko/frontend/screens/pos_screens/pos_main_screen.dart';
-import 'package:kasir_toko/frontend/widgets/common/carousel_with_dot_navigator.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_management_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_payment_method_management_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_product_category_management_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/outlet_management_screens/outlet_product_management.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/pos_screens/pos_main_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/carousel_with_dot_navigator.dart';
 
 class OtherInformationUsageDialogItemBottomAction {
   final String label;

@@ -1,9 +1,9 @@
-import 'package:app_settings/app_settings.dart' as appSetting;
+import 'package:app_settings/app_settings.dart' as app_settings_lib;
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/frontend/widgets/common/carousel_with_dot_navigator.dart';
-import 'package:kasir_toko/frontend/widgets/common/printer_status.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/carousel_with_dot_navigator.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/printer_status.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:provider/provider.dart';
 
 class OtherInformationPrinterDialogItemBottomAction {
@@ -74,8 +74,8 @@ class OtherInformationPrinterDialog extends StatelessWidget {
                       'Buka pengaturan dan pasangkan dengan perangkat Thermal Printer'),
                   bottomAction: OtherInformationPrinterDialogItemBottomAction(
                     label: 'Buka Pengaturan Bluetooth',
-                    onTap: () => appSetting.AppSettings.openAppSettings(
-                        type: appSetting.AppSettingsType.bluetooth),
+                    onTap: () => app_settings_lib.AppSettings.openAppSettings(
+                        type: app_settings_lib.AppSettingsType.bluetooth),
                   ),
                 ),
                 OtherInformationPrinterDialogItem(

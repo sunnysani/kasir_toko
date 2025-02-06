@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/provider/esc_printer.dart';
-import 'package:kasir_toko/frontend/widgets/pos/pos_proceed_receipt/select_esc_printer_widget.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
-import 'package:kasir_toko/objectbox.g.dart' as generated_object_box;
+import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_proceed_receipt/select_esc_printer_widget.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/objectbox.g.dart' as generated_object_box;
 import 'package:provider/provider.dart';
 
 class CommonFunction {
@@ -27,12 +28,26 @@ class CommonFunction {
     return (screenWidth - maxWidth) / 2;
   }
 
-  static showEscPrinterConnectModal(BuildContext context) {
-    Provider.of<EscPrinter>(context, listen: false).startScanDevices();
-    showDialog(
-      context: context,
-      builder: (context) => SelectEscPrinterWidget(context),
-    );
+  static showEscPrinterConnectModal(BuildContext context) async {
+    final bluetoothEnabled =
+        await Provider.of<EscPrinter>(context, listen: false)
+            .startScanDevices();
+
+    if (context.mounted) {
+      if (bluetoothEnabled) {
+        showDialog(
+          context: context,
+          builder: (context) => SelectEscPrinterWidget(context),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bluetooth mati'),
+            backgroundColor: AppColors.negativeColor,
+          ),
+        );
+      }
+    }
   }
 
   static bool outletValidationConfigured() {

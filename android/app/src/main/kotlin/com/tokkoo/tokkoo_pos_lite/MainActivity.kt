@@ -1,4 +1,4 @@
-package com.example.kasir_toko
+package com.tokkoo.tokkoo_pos_lite
 
 import io.flutter.embedding.android.FlutterActivity
 

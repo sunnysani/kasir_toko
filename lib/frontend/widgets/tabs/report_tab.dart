@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/frontend/screens/report_screens/report_main_screen.dart';
-import 'package:kasir_toko/frontend/widgets/common/hideable_text_form_field.dart';
-import 'package:kasir_toko/utils/common/constant.common.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
-import 'package:kasir_toko/utils/start_configs/app_settings.dart';
+import 'package:tokkoo_pos_lite/frontend/screens/report_screens/report_main_screen.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/hideable_text_form_field.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
 
 class ReportTab extends StatefulWidget {
   const ReportTab({super.key});
@@ -40,7 +40,7 @@ class _ReportTabState extends State<ReportTab> {
 
     if (reportAccessKey == null || reportAccessKey.isEmpty) {
       Navigator.of(context)
-          .pushNamed(ReportMainScreen.routeName, arguments: selectedDate!);
+          .pushNamed(ReportMainScreen.routeName, arguments: selectedDate);
     } else {
       await showDialog(
         context: context,
@@ -72,7 +72,7 @@ class _ReportTabState extends State<ReportTab> {
                       Navigator.of(ctx).pop();
                       Navigator.of(context).pushNamed(
                           ReportMainScreen.routeName,
-                          arguments: selectedDate!);
+                          arguments: selectedDate);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

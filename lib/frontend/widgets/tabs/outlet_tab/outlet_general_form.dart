@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_toko/backend/db/function.db.dart';
-import 'package:kasir_toko/frontend/widgets/common/modified_text_form_field.dart';
-import 'package:kasir_toko/utils/start_configs/static_db.dart';
+import 'package:tokkoo_pos_lite/backend/db/function.db.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/modified_text_form_field.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 
 class OutletGeneralForm extends StatefulWidget {
   const OutletGeneralForm({super.key, this.hideHeaderTitle = false});
@@ -26,6 +27,7 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
       TextEditingController(text: StaticDB.outlet.receiptMessage);
 
   void _submit() {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       currentName = textEditingControllerName.text;
       currentAddress = textEditingControllerAddress.text;
@@ -38,6 +40,13 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
       address: textEditingControllerAddress.text,
       phoneNumber: textEditingControllerPhoneNumber.text,
       receiptMessage: textEditingControllerReceiptMessage.text,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Konfigurasi berhasil disimpan'),
+        backgroundColor: AppColors.positiveColor,
+      ),
     );
   }
 

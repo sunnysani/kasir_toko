@@ -1,5 +1,5 @@
-import 'package:kasir_toko/backend/models/order_row.dart';
-import 'package:kasir_toko/backend/models/outlet.dart';
+import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/outlet.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity(uid: 2539012349328530)

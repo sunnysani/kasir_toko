@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kasir_toko/backend/models/payment_method.dart';
-import 'package:kasir_toko/backend/models/product.dart';
-import 'package:kasir_toko/backend/models/product_category.dart';
-import 'package:kasir_toko/frontend/widgets/common/search_bar.dart';
-import 'package:kasir_toko/frontend/widgets/outlet_management/outlet_management_tile_template.dart';
-import 'package:kasir_toko/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/backend/models/payment_method.dart';
+import 'package:tokkoo_pos_lite/backend/models/product.dart';
+import 'package:tokkoo_pos_lite/backend/models/product_category.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/common/search_bar.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/outlet_management/outlet_management_tile_template.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 enum DataPassedType {
   productCategory,
