@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
-import 'package:tokkoo_pos_lite/frontend/widgets/pos/pos_proceed_receipt/select_esc_printer_widget.dart';
-import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
-import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
-import 'package:tokkoo_pos_lite/objectbox.g.dart' as generated_object_box;
-import 'package:provider/provider.dart';
+import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 
 class CommonFunction {
   static double parseTextDouble(String input) {
@@ -28,58 +23,38 @@ class CommonFunction {
     return (screenWidth - maxWidth) / 2;
   }
 
-  static showEscPrinterConnectModal(BuildContext context) async {
-    final bluetoothEnabled =
-        await Provider.of<EscPrinter>(context, listen: false)
-            .startScanDevices();
-
-    if (context.mounted) {
-      if (bluetoothEnabled) {
-        showDialog(
-          context: context,
-          builder: (context) => SelectEscPrinterWidget(context),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Bluetooth mati'),
-            backgroundColor: AppColors.negativeColor,
-          ),
-        );
-      }
-    }
-  }
-
-  static bool outletValidationConfigured() {
-    final outlet = StaticDB.outlet;
-    if ((outlet.name ?? "").isEmpty) return false;
-    if ((outlet.address ?? "").isEmpty) return false;
-    if ((outlet.phoneNumber ?? "").isEmpty) return false;
+  static Future<bool> outletValidationConfigured() async {
+    final outlet = InstanceDB.outlet;
+    if (outlet.name.isEmpty) return false;
+    if (outlet.address.isEmpty) return false;
+    if (outlet.phoneNumber.isEmpty) return false;
 
     return true;
   }
 
-  static bool outletValidationAtLeastOneProduct() {
-    if (StaticDB.productBox
-            .query(generated_object_box.Product_.active.equals(true))
-            .build()
-            .findFirst() ==
-        null) {
+  static Future<bool> outletValidationAtLeastOneProduct() async {
+    if ((await InstanceDB.getActiveCounts())['products']! < 1) {
       return false;
     }
 
     return true;
   }
 
-  static bool outletValidationAtLeastOnePaymentMethod() {
-    if (StaticDB.paymentMethodBox
-            .query(generated_object_box.PaymentMethod_.active.equals(true))
-            .build()
-            .findFirst() ==
-        null) {
+  static Future<bool> outletValidationAtLeastOnePaymentMethod() async {
+    if ((await InstanceDB.getActiveCounts())['paymentMethods']! < 1) {
       return false;
     }
 
     return true;
+  }
+
+  static bool sameDayDateTime(DateTime startTime, DateTime endTime) {
+    if (startTime.year == endTime.year &&
+        startTime.month == endTime.month &&
+        startTime.day == endTime.day) {
+      return true;
+    }
+
+    return false;
   }
 }

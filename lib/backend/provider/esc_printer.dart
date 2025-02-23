@@ -1,88 +1,96 @@
 import 'package:app_settings/app_settings.dart' as app_settings_lib;
 import 'package:flutter/material.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:tokkoo_pos_lite/backend/models/order_row.dart';
-import 'package:tokkoo_pos_lite/backend/models/order_row_item.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
+import 'package:tokkoo_pos_lite/backend/models/drift_entity_order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
-import 'package:tokkoo_pos_lite/utils/start_configs/static_db.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
-class EscPrinter with ChangeNotifier {
-  static final PrintBluetoothThermal _printerManager = PrintBluetoothThermal();
-  static List<BluetoothInfo> _availableDevices = [];
-  static BluetoothInfo? _selectedDevice;
-  bool printing = false;
-  bool connecting = false;
+final escPrinterProvider =
+    NotifierProvider<EscPrinterNotifier, EscPrinter>(EscPrinterNotifier.new);
 
-  static PaperSize paperSize = PaperSize.mm58;
+class EscPrinter {
+  final List<BluetoothInfo> availableDevices;
+  final BluetoothInfo? selectedDevice;
+  final bool printing;
 
-  List<BluetoothInfo> get availableDevices {
-    return _availableDevices;
+  const EscPrinter({
+    this.availableDevices = const [],
+    this.selectedDevice,
+    this.printing = false,
+  });
+
+  EscPrinter copyWith({
+    List<BluetoothInfo>? availableDevices,
+    BluetoothInfo? selectedDevice,
+    bool? printing,
+  }) {
+    return EscPrinter(
+      availableDevices: availableDevices ?? this.availableDevices,
+      selectedDevice: selectedDevice ?? this.selectedDevice,
+      printing: printing ?? this.printing,
+    );
   }
+}
 
-  BluetoothInfo? get selectedDevice {
-    return _selectedDevice;
+class EscPrinterNotifier extends Notifier<EscPrinter> {
+  static const PaperSize paperSize = PaperSize.mm58;
+
+  @override
+  EscPrinter build() {
+    ref.keepAlive();
+    tryConnectLastConnected();
+    return const EscPrinter();
   }
 
   void tryConnectLastConnected() {
-    if (selectedDevice == null) {
-      final latestConnectedPrinterMacAddress = AppSettings.sharedPreferences
-          .getString("LATEST_CONNECTED_PRINTER_MAC_ADDRESS");
-      final latestConnectedPrinterName = AppSettings.sharedPreferences
-          .getString("LATEST_CONNECTED_PRINTER_NAME");
-
-      if (latestConnectedPrinterMacAddress != null &&
-          latestConnectedPrinterName != null) {
-        selectDevice(BluetoothInfo(
-            name: latestConnectedPrinterName,
-            macAdress: latestConnectedPrinterMacAddress));
-      }
+    final latestMac = AppSettings.sharedPreferences
+        .getString('LATEST_CONNECTED_PRINTER_MAC_ADDRESS');
+    final latestName = AppSettings.sharedPreferences
+        .getString('LATEST_CONNECTED_PRINTER_NAME');
+    if (latestMac != null && latestName != null) {
+      selectDevice(BluetoothInfo(name: latestName, macAdress: latestMac));
     }
   }
 
   Future<bool> selectDevice(BluetoothInfo device) async {
-    if (selectedDevice != null) {
+    if (state.selectedDevice != null) {
       await PrintBluetoothThermal.disconnect;
     }
 
     final connected = await PrintBluetoothThermal.connect(
         macPrinterAddress: device.macAdress);
-
     if (connected) {
-      _selectedDevice = device;
-      notifyListeners();
       await AppSettings.sharedPreferences
-          .setString("LATEST_CONNECTED_PRINTER_MAC_ADDRESS", device.macAdress);
+          .setString('LATEST_CONNECTED_PRINTER_MAC_ADDRESS', device.macAdress);
       await AppSettings.sharedPreferences
-          .setString("LATEST_CONNECTED_PRINTER_NAME", device.name);
+          .setString('LATEST_CONNECTED_PRINTER_NAME', device.name);
+      state = state.copyWith(selectedDevice: device);
       return true;
     }
-
     return false;
   }
 
-  PrintBluetoothThermal get printerManager {
-    return _printerManager;
-  }
-
-  Future<bool> startScanDevices() async {
+  Future<bool> isBluetoothEnabled() async {
     if (!(await Permission.bluetoothScan.isGranted) ||
         !(await Permission.bluetoothConnect.isGranted)) {
       final scanPermission = await Permission.bluetoothScan.request();
-      final connectPermssion = await Permission.bluetoothScan.request();
+      final connectPermission = await Permission.bluetoothConnect.request();
 
       if (scanPermission.isPermanentlyDenied ||
-          connectPermssion.isPermanentlyDenied) {
-        app_settings_lib.AppSettings.openAppSettings(
-            type: app_settings_lib.AppSettingsType.settings);
+          connectPermission.isPermanentlyDenied) {
+        app_settings_lib.AppSettings.openAppSettings();
         return false;
       }
 
       if (scanPermission != PermissionStatus.granted ||
-          connectPermssion != PermissionStatus.granted) {
+          connectPermission != PermissionStatus.granted) {
         return false;
       }
     }
@@ -91,151 +99,152 @@ class EscPrinter with ChangeNotifier {
       return false;
     }
 
-    _availableDevices = await PrintBluetoothThermal.pairedBluetooths;
-
-    notifyListeners();
-
     return true;
+  }
+
+  Future<List<BluetoothInfo>?> getDevices() async {
+    if (!await isBluetoothEnabled()) {
+      return null;
+    }
+
+    return await PrintBluetoothThermal.pairedBluetooths;
   }
 
   bool initialCheckPrintPass(BuildContext context) {
-    if (_selectedDevice == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tidak ada printer terpilih'),
-          backgroundColor: AppColors.negativeColor,
-        ),
-      );
+    if (state.selectedDevice == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Tidak ada printer terpilih'),
+        backgroundColor: AppColors.negativeColor,
+      ));
       return false;
     }
 
-    if (printing) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sedang melakukan print'),
-          backgroundColor: AppColors.negativeColor,
-        ),
-      );
+    if (state.printing) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Sedang melakukan print'),
+        backgroundColor: AppColors.negativeColor,
+      ));
       return false;
     }
 
     return true;
   }
 
-  Future<void> printTesting(
-    BuildContext context,
-  ) async {
+  Future<void> printTesting(BuildContext context) async {
     if (!initialCheckPrintPass(context)) return;
 
-    printing = true;
-    notifyListeners();
+    state = state.copyWith(printing: true);
 
     final profile = await CapabilityProfile.load();
-    final Generator ticket = Generator(paperSize, profile);
+    final ticket = Generator(paperSize, profile);
     List<int> bytes = [];
 
-    bytes += ticket.text(
-      'Tokkoo PoS',
-      styles: const PosStyles(
-        align: PosAlign.center,
-        height: PosTextSize.size1,
-        width: PosTextSize.size1,
-        fontType: PosFontType.fontB,
-      ),
-      linesAfter: 1,
-    );
+    bytes += ticket.text('Tokkoo PoS',
+        styles: const PosStyles(
+          align: PosAlign.center,
+          height: PosTextSize.size1,
+          width: PosTextSize.size1,
+          fontType: PosFontType.fontB,
+        ),
+        linesAfter: 1);
 
     bytes += ticket.text(
-      "Waktu: ${DateFormat("d MMM yyyy HH:mm:ss").format(DateTime.now())}",
-      styles: const PosStyles(
-        align: PosAlign.center,
-        height: PosTextSize.size1,
-        width: PosTextSize.size1,
-        fontType: PosFontType.fontB,
-      ),
-      linesAfter: 1,
-    );
+        'Waktu: ${DateFormat('d MMM yyyy HH:mm:ss').format(DateTime.now())}',
+        styles: const PosStyles(
+          align: PosAlign.center,
+          height: PosTextSize.size1,
+          width: PosTextSize.size1,
+          fontType: PosFontType.fontB,
+        ),
+        linesAfter: 1);
 
-    bytes += ticket.text(
-      "Tes mencektak berhasil",
-      styles: const PosStyles(
-        align: PosAlign.center,
-        height: PosTextSize.size1,
-        width: PosTextSize.size1,
-        fontType: PosFontType.fontB,
-      ),
-      linesAfter: 1,
-    );
+    bytes += ticket.text('Tes mencetak berhasil',
+        styles: const PosStyles(
+          align: PosAlign.center,
+          height: PosTextSize.size1,
+          width: PosTextSize.size1,
+          fontType: PosFontType.fontB,
+        ),
+        linesAfter: 1);
 
     bytes += ticket.cut();
     bytes += ticket.drawer();
 
     await PrintBluetoothThermal.writeBytes(bytes);
     await Future.delayed(const Duration(milliseconds: 2000));
-    printing = false;
-    notifyListeners();
+
+    state = state.copyWith(printing: false);
   }
 
   Future<void> printOrder(
     BuildContext context,
-    OrderRow orderRow,
+    DriftUsableOrderRow orderRow,
   ) async {
     if (!initialCheckPrintPass(context)) return;
 
-    printing = true;
-    notifyListeners();
+    state = state.copyWith(printing: true);
     await PrintBluetoothThermal.writeBytes(
         await getPrintOrderRowBytes(orderRow));
     await Future.delayed(const Duration(milliseconds: 2000));
-    printing = false;
-    notifyListeners();
+    state = state.copyWith(printing: false);
   }
 
   Future<void> printEJournal(
     BuildContext context,
-    DateTime date,
+    DateTime startDate,
+    DateTime endDate,
     TimeOfDay start,
     TimeOfDay end,
   ) async {
     if (!initialCheckPrintPass(context)) return;
 
-    List<OrderRow> orderList =
-        StaticDB.outlet.getOrderRowListBetweenTime(date, start, end);
+    state = state.copyWith(printing: true);
 
-    printing = true;
-    notifyListeners();
+    List<DriftUsableOrderRow> orderList = await InstanceDB.getOrderRowList(
+      startDateTime: DateTime(startDate.year, startDate.month, startDate.day,
+          start.hour, start.minute, 0),
+      endDateTime: DateTime(endDate.year, endDate.month, endDate.day, end.hour,
+          end.minute, 59, 59),
+    );
+
     await PrintBluetoothThermal.writeBytes(
       await getPrintEJournalBytes(orderList,
-          "${DateFormat("d MMMM yyyy").format(date)} @ ${start.format(context)} - ${end.format(context)}"),
+          "${DateFormat("d MM yyyy").format(startDate)} @ ${start.format(context)} - ${DateFormat("d MM yyyy").format(endDate)} @ ${end.format(context)}"),
     );
+
     await Future.delayed(const Duration(milliseconds: 2000));
-    printing = false;
-    notifyListeners();
+    state = state.copyWith(printing: false);
   }
 
   Future<void> printProudctSales(
     BuildContext context,
-    DateTime date,
+    DateTime startDate,
+    DateTime endDate,
     TimeOfDay start,
     TimeOfDay end,
   ) async {
     if (!initialCheckPrintPass(context)) return;
 
-    List<OrderRow> orderList =
-        StaticDB.outlet.getOrderRowListBetweenTime(date, start, end);
+    state = state.copyWith(printing: true);
 
-    printing = true;
-    notifyListeners();
+    List<DriftUsableOrderRow> orderList = await InstanceDB.getOrderRowList(
+      startDateTime: DateTime(startDate.year, startDate.month, startDate.day,
+          start.hour, start.minute, 0),
+      endDateTime: DateTime(endDate.year, endDate.month, endDate.day, end.hour,
+          end.minute, 59, 59),
+      status: OrderStatus.paid,
+    );
+
     await PrintBluetoothThermal.writeBytes(
       await getPrintProductSalesBytes(orderList,
-          "${DateFormat("d MMMM yyyy").format(date)} @ ${start.format(context)} - ${end.format(context)}"),
+          "${DateFormat("d MM yyyy").format(startDate)} @ ${start.format(context)} - ${DateFormat("d MM yyyy").format(endDate)} @ ${end.format(context)}"),
     );
+
     await Future.delayed(const Duration(milliseconds: 2000));
-    printing = false;
-    notifyListeners();
+    state = state.copyWith(printing: false);
   }
 
-  Future<List<int>> getPrintOrderRowBytes(OrderRow orderRow) async {
+  Future<List<int>> getPrintOrderRowBytes(DriftUsableOrderRow orderRow) async {
     final profile = await CapabilityProfile.load();
 
     final Generator ticket = Generator(paperSize, profile);
@@ -243,7 +252,7 @@ class EscPrinter with ChangeNotifier {
 
     // Print Outlet Name
     bytes += ticket.text(
-      StaticDB.outlet.name ?? 'Toko',
+      InstanceDB.outlet.name,
       styles: const PosStyles(
         align: PosAlign.center,
         height: PosTextSize.size2,
@@ -254,31 +263,28 @@ class EscPrinter with ChangeNotifier {
     );
 
     // Print Outlet Address and PhoneNumber
-    if (StaticDB.outlet.address != null) {
-      bytes += ticket.text(
-        StaticDB.outlet.address!,
-        styles: const PosStyles(
-          fontType: PosFontType.fontA,
-          align: PosAlign.center,
-        ),
-        linesAfter: 0,
-      );
-    }
-    if (StaticDB.outlet.phoneNumber != null) {
-      bytes += ticket.text(
-        'No. Telp: ${StaticDB.outlet.phoneNumber!}',
-        styles: const PosStyles(
-          fontType: PosFontType.fontA,
-          align: PosAlign.center,
-        ),
-        linesAfter: 1,
-      );
-    }
+    bytes += ticket.text(
+      InstanceDB.outlet.address,
+      styles: const PosStyles(
+        fontType: PosFontType.fontA,
+        align: PosAlign.center,
+      ),
+      linesAfter: 0,
+    );
+    bytes += ticket.text(
+      'No. Telp: ${InstanceDB.outlet.phoneNumber}',
+      styles: const PosStyles(
+        fontType: PosFontType.fontA,
+        align: PosAlign.center,
+      ),
+      linesAfter: 1,
+    );
 
     // Print Date
     bytes += ticket.hr(ch: '-');
     bytes += ticket.text(
-      DateFormat('d MMM yyyy HH:mm:ss').format(orderRow.timeStamp),
+      DateFormat('d MMM yyyy HH:mm:ss')
+          .format(orderRow.orderData.updatedAt.toLocal()),
       styles: const PosStyles(
         align: PosAlign.center,
         fontType: PosFontType.fontA,
@@ -286,10 +292,12 @@ class EscPrinter with ChangeNotifier {
     );
     bytes += ticket.hr(ch: '-', linesAfter: 1);
 
-    for (OrderRowItem orderRowItem in orderRow.orderRowItem) {
+    for (final orderRowItem in orderRow.items) {
       bytes += ticket.row([
         PosColumn(
-          text: orderRowItem.product.target!.name,
+          text: orderRowItem.product.product.nameInReceipt.isNotEmpty
+              ? orderRowItem.product.product.nameInReceipt
+              : orderRowItem.product.product.name,
           width: 12,
           styles: const PosStyles(
               bold: false, fontType: PosFontType.fontA, align: PosAlign.left),
@@ -298,7 +306,7 @@ class EscPrinter with ChangeNotifier {
 
       bytes += ticket.row([
         PosColumn(
-          text: '${orderRowItem.quantity.toString()}pcs',
+          text: '${orderRowItem.itemData.quantity.toString()}pcs',
           width: 2,
           styles: const PosStyles(bold: false, align: PosAlign.left),
         ),
@@ -309,7 +317,7 @@ class EscPrinter with ChangeNotifier {
         ),
         PosColumn(
           text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(orderRowItem.product.target!.getLatestRevision().price),
+              .format(orderRowItem.product.latestRevision.price),
           width: 4,
           styles: const PosStyles(bold: false, align: PosAlign.left),
         ),
@@ -319,8 +327,9 @@ class EscPrinter with ChangeNotifier {
           styles: const PosStyles(bold: false, align: PosAlign.left),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(orderRowItem.totalPriceItem),
+          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
+              orderRowItem.product.latestRevision.price *
+                  orderRowItem.itemData.quantity),
           width: 4,
           styles: const PosStyles(
               bold: false, align: PosAlign.center, fontType: PosFontType.fontA),
@@ -340,7 +349,7 @@ class EscPrinter with ChangeNotifier {
       ),
       PosColumn(
         text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-            .format(orderRow.totalPrice),
+            .format(orderRow.orderData.totalPrice),
         width: 6,
         styles: const PosStyles(
             bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
@@ -355,7 +364,7 @@ class EscPrinter with ChangeNotifier {
         styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
       ),
       PosColumn(
-        text: orderRow.paymentMethod.target!.name,
+        text: orderRow.paymentMethod!.name,
         width: 6,
         styles: const PosStyles(
             bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
@@ -363,7 +372,7 @@ class EscPrinter with ChangeNotifier {
     ]);
 
     // Print PayAmount & Change
-    if (orderRow.paymentMethod.target?.sameAsAmount == false) {
+    if (orderRow.paymentMethod?.sameAsAmount == false) {
       bytes += ticket.row([
         PosColumn(
           text: 'Pembayaran',
@@ -372,7 +381,7 @@ class EscPrinter with ChangeNotifier {
         ),
         PosColumn(
           text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(orderRow.payAmount),
+              .format(orderRow.orderData.payAmount),
           width: 6,
           styles: const PosStyles(
               bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
@@ -386,8 +395,8 @@ class EscPrinter with ChangeNotifier {
           styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(orderRow.change),
+          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
+              orderRow.orderData.payAmount - orderRow.orderData.totalPrice),
           width: 6,
           styles: const PosStyles(
               bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
@@ -398,9 +407,8 @@ class EscPrinter with ChangeNotifier {
     bytes += ticket.hr(ch: '-', linesAfter: 1);
 
     bytes += ticket.text(
-      StaticDB.outlet.receiptMessage != null &&
-              StaticDB.outlet.receiptMessage!.isNotEmpty
-          ? StaticDB.outlet.receiptMessage!
+      InstanceDB.outlet.receiptMessage.isNotEmpty
+          ? InstanceDB.outlet.receiptMessage
           : 'Terima kasih sudah datang',
       styles:
           const PosStyles(align: PosAlign.center, fontType: PosFontType.fontA),
@@ -413,7 +421,7 @@ class EscPrinter with ChangeNotifier {
   }
 
   Future<List<int>> getPrintEJournalBytes(
-      List<OrderRow> orderList, String dateString) async {
+      List<DriftUsableOrderRow> orderList, String dateString) async {
     final profile = await CapabilityProfile.load();
 
     final Generator ticket = Generator(paperSize, profile);
@@ -440,31 +448,35 @@ class EscPrinter with ChangeNotifier {
     );
     bytes += ticket.hr(ch: '-', linesAfter: 1);
 
-    // key: paymentMethod.TargetId
+    // key: paymentMethod.name
     // value: total
-    Map<int, double> totalIncomeMapping = {};
+    Map<String, double> totalIncomeMapping = {};
+    double totalIncome = 0;
 
-    for (OrderRow orderRow in orderList) {
-      if (totalIncomeMapping[orderRow.paymentMethod.targetId] == null) {
-        totalIncomeMapping[orderRow.paymentMethod.targetId] = 0;
+    for (DriftUsableOrderRow orderRow in orderList) {
+      if (orderRow.paymentMethod != null) {
+        if (totalIncomeMapping[orderRow.paymentMethod!.name] == null) {
+          totalIncomeMapping[orderRow.paymentMethod!.name] = 0;
+        }
+        totalIncomeMapping[orderRow.paymentMethod!.name] =
+            totalIncomeMapping[orderRow.paymentMethod!.name]! +
+                orderRow.orderData.totalPrice;
+        totalIncome += orderRow.orderData.totalPrice;
       }
-
-      totalIncomeMapping[orderRow.paymentMethod.targetId] =
-          totalIncomeMapping[orderRow.paymentMethod.targetId]! +
-              orderRow.totalPrice;
 
       bytes += ticket.row([
         PosColumn(
-          text: DateFormat("d MMMM yyyy @ HH:mm").format(orderRow.timeStamp),
+          text: DateFormat("d MMMM yyyy @ HH:mm")
+              .format(orderRow.orderData.createdAt.toLocal()),
           width: 12,
           styles: const PosStyles(
               bold: false, fontType: PosFontType.fontA, align: PosAlign.left),
         ),
       ]);
-      for (OrderRowItem orderRowItem in orderRow.orderRowItem) {
+      for (final orderRowItem in orderRow.items) {
         bytes += ticket.row([
           PosColumn(
-            text: orderRowItem.product.target!.name,
+            text: orderRowItem.product.product.name,
             width: 12,
             styles: const PosStyles(
                 bold: false, fontType: PosFontType.fontA, align: PosAlign.left),
@@ -473,7 +485,7 @@ class EscPrinter with ChangeNotifier {
 
         bytes += ticket.row([
           PosColumn(
-            text: '${orderRowItem.quantity.toString()}pcs',
+            text: '${orderRowItem.itemData.quantity.toString()}pcs',
             width: 2,
             styles: const PosStyles(bold: false, align: PosAlign.left),
           ),
@@ -484,7 +496,7 @@ class EscPrinter with ChangeNotifier {
           ),
           PosColumn(
             text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                .format(orderRowItem.product.target!.getLatestRevision().price),
+                .format(orderRowItem.product.latestRevision.price),
             width: 4,
             styles: const PosStyles(bold: false, align: PosAlign.left),
           ),
@@ -494,8 +506,9 @@ class EscPrinter with ChangeNotifier {
             styles: const PosStyles(bold: false, align: PosAlign.left),
           ),
           PosColumn(
-            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                .format(orderRowItem.totalPriceItem),
+            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
+                orderRowItem.itemData.quantity *
+                    orderRowItem.product.latestRevision.price),
             width: 4,
             styles: const PosStyles(
                 bold: false,
@@ -505,27 +518,40 @@ class EscPrinter with ChangeNotifier {
         ]);
       }
 
-      bytes += ticket.row([
-        PosColumn(
-          text: orderRow.paymentMethod.target!.name,
-          width: 6,
-          styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
-        ),
-        PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(orderRow.totalPrice),
-          width: 6,
-          styles: const PosStyles(
-              bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
-        ),
-      ]);
+      if (orderRow.paymentMethod != null) {
+        bytes += ticket.row([
+          PosColumn(
+            text: orderRow.paymentMethod!.name,
+            width: 6,
+            styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+          ),
+          PosColumn(
+            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+                .format(orderRow.orderData.totalPrice),
+            width: 6,
+            styles: const PosStyles(
+                bold: false,
+                align: PosAlign.right,
+                fontType: PosFontType.fontA),
+          ),
+        ]);
+      } else {
+        bytes += ticket.row([
+          PosColumn(
+            // TODO: Text Based on Status
+            text: "DIBATALKAN",
+            width: 12,
+            styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+          ),
+        ]);
+      }
 
       bytes += ticket.hr(ch: '-');
     }
 
     bytes += ticket.row([
       PosColumn(
-        text: "TOTAL PENDAPATAN",
+        text: "LAPORAN PENDAPATAN",
         width: 12,
         styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
       )
@@ -533,7 +559,7 @@ class EscPrinter with ChangeNotifier {
     for (final entry in totalIncomeMapping.entries) {
       bytes += ticket.row([
         PosColumn(
-          text: StaticDB.paymentMethodBox.get(entry.key)!.name,
+          text: entry.key,
           width: 6,
           styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
         ),
@@ -546,6 +572,20 @@ class EscPrinter with ChangeNotifier {
         ),
       ]);
     }
+    bytes += ticket.row([
+      PosColumn(
+        text: "TOTAL",
+        width: 6,
+        styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
+      ),
+      PosColumn(
+        text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+            .format(totalIncome),
+        width: 6,
+        styles: const PosStyles(
+            bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
+      ),
+    ]);
 
     bytes += ticket.feed(2);
 
@@ -553,7 +593,7 @@ class EscPrinter with ChangeNotifier {
   }
 
   Future<List<int>> getPrintProductSalesBytes(
-      List<OrderRow> orderList, String dateString) async {
+      List<DriftUsableOrderRow> orderList, String dateString) async {
     final profile = await CapabilityProfile.load();
 
     final Generator ticket = Generator(paperSize, profile);
@@ -586,16 +626,16 @@ class EscPrinter with ChangeNotifier {
 
     double totalIncome = 0;
 
-    for (OrderRow orderRow in orderList) {
-      totalIncome += orderRow.totalPrice;
-      for (OrderRowItem orderRowItem in orderRow.orderRowItem) {
-        if (itemQtyMapping[orderRowItem.productRevision.targetId] == null) {
-          itemQtyMapping[orderRowItem.productRevision.targetId] = 0;
+    for (final orderRow in orderList) {
+      totalIncome += orderRow.orderData.totalPrice;
+      for (final orderRowItem in orderRow.items) {
+        if (itemQtyMapping[orderRowItem.product.latestRevision.id] == null) {
+          itemQtyMapping[orderRowItem.product.latestRevision.id] = 0;
         }
 
-        itemQtyMapping[orderRowItem.productRevision.targetId] =
-            itemQtyMapping[orderRowItem.productRevision.targetId]! +
-                orderRowItem.quantity;
+        itemQtyMapping[orderRowItem.product.latestRevision.id] =
+            itemQtyMapping[orderRowItem.product.latestRevision.id]! +
+                orderRowItem.itemData.quantity;
       }
     }
 
@@ -605,8 +645,10 @@ class EscPrinter with ChangeNotifier {
 
     // Iterate over the sorted entries
     for (var entry in sortedEntries) {
-      final productRevision = StaticDB.productRevisionBox.get(entry.key)!;
-      final product = productRevision.product.target!;
+      final productRevision =
+          await InstanceDB.getProductRevisionByID(id: entry.key);
+      final product =
+          await InstanceDB.getProductByID(id: productRevision.product);
 
       bytes += ticket.row([
         PosColumn(

@@ -1,0 +1,422 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
+import 'package:tokkoo_pos_lite/backend/models/drift_entity_order_row.dart';
+import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
+import 'package:tokkoo_pos_lite/frontend/features/report/widgets/report_print_select_method_bottomsheet.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+
+class ReportMainScreenParam {
+  final DateTime startTime;
+  final DateTime endTime;
+
+  const ReportMainScreenParam({required this.startTime, required this.endTime});
+}
+
+class ReportMainScreen extends StatelessWidget {
+  const ReportMainScreen({super.key, required this.param});
+
+  final ReportMainScreenParam param;
+
+  static const routeName = '/report/list';
+
+  void seeDetail(BuildContext context, DriftUsableOrderRow orderRow) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 600),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Waktu: ${DateFormat('yyyy-MM-dd / HH:mm:ss').format(orderRow.orderData.createdAt)}',
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    ListView(
+                      shrinkWrap: true,
+                    ),
+                    Center(
+                      child: DataTable(columns: const [
+                        DataColumn(label: Text('Deskripsi')),
+                        DataColumn(label: Text('Kuantitas')),
+                        DataColumn(label: Text('Harga')),
+                      ], rows: [
+                        ...orderRow.items.map((item) => DataRow(cells: [
+                              DataCell(ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 250),
+                                  child: Text(item.product.product.name))),
+                              DataCell(Center(
+                                child: Text(item.itemData.quantity.toString()),
+                              )),
+                              DataCell(Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(NumberFormat.currency(
+                                        symbol: 'Rp ', decimalDigits: 0)
+                                    .format(item.product.latestRevision.price *
+                                        item.itemData.quantity)),
+                              )),
+                            ]))
+                      ]),
+                    ),
+                    const SizedBox(height: 16),
+                    const Divider(),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Jenis Pembayaran'),
+                        Text(orderRow.paymentMethod?.name ?? "-"),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Total Harga'),
+                        Text(NumberFormat.currency(
+                                symbol: 'Rp ', decimalDigits: 0)
+                            .format(orderRow.orderData.totalPrice)),
+                      ],
+                    ),
+                    if (orderRow.paymentMethod != null &&
+                        !orderRow.paymentMethod!.sameAsAmount)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Jumlah yang Dibayarkan'),
+                              Text(NumberFormat.currency(
+                                      symbol: 'Rp ', decimalDigits: 0)
+                                  .format(orderRow.orderData.payAmount)),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Kembalian'),
+                              Text(NumberFormat.currency(
+                                      symbol: 'Rp ', decimalDigits: 0)
+                                  .format(orderRow.orderData.payAmount -
+                                      orderRow.orderData.totalPrice)),
+                            ],
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          )),
+    );
+  }
+
+  Future<void> seeSummary(
+      BuildContext context, List<DriftUsableOrderRow> orderRows) async {
+    final Map<int, int> productRevisionQuantityMapping = {};
+    final Map<int, double> productRevisionPriceMapping = {};
+    final Map<String, double> paymentMethodTotalMapping = {};
+
+    for (final order in orderRows) {
+      if (order.paymentMethod == null) break;
+
+      if (!paymentMethodTotalMapping.containsKey(order.paymentMethod!.name)) {
+        paymentMethodTotalMapping[order.paymentMethod!.name] = 0;
+      }
+
+      paymentMethodTotalMapping[order.paymentMethod!.name] =
+          paymentMethodTotalMapping[order.paymentMethod!.name]! +
+              order.orderData.totalPrice;
+
+      for (final item in order.items) {
+        final productRevision = item.product.latestRevision;
+
+        if (!productRevisionQuantityMapping.containsKey(productRevision.id)) {
+          productRevisionQuantityMapping[productRevision.id] = 0;
+          productRevisionPriceMapping[productRevision.id] = 0;
+        }
+
+        productRevisionQuantityMapping[productRevision.id] =
+            productRevisionQuantityMapping[productRevision.id]! +
+                item.itemData.quantity;
+        productRevisionPriceMapping[productRevision.id] =
+            productRevisionPriceMapping[productRevision.id]! +
+                (item.itemData.quantity * productRevision.price);
+      }
+    }
+
+    // Construct Payment Method -------------------------------------------------------
+    // constructedPaymentMethodItems at List<String> struct is:
+    // 0: name
+    // 1: total
+    // 2: UnitPrice
+    // 3: totalPrice
+    List<List<String>> constructedPaymentMethodItems = [];
+    for (final paymentMethodName in paymentMethodTotalMapping.keys) {
+      constructedPaymentMethodItems.add([
+        paymentMethodName,
+        NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+            .format(paymentMethodTotalMapping[paymentMethodName]),
+      ]);
+    }
+    constructedPaymentMethodItems.sort((a, b) {
+      final nameComparison = a[0].compareTo(b[0]);
+      if (nameComparison == 0) {
+        return a[1].compareTo(b[1]);
+      }
+      return nameComparison;
+    });
+    // --------------------------------------------------------------------------------
+
+    // Construct Order Items ----------------------------------------------------------
+    // constructedOrderItems at List<String> struct is:
+    // 0: ProductName
+    // 1: Quantity
+    // 2: UnitPrice
+    // 3: totalPrice
+    List<List<String>> constructedOrderItems = [];
+    for (final productRevisionId in productRevisionQuantityMapping.keys) {
+      final productRevision =
+          await InstanceDB.getProductRevisionByID(id: productRevisionId);
+      final product =
+          await InstanceDB.getProductByID(id: productRevision.product);
+      constructedOrderItems.add([
+        product.name,
+        productRevisionQuantityMapping[productRevisionId].toString(),
+        NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+            .format(productRevision.price),
+        NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
+          productRevisionPriceMapping[productRevisionId],
+        ),
+      ]);
+    }
+    constructedOrderItems.sort((a, b) {
+      final nameComparison = a[0].compareTo(b[0]);
+      if (nameComparison == 0) {
+        // compare based on quantity
+        return a[1].compareTo(b[1]);
+      }
+      return nameComparison;
+    });
+    // --------------------------------------------------------------------------------
+
+    final ScrollController scrollController1 = ScrollController();
+    final ScrollController scrollController2 = ScrollController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 600),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Text(
+                      'Total Pemasukan: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(paymentMethodTotalMapping.values.map((item) => item).reduce((a, b) => a + b))}'),
+                  Text(
+                      'Total Produk Terjual: ${productRevisionQuantityMapping.values.map((item) => item).reduce((a, b) => a + b)}'),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const Text(
+                    'Berdasarkan Jenis Pembayaran',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  Center(
+                    child: Scrollbar(
+                      controller: scrollController1,
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: scrollController1,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                            columns: const [
+                              DataColumn(label: Text('Metode Pembayaran')),
+                              DataColumn(label: Text('Jumlah Pemasukan')),
+                            ],
+                            rows: constructedPaymentMethodItems
+                                .map((item) => DataRow(cells: [
+                                      DataCell((Text(item[0]))),
+                                      DataCell((Text(item[1]))),
+                                    ]))
+                                .toList()),
+                      ),
+                    ),
+                  ),
+
+                  // Based on Order
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const Text(
+                    'Berdasarkan Produk',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  Center(
+                    child: Scrollbar(
+                      controller: scrollController2,
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: scrollController2,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                            columns: const [
+                              DataColumn(label: Text('Deskripsi')),
+                              DataColumn(label: Text('Kuantitas')),
+                              DataColumn(label: Text('Harga Satuan')),
+                              DataColumn(label: Text('Total Harga')),
+                            ],
+                            rows: constructedOrderItems
+                                .map((item) => DataRow(cells: [
+                                      DataCell((Text(item[0]))),
+                                      DataCell((Text(item[1]))),
+                                      DataCell((Text(item[2]))),
+                                      DataCell((Text(item[3]))),
+                                    ]))
+                                .toList()),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Laporan Harian'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => ReportPrintSelectMethodBottomsheet(
+                    param.startTime,
+                    param.endTime,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.print_outlined))
+        ],
+      ),
+      body: SafeArea(
+        child: Center(
+          child: FutureBuilder(
+              future: InstanceDB.getOrderRowList(
+                startDateTime: DateTime(param.startTime.year,
+                    param.startTime.month, param.startTime.day, 0, 0, 0),
+                endDateTime: DateTime(param.endTime.year, param.endTime.month,
+                    param.endTime.day, 23, 59, 59),
+                status: OrderStatus.paid,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                final data = snapshot.data!;
+                double totalSale = 0;
+                for (final orderRow in data) {
+                  totalSale += orderRow.orderData.totalPrice;
+                }
+
+                return Stack(
+                  fit: StackFit.expand,
+                  alignment: Alignment.center,
+                  children: [
+                    ListView(
+                      padding: EdgeInsets.fromLTRB(
+                        CommonFunction.getHorizontalPaddingForMaxWidth(
+                            maxWidth: 550, context: context),
+                        20,
+                        CommonFunction.getHorizontalPaddingForMaxWidth(
+                            maxWidth: 550, context: context),
+                        90,
+                      ),
+                      children: [
+                        Text(
+                          'Laporan Tanggal: ${CommonFunction.sameDayDateTime(param.startTime, param.endTime) ? DateFormat('d MMM yyyy').format(param.startTime) : "${DateFormat('d MMM yyyy').format(param.startTime)} - ${DateFormat('d MMM yyyy').format(param.endTime)}"}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                            'Hasil Total Penjualan: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(totalSale)}'),
+                        const SizedBox(height: 10),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final orderData = data[index].orderData;
+
+                              return Card(
+                                child: ListTile(
+                                  onTap: () => seeDetail(context, data[index]),
+                                  title: Text(
+                                    NumberFormat.currency(
+                                            symbol: 'Rp ', decimalDigits: 0)
+                                        .format(orderData.totalPrice),
+                                  ),
+                                  subtitle: Text(
+                                      'Pukul: ${DateFormat('HH:mm').format(orderData.createdAt)}'),
+                                ),
+                              );
+                            })
+                      ],
+                    ),
+                    if (data.isNotEmpty)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                CommonFunction.getHorizontalPaddingForMaxWidth(
+                                    maxWidth: 550, context: context),
+                            vertical: 20,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              context.loaderOverlay.show();
+                              await seeSummary(context, data);
+                              // ignore: use_build_context_synchronously
+                              context.loaderOverlay.hide();
+                            },
+                            child: const Text('Lihat Ringkasan Laporan'),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              }),
+        ),
+      ),
+    );
+  }
+}
