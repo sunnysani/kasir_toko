@@ -31,7 +31,7 @@ class ReportPrintSelectDateBottomsheet extends ConsumerStatefulWidget {
 class _ReportPrintSelectDateBottomsheetState
     extends ConsumerState<ReportPrintSelectDateBottomsheet> {
   TimeOfDay selectedStartTime = const TimeOfDay(hour: 6, minute: 30);
-  TimeOfDay selectedEndTime = const TimeOfDay(hour: 18, minute: 0);
+  TimeOfDay selectedEndTime = const TimeOfDay(hour: 22, minute: 0);
 
   TextEditingController selectedStartTimeEditor = TextEditingController();
   TextEditingController selectedEndTimeEditor = TextEditingController();

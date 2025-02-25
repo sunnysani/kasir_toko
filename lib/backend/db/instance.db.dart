@@ -37,19 +37,24 @@ class InstanceDB extends _$InstanceDB {
   static late DriftEntityOutletData outlet;
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 4;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-      onCreate: (m) async {
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (m) async {
         await m.createAll();
 
         // add trigger
         for (final trigger in TriggerDB.triggers) {
           await customStatement(trigger);
         }
-      },
-      onUpgrade: (m, from, to) async {});
+      }, onUpgrade: (m, from, to) async {
+        if (from == 1 || from == 2 || from == 3) {
+          // update trigger
+          for (final trigger in TriggerDB.triggers) {
+            await customStatement(trigger);
+          }
+        }
+      });
 
   static Future<void> start() async {
     await Directory(

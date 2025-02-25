@@ -59,7 +59,7 @@ class PosCaregorizedProductsListView extends ConsumerWidget {
           },
         ),
         if (posInformationState.value!.uncategorizedProducts.isNotEmpty &&
-            posFilterState.filterProductCategoryIDs.isNotEmpty)
+            posFilterState.filterProductCategoryIDs.isEmpty)
           PosProductListView(
             title: 'Tidak Berkategori',
             products: posInformationState.value!.uncategorizedProducts,

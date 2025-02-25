@@ -147,9 +147,12 @@ class PosQuantityState extends _$PosQuantityState {
 
     for (final key in state.value!.keys) {
       final quantity = int.parse(state.value![key]!.text);
-      final product = ref.read(posUsableProductIDMappingProvider).value![key]!;
-      dbTempObjProductQuantityList
-          .add(DBTempObjProductQuantity(product, quantity));
+      if (quantity > 0) {
+        final product =
+            ref.read(posUsableProductIDMappingProvider).value![key]!;
+        dbTempObjProductQuantityList
+            .add(DBTempObjProductQuantity(product, quantity));
+      }
     }
 
     return dbTempObjProductQuantityList;
