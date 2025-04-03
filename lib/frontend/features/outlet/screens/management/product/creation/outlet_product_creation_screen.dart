@@ -11,6 +11,7 @@ import 'package:tokkoo_pos_lite/frontend/widgets/shared/switch_form_field.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:tokkoo_pos_lite/utils/other/number_input_formatter.dart';
 
 class OutletProductCreationScreen extends StatefulWidget {
   const OutletProductCreationScreen({super.key, this.data});
@@ -45,7 +46,8 @@ class _OutletProductCreationScreenState
     if (widget.data == null) {
       InstanceDB.insertProduct(
         name: textEditingControllerProductName.text,
-        price: double.parse(textEditingControllerProductPrice.text),
+        price: NumberInputFormatter.parseToDouble(
+            textEditingControllerProductPrice.text),
         nameInReceipt: textEditingControllerProductNameInReceipt.text,
         code: textEditingControllerProductCode.text,
         categoryIDs: selectedCategories,
@@ -54,7 +56,7 @@ class _OutletProductCreationScreenState
       InstanceDB.updateProduct(
         product: widget.data!.product,
         name: textEditingControllerProductName.text,
-        price: CommonFunction.parseTextDouble(
+        price: NumberInputFormatter.parseToDouble(
             textEditingControllerProductPrice.text),
         code: textEditingControllerProductCode.text,
         nameInReceipt: textEditingControllerProductNameInReceipt.text,
@@ -125,9 +127,7 @@ class _OutletProductCreationScreenState
               isCreation: widget.data == null,
               validator: ((value) =>
                   value?.isNotEmpty ?? false ? null : 'Salah'),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,12}$')),
-              ],
+              inputFormatters: [NumberInputFormatter()],
               prefix: 'Rp ',
             ),
             const SizedBox(height: 20),

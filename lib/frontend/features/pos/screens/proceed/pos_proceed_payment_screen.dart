@@ -10,6 +10,7 @@ import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dar
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/proceed/pos_proceed_receipt_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/other/number_input_formatter.dart';
 
 class PosProceedPaymentScreen extends ConsumerStatefulWidget {
   static const childRouteName = 'proceed/payment';
@@ -29,9 +30,9 @@ class _PosProceedPaymentScreenState
   double change = 0;
 
   void triggerPayAmountListener() {
-    double currentPayAmount = payAmountController.text.isNotEmpty
-        ? double.parse(payAmountController.text)
-        : 0;
+    double currentPayAmount = payAmountController.text.isEmpty
+        ? 0
+        : NumberInputFormatter.parseToDouble(payAmountController.text);
     setState(() => change = currentPayAmount -
         ref
             .read(posProceedOrderRowProvider.notifier)
@@ -84,7 +85,8 @@ class _PosProceedPaymentScreenState
       overlay.show();
       try {
         final orderRow = await InstanceDB.payOrderRow(
-          payAmount: double.parse(payAmountController.text),
+          payAmount:
+              NumberInputFormatter.parseToDouble(payAmountController.text),
           useableOrderRow: ref.read(posProceedOrderRowProvider.notifier).state!,
           paymentMethodData: selectedPaymentMethod!,
         );
@@ -173,7 +175,8 @@ class _PosProceedPaymentScreenState
                 onChanged: (paymentMethodData) {
                   if (paymentMethodData?.sameAsAmount == true) {
                     payAmountController.text =
-                        proceededOrderRowState.orderData.totalPrice.toString();
+                        NumberInputFormatter.parseToString(
+                            proceededOrderRowState.orderData.totalPrice);
                   }
 
                   setState(() => selectedPaymentMethod = paymentMethodData);
@@ -185,10 +188,7 @@ class _PosProceedPaymentScreenState
                 controller: payAmountController,
                 readOnly: selectedPaymentMethod?.sameAsAmount ?? false,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'^\d*\.?\d{0,12}$')),
-                ],
+                inputFormatters: [NumberInputFormatter()],
                 decoration: InputDecoration(
                   prefix: const Text('Rp '),
                   label: const Text('Jumlah Pembayaran'),
