@@ -5,6 +5,7 @@ import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/backend/models/drift_entity_order_row.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
 import 'package:tokkoo_pos_lite/frontend/features/report/widgets/report_print_select_method_bottomsheet.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class ReportMainScreenParam {
@@ -347,72 +348,53 @@ class ReportMainScreen extends StatelessWidget {
                   totalSale += orderRow.orderData.totalPrice;
                 }
 
-                return Stack(
-                  fit: StackFit.expand,
-                  alignment: Alignment.center,
-                  children: [
-                    ListView(
-                      padding: EdgeInsets.fromLTRB(
-                        CommonFunction.getHorizontalPaddingForMaxWidth(
-                            maxWidth: 550, context: context),
-                        20,
-                        CommonFunction.getHorizontalPaddingForMaxWidth(
-                            maxWidth: 550, context: context),
-                        90,
-                      ),
-                      children: [
-                        Text(
-                          'Laporan Tanggal: ${CommonFunction.sameDayDateTime(param.startTime, param.endTime) ? DateFormat('d MMM yyyy').format(param.startTime) : "${DateFormat('d MMM yyyy').format(param.startTime)} - ${DateFormat('d MMM yyyy').format(param.endTime)}"}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
+                return LayoutWithBottomButton(
+                  bottomButton: data.isEmpty
+                      ? null
+                      : ElevatedButton(
+                          onPressed: () async {
+                            context.loaderOverlay.show();
+                            await seeSummary(context, data);
+                            // ignore: use_build_context_synchronously
+                            context.loaderOverlay.hide();
+                          },
+                          child: const Text('Lihat Ringkasan Laporan'),
                         ),
-                        Text(
-                            'Hasil Total Penjualan: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(totalSale)}'),
-                        const SizedBox(height: 10),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              final orderData = data[index].orderData;
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      Text(
+                        'Laporan Tanggal: ${CommonFunction.sameDayDateTime(param.startTime, param.endTime) ? DateFormat('d MMM yyyy').format(param.startTime) : "${DateFormat('d MMM yyyy').format(param.startTime)} - ${DateFormat('d MMM yyyy').format(param.endTime)}"}',
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                          'Hasil Total Penjualan: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(totalSale)}'),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final orderData = data[index].orderData;
 
-                              return Card(
-                                child: ListTile(
-                                  onTap: () => seeDetail(context, data[index]),
-                                  title: Text(
-                                    NumberFormat.currency(
-                                            symbol: 'Rp ', decimalDigits: 0)
-                                        .format(orderData.totalPrice),
-                                  ),
-                                  subtitle: Text(
-                                      'Pukul: ${DateFormat('HH:mm').format(orderData.createdAt)}'),
-                                ),
-                              );
-                            })
-                      ],
-                    ),
-                    if (data.isNotEmpty)
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                CommonFunction.getHorizontalPaddingForMaxWidth(
-                                    maxWidth: 550, context: context),
-                            vertical: 20,
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              context.loaderOverlay.show();
-                              await seeSummary(context, data);
-                              // ignore: use_build_context_synchronously
-                              context.loaderOverlay.hide();
-                            },
-                            child: const Text('Lihat Ringkasan Laporan'),
-                          ),
-                        ),
-                      ),
-                  ],
+                          return Card(
+                            child: ListTile(
+                              onTap: () => seeDetail(context, data[index]),
+                              title: Text(
+                                NumberFormat.currency(
+                                        symbol: 'Rp ', decimalDigits: 0)
+                                    .format(orderData.totalPrice),
+                              ),
+                              subtitle: Text(
+                                  'Pukul: ${DateFormat('HH:mm').format(orderData.createdAt)}'),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 );
               }),
         ),

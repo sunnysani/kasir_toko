@@ -5,9 +5,8 @@ import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/printer_status.dart';
-import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_template.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PosProceedReceiptScreen extends ConsumerStatefulWidget {
   const PosProceedReceiptScreen({super.key});
@@ -24,49 +23,42 @@ class _PosProceedReceiptScreenState
     extends ConsumerState<PosProceedReceiptScreen> {
   int printButtonClickCount = 0;
 
+  void backToPosScreen() {
+    if (printButtonClickCount > 0) {
+      ref.invalidate(posProceedOrderRowProvider);
+      context.pop();
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: AppSize.maxWidth),
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            children: [
+              const Text('Struk belum dicetak. Lanjutkan?'),
+              const SizedBox(height: 16),
+              FilledButton(
+                  onPressed: () {
+                    ref.invalidate(posProceedOrderRowProvider);
+                    context.pop();
+                    context.pop();
+                  },
+                  child: const Text('Ya')),
+            ],
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PosTemplate(
+    return LayoutWithBottomButton(
       childAlignment: Alignment.center,
-      bottomSheetWidget: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-              maxWidth: 550, context: context),
-          vertical: 20,
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            if (printButtonClickCount > 0) {
-              ref.invalidate(posProceedOrderRowProvider);
-              context.pop();
-            } else {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) => ListView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                CommonFunction.getHorizontalPaddingForMaxWidth(
-                              maxWidth: 550,
-                              context: context,
-                            ),
-                            vertical: 20),
-                        children: [
-                          const Text('Struk belum dicetak. Lanjutkan?'),
-                          const SizedBox(height: 16),
-                          FilledButton(
-                              onPressed: () {
-                                ref.invalidate(posProceedOrderRowProvider);
-                                context.pop();
-                                context.pop();
-                              },
-                              child: const Text('Ya')),
-                        ],
-                      ));
-            }
-          },
-          child: const Text('Kembali ke Halaman Kasir'),
-        ),
+      bottomButton: ElevatedButton(
+        onPressed: backToPosScreen,
+        child: const Text('Kembali ke Halaman Kasir'),
       ),
       child: Column(
         children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_general_form.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 
 class OutletManagementScreen extends StatelessWidget {
   const OutletManagementScreen({super.key});
@@ -14,16 +14,12 @@ class OutletManagementScreen extends StatelessWidget {
         title: const Text("Manajemen Outlet"),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(
-            horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-              maxWidth: 550,
-              context: context,
-            ),
+        child: LayoutMaxWidth(
+          child: ListView(
+            children: const [
+              OutletGeneralForm(hideHeaderTitle: true),
+            ],
           ),
-          children: const [
-            OutletGeneralForm(hideHeaderTitle: true),
-          ],
         ),
       ),
     );

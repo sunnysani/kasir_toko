@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
-import 'package:provider/provider.dart';
 import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/select_esc_printer_widget.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PrinterStatus extends ConsumerStatefulWidget {
   const PrinterStatus({super.key});

@@ -11,7 +11,7 @@ import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_bottom_sheet.d
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_categorized_product_list_view.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_filter_drawer.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_product_list_view.dart';
-import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_template.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/search_bar.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
@@ -69,6 +69,8 @@ class PosAppScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     initialUseablePosCheck(context);
 
     final posInformationState = ref.watch(posInformationStateProvider);
@@ -76,35 +78,76 @@ class PosAppScreen extends ConsumerWidget {
     final posFilterState = ref.watch(posFilterStateProvider);
 
     if (posInformationState.isLoading || posQuantityState.isLoading) {
-      return PosTemplate(child: Center(child: CircularProgressIndicator()));
+      return Scaffold(
+        appBar: AppBar(title: Text('Kasir')),
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
-    return PosTemplate(
-      title: 'Kasir',
-      bottomSheetWidget: PosBottomSheet(),
-      endDrawer: posInformationState.value!.categoryList.isEmpty
-          ? null
-          : PosFilterDrawer(),
-      child: Column(
-        children: [
-          CustomSearchBar(
-            onChanged:
-                ref.read(posFilterStateProvider.notifier).setSearchString,
-            hintText: 'Temukan dengan Nama atau Kode',
+    return Scaffold(
+      key: scaffoldKey,
+      endDrawer: PosFilterDrawer(),
+      appBar: AppBar(
+        title: Text('Kasir'),
+        actions: posInformationState.value!.categoryList.isEmpty
+            ? null
+            : [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: IconButton(
+                    icon: const Icon(Icons.filter_alt),
+                    onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
+                  ),
+                )
+              ],
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: [
+              LayoutMaxWidth(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 90),
+                    child: Column(
+                      children: [
+                        CustomSearchBar(
+                          onChanged: ref
+                              .read(posFilterStateProvider.notifier)
+                              .setSearchString,
+                          hintText: 'Temukan dengan Nama atau Kode',
+                        ),
+                        const SizedBox(height: 20),
+                        if (posFilterState.searchString.isEmpty)
+                          PosCaregorizedProductsListView()
+                        else
+                          PosProductListView(
+                              products: posInformationState.value!.allProducts
+                                  .where((element) =>
+                                      element.product.name
+                                          .toLowerCase()
+                                          .contains(posFilterState.searchString
+                                              .toLowerCase()) ||
+                                      element.product.code
+                                          .toLowerCase()
+                                          .contains(posFilterState.searchString
+                                              .toLowerCase()))
+                                  .toList())
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: PosBottomSheet(),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          if (posFilterState.searchString.isEmpty)
-            PosCaregorizedProductsListView()
-          else
-            PosProductListView(
-                products: posInformationState.value!.allProducts
-                    .where((element) =>
-                        element.product.name.toLowerCase().contains(
-                            posFilterState.searchString.toLowerCase()) ||
-                        element.product.code.toLowerCase().contains(
-                            posFilterState.searchString.toLowerCase()))
-                    .toList())
-        ],
+        ),
       ),
     );
   }

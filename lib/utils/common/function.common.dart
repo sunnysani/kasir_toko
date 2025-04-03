@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 
 class CommonFunction {
@@ -12,15 +11,6 @@ class CommonFunction {
       String secondInput = input.substring(0, input.length - 1);
       return parseTextDouble(secondInput);
     }
-  }
-
-  static double getHorizontalPaddingForMaxWidth({
-    required double maxWidth,
-    required BuildContext context,
-  }) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    if (maxWidth + 40 > screenWidth) return 20;
-    return (screenWidth - maxWidth) / 2;
   }
 
   static Future<bool> outletValidationConfigured() async {

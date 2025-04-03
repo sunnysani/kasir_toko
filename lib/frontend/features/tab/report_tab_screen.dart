@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tokkoo_pos_lite/frontend/features/report/screens/report_main_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/hideable_text_form_field.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
@@ -111,12 +112,7 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-            maxWidth: 550, context: context),
-      ),
+    return LayoutMaxWidth(
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -142,6 +138,6 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
           ],
         ),
       ),
-    ));
+    );
   }
 }

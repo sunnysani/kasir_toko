@@ -38,3 +38,7 @@ class ButtonTextStyle {
     backgroundColor: WidgetStatePropertyAll(AppColors.secondaryMainColor),
   );
 }
+
+class AppSize {
+  static const double maxWidth = 550;
+}

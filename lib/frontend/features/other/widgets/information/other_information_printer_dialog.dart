@@ -5,7 +5,6 @@ import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/carousel_with_dot_navigator.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/printer_status.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
-import 'package:provider/provider.dart';
 
 class OtherInformationPrinterDialogItemBottomAction {
   final String label;

@@ -8,9 +8,8 @@ import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/proceed/pos_proceed_receipt_screen.dart';
-import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_template.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PosProceedPaymentScreen extends ConsumerStatefulWidget {
   static const childRouteName = 'proceed/payment';
@@ -55,65 +54,57 @@ class _PosProceedPaymentScreenState
     final paymentMethodListState = ref.watch(posAvailablePaymentMethodProvider);
 
     if (proceededOrderRowState == null || paymentMethodListState.isLoading) {
-      return PosTemplate(
-        title: 'Pembayaran',
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
+      return Scaffold(
+        appBar: AppBar(title: Text('Pembayaran')),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
-    return PosTemplate(
-        title: 'Pembayaran',
-        bottomSheetWidget: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-                maxWidth: 550, context: context),
-            vertical: 20,
+    Future<void> confirmPayment() async {
+      if (selectedPaymentMethod == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Metode Pembayaran Kosong'),
+            backgroundColor: AppColors.negativeColor,
           ),
-          child: ElevatedButton(
-            onPressed: () async {
-              if (selectedPaymentMethod == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Metode Pembayaran Kosong'),
-                    backgroundColor: AppColors.negativeColor,
-                  ),
-                );
-                return;
-              }
-              if (change < 0) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Kembalian kurang dari 0'),
-                    backgroundColor: AppColors.negativeColor,
-                  ),
-                );
-                return;
-              }
+        );
+        return;
+      }
+      if (change < 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Kembalian kurang dari 0'),
+            backgroundColor: AppColors.negativeColor,
+          ),
+        );
+        return;
+      }
 
-              final overlay = context.loaderOverlay;
-              overlay.show();
-              try {
-                final orderRow = await InstanceDB.payOrderRow(
-                  payAmount: double.parse(payAmountController.text),
-                  useableOrderRow:
-                      ref.read(posProceedOrderRowProvider.notifier).state!,
-                  paymentMethodData: selectedPaymentMethod!,
-                );
-                ref.read(posProceedOrderRowProvider.notifier).state = orderRow;
-                if (context.mounted) {
-                  ref.invalidate(posQuantityStateProvider);
-                  context.replace(PosProceedReceiptScreen.routeName);
-                }
-              } catch (e) {
-                debugPrint(e.toString());
-              } finally {
-                overlay.hide(); // Hide loader
-              }
-            },
-            child: const Text('Konfirmasi Pembayaran'),
-          ),
+      final overlay = context.loaderOverlay;
+      overlay.show();
+      try {
+        final orderRow = await InstanceDB.payOrderRow(
+          payAmount: double.parse(payAmountController.text),
+          useableOrderRow: ref.read(posProceedOrderRowProvider.notifier).state!,
+          paymentMethodData: selectedPaymentMethod!,
+        );
+        ref.read(posProceedOrderRowProvider.notifier).state = orderRow;
+        if (context.mounted) {
+          ref.invalidate(posQuantityStateProvider);
+          context.replace(PosProceedReceiptScreen.routeName);
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      } finally {
+        overlay.hide(); // Hide loader
+      }
+    }
+
+    return LayoutWithBottomButton(
+        title: 'Pembayaran',
+        bottomButton: ElevatedButton(
+          onPressed: confirmPayment,
+          child: const Text('Konfirmasi Pembayaran'),
         ),
         child: Column(children: [
           // Order Summary

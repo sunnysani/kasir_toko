@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_tile_template.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/search_bar.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 enum DataPassedType {
   productCategory,
@@ -93,44 +93,40 @@ class _OutletManagementTemplateState extends State<OutletManagementTemplate> {
         onPressed: () => context.push(widget.creationRoute),
         child: const Icon(Icons.add),
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-            maxWidth: 550,
-            context: context,
-          ),
-        ),
-        children: [
-          const SizedBox(height: 20),
-          CustomSearchBar(
-            onChanged: (val) => setState(() => filterText = val),
-            hintText: widget.searchBarText,
-          ),
-          if (widget.isLoading)
-            Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Center(child: CircularProgressIndicator())),
-          if (!widget.isLoading && widget.dataList != null)
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: widget.dataList!.length,
-              itemBuilder: (context, index) {
-                if (showBasedOnFilterString(widget.dataList![index])) {
-                  return OutletManagementTileTemplate(
-                    onTap: () => context.push(widget.creationRoute,
-                        extra: widget.dataList![index]),
-                    title: getTitle(widget.dataList![index]),
-                    active: getActive(widget.dataList![index]),
-                    subtitle: getTitleSubtitle(widget.dataList![index]),
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              },
+      body: LayoutMaxWidth(
+        child: ListView(
+          children: [
+            const SizedBox(height: 20),
+            CustomSearchBar(
+              onChanged: (val) => setState(() => filterText = val),
+              hintText: widget.searchBarText,
             ),
-          const SizedBox(height: 20),
-        ],
+            if (widget.isLoading)
+              Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Center(child: CircularProgressIndicator())),
+            if (!widget.isLoading && widget.dataList != null)
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.dataList!.length,
+                itemBuilder: (context, index) {
+                  if (showBasedOnFilterString(widget.dataList![index])) {
+                    return OutletManagementTileTemplate(
+                      onTap: () => context.push(widget.creationRoute,
+                          extra: widget.dataList![index]),
+                      title: getTitle(widget.dataList![index]),
+                      active: getActive(widget.dataList![index]),
+                      subtitle: getTitleSubtitle(widget.dataList![index]),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }

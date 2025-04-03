@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_general_form.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_list.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 
 class OutletTabScreen extends StatefulWidget {
   const OutletTabScreen({super.key});
@@ -44,13 +44,7 @@ class _OutletTabScreenState extends State<OutletTabScreen> {
       body: SingleChildScrollView(
         controller: scrollController,
         child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-                maxWidth: 550,
-                context: context,
-              ),
-            ),
+          child: LayoutMaxWidth(
             child: const Column(
               children: [
                 SizedBox(height: 20),

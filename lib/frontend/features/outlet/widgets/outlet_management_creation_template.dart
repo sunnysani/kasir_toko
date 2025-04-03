@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 
 class OutletManagementCreationTemplate extends StatelessWidget {
   const OutletManagementCreationTemplate({
@@ -28,12 +28,7 @@ class OutletManagementCreationTemplate extends StatelessWidget {
               Align(
                 alignment: Alignment.topCenter,
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal:
-                          CommonFunction.getHorizontalPaddingForMaxWidth(
-                              maxWidth: 550, context: context),
-                    ),
+                  child: LayoutMaxWidth(
                     child: Column(
                       children: [
                         const SizedBox(height: 20),
@@ -44,13 +39,9 @@ class OutletManagementCreationTemplate extends StatelessWidget {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: CommonFunction.getHorizontalPaddingForMaxWidth(
-                        maxWidth: 550, context: context),
-                  ),
+              LayoutMaxWidth(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
                   child: Container(
                     height: 50,
                     margin: const EdgeInsets.only(bottom: 20),
