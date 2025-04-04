@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_template.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/product_category/creation/outlet_product_category_creation_screen.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class OutletProductCategoryManagementScreen extends StatelessWidget {
   const OutletProductCategoryManagementScreen({super.key});
@@ -15,8 +16,8 @@ class OutletProductCategoryManagementScreen extends StatelessWidget {
         builder: (context, snapshot) {
           return OutletManagementTemplate(
             creationRoute: OutletProductCategoryCreationScreen.routeName,
-            appBarTitle: 'Kategori Produk',
-            searchBarText: 'Temukan Produk berdasarkan nama atau kode',
+            appBarTitle: t.product_category,
+            searchBarText: t.find_product_category_based_on_name,
             isLoading: snapshot.connectionState == ConnectionState.waiting,
             dataList: snapshot.data,
             dataPassedType: DataPassedType.productCategory,

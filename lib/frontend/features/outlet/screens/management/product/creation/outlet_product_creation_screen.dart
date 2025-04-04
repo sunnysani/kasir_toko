@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_product_object.dart';
@@ -8,8 +7,8 @@ import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/prod
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_creation_template.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/modified_text_form_field.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/switch_form_field.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
-import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:tokkoo_pos_lite/utils/other/number_input_formatter.dart';
 
@@ -89,7 +88,9 @@ class _OutletProductCreationScreenState
   @override
   Widget build(BuildContext context) {
     return OutletManagementCreationTemplate(
-      title: widget.data == null ? 'Tambah Produk' : 'Edit Produk',
+      title: widget.data == null
+          ? t.add_arg(text: t.product)
+          : t.edit_arg(text: t.product),
       isCreation: widget.data == null,
       submit: _submit,
       child: Form(
@@ -98,24 +99,24 @@ class _OutletProductCreationScreenState
           children: [
             ModifiedTextFormField(
               controller: textEditingControllerProductName,
-              labelName: 'Nama Produk',
+              labelName: t.product_name,
               isCreation: widget.data == null,
-              validator: ((value) =>
-                  value?.isNotEmpty ?? false ? null : 'Salah'),
+              validator: ((value) => value?.isNotEmpty ?? false
+                  ? null
+                  : t.modified_text_form_widget.alert.cannot_be_empty),
             ),
             const SizedBox(height: 20),
             ModifiedTextFormField(
               controller: textEditingControllerProductNameInReceipt,
-              labelName: 'Nama Produk di Struk',
+              labelName: t.product_name_on_receipt,
               isCreation: widget.data == null,
               isOkEmpty: true,
-              okEmptyMessage:
-                  'Nama Produk di Struk akan sama dengan Nama Produk',
+              okEmptyMessage: t.product_receipt_same_as_product_name,
             ),
             const SizedBox(height: 20),
             ModifiedTextFormField(
               controller: textEditingControllerProductCode,
-              labelName: 'Kode Produk',
+              labelName: t.product_code,
               isCreation: widget.data == null,
               isOkEmpty: true,
             ),
@@ -123,12 +124,13 @@ class _OutletProductCreationScreenState
             ModifiedTextFormField(
               controller: textEditingControllerProductPrice,
               keyboardType: TextInputType.number,
-              labelName: 'Harga',
+              labelName: t.price,
               isCreation: widget.data == null,
-              validator: ((value) =>
-                  value?.isNotEmpty ?? false ? null : 'Salah'),
+              validator: ((value) => value?.isNotEmpty ?? false
+                  ? null
+                  : t.modified_text_form_widget.alert.cannot_be_empty),
               inputFormatters: [NumberInputFormatter()],
-              prefix: 'Rp ',
+              prefix: '${InstanceDB.outlet.currency} ',
             ),
             const SizedBox(height: 20),
             StreamBuilder(
@@ -157,8 +159,7 @@ class _OutletProductCreationScreenState
                           context.push(
                               OutletProductCategoryManagementScreen.routeName);
                         },
-                        child:
-                            const Text('Tidak ada kategori produk terdaftar'),
+                        child: Text(t.no_product_category_registered),
                       ),
                     );
                   }
@@ -191,7 +192,7 @@ class _OutletProductCreationScreenState
               SwitchFormField(
                 initialValue: active,
                 onChanged: (val) => active = val,
-                description: 'Aktif',
+                description: t.active,
               )
           ],
         ),

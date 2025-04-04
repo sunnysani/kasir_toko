@@ -7,7 +7,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/backend/models/drift_entity_order_row.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
@@ -112,16 +114,16 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
 
   bool initialCheckPrintPass(BuildContext context) {
     if (state.selectedDevice == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Tidak ada printer terpilih'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(t.esc_strings.no_printer_selected),
         backgroundColor: AppColors.negativeColor,
       ));
       return false;
     }
 
     if (state.printing) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Sedang melakukan print'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(t.esc_strings.printing_in_progress),
         backgroundColor: AppColors.negativeColor,
       ));
       return false;
@@ -139,7 +141,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     final ticket = Generator(paperSize, profile);
     List<int> bytes = [];
 
-    bytes += ticket.text('Tokkoo PoS',
+    bytes += ticket.text('Tokkoo Lite PoS',
         styles: const PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size1,
@@ -149,7 +151,9 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
         linesAfter: 1);
 
     bytes += ticket.text(
-        'Waktu: ${DateFormat('d MMM yyyy HH:mm:ss').format(DateTime.now())}',
+        t.esc_strings.time_arg(
+            time_string:
+                DateFormat('d MMM yyyy HH:mm:ss').format(DateTime.now())),
         styles: const PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size1,
@@ -158,7 +162,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
         ),
         linesAfter: 1);
 
-    bytes += ticket.text('Tes mencetak berhasil',
+    bytes += ticket.text(t.esc_strings.print_test_succeeded,
         styles: const PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size1,
@@ -236,7 +240,9 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     );
 
     await PrintBluetoothThermal.writeBytes(
-      await getPrintProductSalesBytes(orderList,
+      await getPrintProductSalesBytes(
+          orderList,
+          // ignore: use_build_context_synchronously
           "${DateFormat("d MM yyyy").format(startDate)} @ ${start.format(context)} - ${DateFormat("d MM yyyy").format(endDate)} @ ${end.format(context)}"),
     );
 
@@ -272,7 +278,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
       linesAfter: 0,
     );
     bytes += ticket.text(
-      'No. Telp: ${InstanceDB.outlet.phoneNumber}',
+      t.esc_strings.phone_number(phone_number: InstanceDB.outlet.phoneNumber),
       styles: const PosStyles(
         fontType: PosFontType.fontA,
         align: PosAlign.center,
@@ -304,6 +310,8 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
         ),
       ]);
 
+      final totalPrice = orderRowItem.product.latestRevision.price *
+          orderRowItem.itemData.quantity;
       bytes += ticket.row([
         PosColumn(
           text: '${orderRowItem.itemData.quantity.toString()}pcs',
@@ -316,8 +324,11 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
           styles: const PosStyles(bold: false, align: PosAlign.left),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(orderRowItem.product.latestRevision.price),
+          text: NumberFormat.currency(
+            symbol: '${InstanceDB.outlet.currency} ',
+            decimalDigits: CommonFunction.determineDecimalCount(
+                orderRowItem.product.latestRevision.price),
+          ).format(orderRowItem.product.latestRevision.price),
           width: 4,
           styles: const PosStyles(bold: false, align: PosAlign.left),
         ),
@@ -327,8 +338,11 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
           styles: const PosStyles(bold: false, align: PosAlign.left),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
-              orderRowItem.product.latestRevision.price *
+          text: NumberFormat.currency(
+                  symbol: '${InstanceDB.outlet.currency} ',
+                  decimalDigits:
+                      CommonFunction.determineDecimalCount(totalPrice))
+              .format(orderRowItem.product.latestRevision.price *
                   orderRowItem.itemData.quantity),
           width: 4,
           styles: const PosStyles(
@@ -343,12 +357,15 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     // Print Total
     bytes += ticket.row([
       PosColumn(
-        text: 'Total',
+        text: t.esc_strings.total,
         width: 6,
         styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
       ),
       PosColumn(
-        text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+        text: NumberFormat.currency(
+                symbol: '${InstanceDB.outlet.currency} ',
+                decimalDigits: CommonFunction.determineDecimalCount(
+                    orderRow.orderData.totalPrice))
             .format(orderRow.orderData.totalPrice),
         width: 6,
         styles: const PosStyles(
@@ -359,7 +376,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     // Print PaymentMethod
     bytes += ticket.row([
       PosColumn(
-        text: 'Metode',
+        text: t.esc_strings.method,
         width: 6,
         styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
       ),
@@ -375,12 +392,15 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     if (orderRow.paymentMethod?.sameAsAmount == false) {
       bytes += ticket.row([
         PosColumn(
-          text: 'Pembayaran',
+          text: t.esc_strings.payment,
           width: 6,
           styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+          text: NumberFormat.currency(
+                  symbol: '${InstanceDB.outlet.currency} ',
+                  decimalDigits: CommonFunction.determineDecimalCount(
+                      orderRow.orderData.payAmount))
               .format(orderRow.orderData.payAmount),
           width: 6,
           styles: const PosStyles(
@@ -388,15 +408,19 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
         ),
       ]);
 
+      final change =
+          orderRow.orderData.payAmount - orderRow.orderData.totalPrice;
       bytes += ticket.row([
         PosColumn(
-          text: 'Kembalian',
+          text: t.esc_strings.change,
           width: 6,
           styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
-              orderRow.orderData.payAmount - orderRow.orderData.totalPrice),
+          text: NumberFormat.currency(
+                  symbol: '${InstanceDB.outlet.currency} ',
+                  decimalDigits: CommonFunction.determineDecimalCount(change))
+              .format(change),
           width: 6,
           styles: const PosStyles(
               bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
@@ -409,7 +433,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     bytes += ticket.text(
       InstanceDB.outlet.receiptMessage.isNotEmpty
           ? InstanceDB.outlet.receiptMessage
-          : 'Terima kasih sudah datang',
+          : t.esc_strings.thank_you_for_coming,
       styles:
           const PosStyles(align: PosAlign.center, fontType: PosFontType.fontA),
       linesAfter: 2,
@@ -428,7 +452,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     List<int> bytes = [];
 
     bytes += ticket.text(
-      "Journal",
+      t.esc_strings.journal,
       styles: const PosStyles(
         align: PosAlign.center,
         fontType: PosFontType.fontA,
@@ -483,6 +507,8 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
           ),
         ]);
 
+        final totalPrice = orderRowItem.product.latestRevision.price *
+            orderRowItem.itemData.quantity;
         bytes += ticket.row([
           PosColumn(
             text: '${orderRowItem.itemData.quantity.toString()}pcs',
@@ -495,8 +521,11 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
             styles: const PosStyles(bold: false, align: PosAlign.left),
           ),
           PosColumn(
-            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                .format(orderRowItem.product.latestRevision.price),
+            text: NumberFormat.currency(
+              symbol: '${InstanceDB.outlet.currency} ',
+              decimalDigits: CommonFunction.determineDecimalCount(
+                  orderRowItem.product.latestRevision.price),
+            ).format(orderRowItem.product.latestRevision.price),
             width: 4,
             styles: const PosStyles(bold: false, align: PosAlign.left),
           ),
@@ -506,9 +535,11 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
             styles: const PosStyles(bold: false, align: PosAlign.left),
           ),
           PosColumn(
-            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
-                orderRowItem.itemData.quantity *
-                    orderRowItem.product.latestRevision.price),
+            text: NumberFormat.currency(
+                    symbol: '${InstanceDB.outlet.currency} ',
+                    decimalDigits:
+                        CommonFunction.determineDecimalCount(totalPrice))
+                .format(totalPrice),
             width: 4,
             styles: const PosStyles(
                 bold: false,
@@ -526,8 +557,11 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
             styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
           ),
           PosColumn(
-            text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                .format(orderRow.orderData.totalPrice),
+            text: NumberFormat.currency(
+              symbol: '${InstanceDB.outlet.currency} ',
+              decimalDigits: CommonFunction.determineDecimalCount(
+                  orderRow.orderData.totalPrice),
+            ).format(orderRow.orderData.totalPrice),
             width: 6,
             styles: const PosStyles(
                 bold: false,
@@ -539,7 +573,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
         bytes += ticket.row([
           PosColumn(
             // TODO: Text Based on Status
-            text: "DIBATALKAN",
+            text: t.esc_strings.cancelled,
             width: 12,
             styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
           ),
@@ -551,7 +585,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
 
     bytes += ticket.row([
       PosColumn(
-        text: "LAPORAN PENDAPATAN",
+        text: t.esc_strings.income_report,
         width: 12,
         styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
       )
@@ -564,7 +598,10 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
           styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
         ),
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+          text: NumberFormat.currency(
+                  symbol: '${InstanceDB.outlet.currency} ',
+                  decimalDigits:
+                      CommonFunction.determineDecimalCount(entry.value))
               .format(entry.value),
           width: 6,
           styles: const PosStyles(
@@ -574,12 +611,15 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     }
     bytes += ticket.row([
       PosColumn(
-        text: "TOTAL",
+        text: t.esc_strings.total,
         width: 6,
         styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
       ),
       PosColumn(
-        text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+        text: NumberFormat.currency(
+                symbol: '${InstanceDB.outlet.currency} ',
+                decimalDigits:
+                    CommonFunction.determineDecimalCount(totalIncome))
             .format(totalIncome),
         width: 6,
         styles: const PosStyles(
@@ -600,7 +640,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     List<int> bytes = [];
 
     bytes += ticket.text(
-      "Penjualan Produk",
+      t.esc_strings.product_sales,
       styles: const PosStyles(
         align: PosAlign.center,
         fontType: PosFontType.fontA,
@@ -649,6 +689,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
           await InstanceDB.getProductRevisionByID(id: entry.key);
       final product =
           await InstanceDB.getProductByID(id: productRevision.product);
+      final totalPrice = productRevision.price * entry.value;
 
       bytes += ticket.row([
         PosColumn(
@@ -657,7 +698,7 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
           styles: const PosStyles(bold: true, fontType: PosFontType.fontA),
         ),
         PosColumn(
-          text: "${entry.value} qty",
+          text: t.esc_strings.qty(qty: entry.value.toString()),
           width: 4,
           styles: const PosStyles(
               bold: false, align: PosAlign.right, fontType: PosFontType.fontA),
@@ -665,8 +706,11 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
       ]);
       bytes += ticket.row([
         PosColumn(
-          text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-              .format(productRevision.price * entry.value),
+          text: NumberFormat.currency(
+                  symbol: '${InstanceDB.outlet.currency} ',
+                  decimalDigits:
+                      CommonFunction.determineDecimalCount(totalPrice))
+              .format(totalPrice),
           width: 12,
           styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
         ),
@@ -677,12 +721,15 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
 
     bytes += ticket.row([
       PosColumn(
-        text: "Pendapatan",
+        text: t.esc_strings.income,
         width: 6,
         styles: const PosStyles(bold: false, fontType: PosFontType.fontA),
       ),
       PosColumn(
-        text: NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+        text: NumberFormat.currency(
+                symbol: '${InstanceDB.outlet.currency} ',
+                decimalDigits:
+                    CommonFunction.determineDecimalCount(totalIncome))
             .format(totalIncome),
         width: 6,
         styles: const PosStyles(

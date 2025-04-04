@@ -4,6 +4,7 @@ import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/paym
 import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/product_category/outlet_product_category_management_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/product/outlet_product_management.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_tab.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class OutletManagementList extends StatelessWidget {
   const OutletManagementList({super.key});
@@ -20,22 +21,23 @@ class OutletManagementList extends StatelessWidget {
         return Column(
           children: [
             OutletManagementTab(
-              title: 'Atur Kategori Produk',
-              subtitle:
-                  'Jumlah Kategori Produk Tersedia: ${snapshot.data!["productCategories"]}',
+              title: t.manage_product,
+              subtitle: t.product_category_count(
+                  count: snapshot.data!["productCategories"].toString()),
               navigatorRoute: OutletProductCategoryManagementScreen.routeName,
             ),
             const SizedBox(height: 40),
             OutletManagementTab(
-              title: 'Atur Produk',
-              subtitle: 'Jumlah Produk Tersedia: ${snapshot.data!["products"]}',
+              title: t.manage_product,
+              subtitle:
+                  t.product_count(count: snapshot.data!["products"].toString()),
               navigatorRoute: OutletProductManagementScreen.routeName,
             ),
             const SizedBox(height: 40),
             OutletManagementTab(
-              title: 'Atur Metode Pembayaran',
-              subtitle:
-                  'Jumlah Metode Pembayaran Tersedia: ${snapshot.data!["paymentMethods"]}',
+              title: t.manage_payment_method,
+              subtitle: t.payment_method_count(
+                  count: snapshot.data!["paymentMethods"].toString()),
               navigatorRoute: OutletPaymentMethodManagementScreen.routeName,
             ),
             const SizedBox(height: 40),

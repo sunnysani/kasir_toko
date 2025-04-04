@@ -66,6 +66,14 @@ class $DriftEntityOutletTable extends DriftEntityOutlet
   late final GeneratedColumn<String> receiptMessage = GeneratedColumn<String>(
       'receipt_message', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _currencyMeta =
+      const VerificationMeta('currency');
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+      'currency', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('XXX'));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -75,7 +83,8 @@ class $DriftEntityOutletTable extends DriftEntityOutlet
         name,
         address,
         phoneNumber,
-        receiptMessage
+        receiptMessage,
+        currency
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -131,6 +140,10 @@ class $DriftEntityOutletTable extends DriftEntityOutlet
     } else if (isInserting) {
       context.missing(_receiptMessageMeta);
     }
+    if (data.containsKey('currency')) {
+      context.handle(_currencyMeta,
+          currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
+    }
     return context;
   }
 
@@ -156,6 +169,8 @@ class $DriftEntityOutletTable extends DriftEntityOutlet
           .read(DriftSqlType.string, data['${effectivePrefix}phone_number'])!,
       receiptMessage: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}receipt_message'])!,
+      currency: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}currency'])!,
     );
   }
 
@@ -175,6 +190,7 @@ class DriftEntityOutletData extends DataClass
   final String address;
   final String phoneNumber;
   final String receiptMessage;
+  final String currency;
   const DriftEntityOutletData(
       {required this.id,
       required this.createdAt,
@@ -183,7 +199,8 @@ class DriftEntityOutletData extends DataClass
       required this.name,
       required this.address,
       required this.phoneNumber,
-      required this.receiptMessage});
+      required this.receiptMessage,
+      required this.currency});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -195,6 +212,7 @@ class DriftEntityOutletData extends DataClass
     map['address'] = Variable<String>(address);
     map['phone_number'] = Variable<String>(phoneNumber);
     map['receipt_message'] = Variable<String>(receiptMessage);
+    map['currency'] = Variable<String>(currency);
     return map;
   }
 
@@ -208,6 +226,7 @@ class DriftEntityOutletData extends DataClass
       address: Value(address),
       phoneNumber: Value(phoneNumber),
       receiptMessage: Value(receiptMessage),
+      currency: Value(currency),
     );
   }
 
@@ -223,6 +242,7 @@ class DriftEntityOutletData extends DataClass
       address: serializer.fromJson<String>(json['address']),
       phoneNumber: serializer.fromJson<String>(json['phoneNumber']),
       receiptMessage: serializer.fromJson<String>(json['receiptMessage']),
+      currency: serializer.fromJson<String>(json['currency']),
     );
   }
   @override
@@ -237,6 +257,7 @@ class DriftEntityOutletData extends DataClass
       'address': serializer.toJson<String>(address),
       'phoneNumber': serializer.toJson<String>(phoneNumber),
       'receiptMessage': serializer.toJson<String>(receiptMessage),
+      'currency': serializer.toJson<String>(currency),
     };
   }
 
@@ -248,7 +269,8 @@ class DriftEntityOutletData extends DataClass
           String? name,
           String? address,
           String? phoneNumber,
-          String? receiptMessage}) =>
+          String? receiptMessage,
+          String? currency}) =>
       DriftEntityOutletData(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
@@ -258,6 +280,7 @@ class DriftEntityOutletData extends DataClass
         address: address ?? this.address,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         receiptMessage: receiptMessage ?? this.receiptMessage,
+        currency: currency ?? this.currency,
       );
   DriftEntityOutletData copyWithCompanion(DriftEntityOutletCompanion data) {
     return DriftEntityOutletData(
@@ -272,6 +295,7 @@ class DriftEntityOutletData extends DataClass
       receiptMessage: data.receiptMessage.present
           ? data.receiptMessage.value
           : this.receiptMessage,
+      currency: data.currency.present ? data.currency.value : this.currency,
     );
   }
 
@@ -285,14 +309,15 @@ class DriftEntityOutletData extends DataClass
           ..write('name: $name, ')
           ..write('address: $address, ')
           ..write('phoneNumber: $phoneNumber, ')
-          ..write('receiptMessage: $receiptMessage')
+          ..write('receiptMessage: $receiptMessage, ')
+          ..write('currency: $currency')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, createdAt, updatedAt, active, name,
-      address, phoneNumber, receiptMessage);
+      address, phoneNumber, receiptMessage, currency);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -304,7 +329,8 @@ class DriftEntityOutletData extends DataClass
           other.name == this.name &&
           other.address == this.address &&
           other.phoneNumber == this.phoneNumber &&
-          other.receiptMessage == this.receiptMessage);
+          other.receiptMessage == this.receiptMessage &&
+          other.currency == this.currency);
 }
 
 class DriftEntityOutletCompanion
@@ -317,6 +343,7 @@ class DriftEntityOutletCompanion
   final Value<String> address;
   final Value<String> phoneNumber;
   final Value<String> receiptMessage;
+  final Value<String> currency;
   const DriftEntityOutletCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -326,6 +353,7 @@ class DriftEntityOutletCompanion
     this.address = const Value.absent(),
     this.phoneNumber = const Value.absent(),
     this.receiptMessage = const Value.absent(),
+    this.currency = const Value.absent(),
   });
   DriftEntityOutletCompanion.insert({
     this.id = const Value.absent(),
@@ -336,6 +364,7 @@ class DriftEntityOutletCompanion
     required String address,
     required String phoneNumber,
     required String receiptMessage,
+    this.currency = const Value.absent(),
   })  : name = Value(name),
         address = Value(address),
         phoneNumber = Value(phoneNumber),
@@ -349,6 +378,7 @@ class DriftEntityOutletCompanion
     Expression<String>? address,
     Expression<String>? phoneNumber,
     Expression<String>? receiptMessage,
+    Expression<String>? currency,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -359,6 +389,7 @@ class DriftEntityOutletCompanion
       if (address != null) 'address': address,
       if (phoneNumber != null) 'phone_number': phoneNumber,
       if (receiptMessage != null) 'receipt_message': receiptMessage,
+      if (currency != null) 'currency': currency,
     });
   }
 
@@ -370,7 +401,8 @@ class DriftEntityOutletCompanion
       Value<String>? name,
       Value<String>? address,
       Value<String>? phoneNumber,
-      Value<String>? receiptMessage}) {
+      Value<String>? receiptMessage,
+      Value<String>? currency}) {
     return DriftEntityOutletCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
@@ -380,6 +412,7 @@ class DriftEntityOutletCompanion
       address: address ?? this.address,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       receiptMessage: receiptMessage ?? this.receiptMessage,
+      currency: currency ?? this.currency,
     );
   }
 
@@ -410,6 +443,9 @@ class DriftEntityOutletCompanion
     if (receiptMessage.present) {
       map['receipt_message'] = Variable<String>(receiptMessage.value);
     }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
     return map;
   }
 
@@ -423,7 +459,8 @@ class DriftEntityOutletCompanion
           ..write('name: $name, ')
           ..write('address: $address, ')
           ..write('phoneNumber: $phoneNumber, ')
-          ..write('receiptMessage: $receiptMessage')
+          ..write('receiptMessage: $receiptMessage, ')
+          ..write('currency: $currency')
           ..write(')'))
         .toString();
   }
@@ -2908,6 +2945,9 @@ abstract class _$InstanceDB extends GeneratedDatabase {
       $DriftEntityOrderRowTable(this);
   late final $DriftEntityOrderRowItemTable driftEntityOrderRowItem =
       $DriftEntityOrderRowItemTable(this);
+  late final Index idxOrderRowItemOrderRow = Index(
+      'idx_order_row_item_order_row',
+      'CREATE INDEX idx_order_row_item_order_row ON drift_entity_order_row_item ()');
   late final Index idxOrderRowCreatedAt = Index('idx_order_row_created_at',
       'CREATE INDEX idx_order_row_created_at ON drift_entity_order_row (created_at)');
   @override
@@ -2923,6 +2963,7 @@ abstract class _$InstanceDB extends GeneratedDatabase {
         driftRelationProductProductCategory,
         driftEntityOrderRow,
         driftEntityOrderRowItem,
+        idxOrderRowItemOrderRow,
         idxOrderRowCreatedAt
       ];
 }
@@ -2937,6 +2978,7 @@ typedef $$DriftEntityOutletTableCreateCompanionBuilder
   required String address,
   required String phoneNumber,
   required String receiptMessage,
+  Value<String> currency,
 });
 typedef $$DriftEntityOutletTableUpdateCompanionBuilder
     = DriftEntityOutletCompanion Function({
@@ -2948,6 +2990,7 @@ typedef $$DriftEntityOutletTableUpdateCompanionBuilder
   Value<String> address,
   Value<String> phoneNumber,
   Value<String> receiptMessage,
+  Value<String> currency,
 });
 
 final class $$DriftEntityOutletTableReferences extends BaseReferences<
@@ -3045,6 +3088,9 @@ class $$DriftEntityOutletTableFilterComposer
   ColumnFilters<String> get receiptMessage => $composableBuilder(
       column: $table.receiptMessage,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get currency => $composableBuilder(
+      column: $table.currency, builder: (column) => ColumnFilters(column));
 
   Expression<bool> driftEntityProductCategoryRefs(
       Expression<bool> Function(
@@ -3148,6 +3194,9 @@ class $$DriftEntityOutletTableOrderingComposer
   ColumnOrderings<String> get receiptMessage => $composableBuilder(
       column: $table.receiptMessage,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get currency => $composableBuilder(
+      column: $table.currency, builder: (column) => ColumnOrderings(column));
 }
 
 class $$DriftEntityOutletTableAnnotationComposer
@@ -3182,6 +3231,9 @@ class $$DriftEntityOutletTableAnnotationComposer
 
   GeneratedColumn<String> get receiptMessage => $composableBuilder(
       column: $table.receiptMessage, builder: (column) => column);
+
+  GeneratedColumn<String> get currency =>
+      $composableBuilder(column: $table.currency, builder: (column) => column);
 
   Expression<T> driftEntityProductCategoryRefs<T extends Object>(
       Expression<T> Function(
@@ -3290,6 +3342,7 @@ class $$DriftEntityOutletTableTableManager extends RootTableManager<
             Value<String> address = const Value.absent(),
             Value<String> phoneNumber = const Value.absent(),
             Value<String> receiptMessage = const Value.absent(),
+            Value<String> currency = const Value.absent(),
           }) =>
               DriftEntityOutletCompanion(
             id: id,
@@ -3300,6 +3353,7 @@ class $$DriftEntityOutletTableTableManager extends RootTableManager<
             address: address,
             phoneNumber: phoneNumber,
             receiptMessage: receiptMessage,
+            currency: currency,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -3310,6 +3364,7 @@ class $$DriftEntityOutletTableTableManager extends RootTableManager<
             required String address,
             required String phoneNumber,
             required String receiptMessage,
+            Value<String> currency = const Value.absent(),
           }) =>
               DriftEntityOutletCompanion.insert(
             id: id,
@@ -3320,6 +3375,7 @@ class $$DriftEntityOutletTableTableManager extends RootTableManager<
             address: address,
             phoneNumber: phoneNumber,
             receiptMessage: receiptMessage,
+            currency: currency,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

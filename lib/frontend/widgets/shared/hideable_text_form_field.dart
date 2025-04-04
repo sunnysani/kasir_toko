@@ -5,7 +5,7 @@ class HideableTextFormField extends StatefulWidget {
       {super.key, required this.controller, required this.labelText});
 
   final TextEditingController controller;
-  final String? labelText;
+  final String labelText;
 
   @override
   State<HideableTextFormField> createState() => _HideableTextFormFieldState();
@@ -19,7 +19,7 @@ class _HideableTextFormFieldState extends State<HideableTextFormField> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-        labelText: "Tambah Kode Akses",
+        labelText: widget.labelText,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: GestureDetector(
             onTap: () => setState(() => hideText = !hideText),

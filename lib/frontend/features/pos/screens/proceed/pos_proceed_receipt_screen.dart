@@ -6,6 +6,7 @@ import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/printer_status.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 
 class PosProceedReceiptScreen extends ConsumerStatefulWidget {
@@ -36,7 +37,7 @@ class _PosProceedReceiptScreenState
             shrinkWrap: true,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             children: [
-              const Text('Struk belum dicetak. Lanjutkan?'),
+              Text(t.feature_pos.receipt_has_not_been_printed),
               const SizedBox(height: 16),
               FilledButton(
                   onPressed: () {
@@ -58,11 +59,11 @@ class _PosProceedReceiptScreenState
       childAlignment: Alignment.center,
       bottomButton: ElevatedButton(
         onPressed: backToPosScreen,
-        child: const Text('Kembali ke Halaman Kasir'),
+        child: Text(t.feature_pos.back_to_cashier_page),
       ),
       child: Column(
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
@@ -72,7 +73,7 @@ class _PosProceedReceiptScreenState
               ),
               SizedBox(width: 20),
               Text(
-                'Pemesanan Selesai',
+                t.feature_pos.order_finished,
                 style: TextStyle(
                   fontSize: 24,
                   color: AppColors.mainColor,
@@ -82,8 +83,8 @@ class _PosProceedReceiptScreenState
             ],
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Jangan lupa untuk cetak struk',
+          Text(
+            t.feature_pos.dont_forget_to_print_receipt,
             style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 20),
@@ -102,7 +103,7 @@ class _PosProceedReceiptScreenState
               printButtonClickCount++;
             },
             style: ButtonTextStyle.secondaryButtonStyle,
-            child: const Text('Cetak Struk'),
+            child: Text(t.feature_pos.print_receipt),
           )
         ],
       ),

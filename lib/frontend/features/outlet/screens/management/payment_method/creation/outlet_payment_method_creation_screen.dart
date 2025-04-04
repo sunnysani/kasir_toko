@@ -4,6 +4,7 @@ import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/paym
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_creation_template.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/modified_text_form_field.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/switch_form_field.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class OutletPaymentMethodCreationScreen extends StatefulWidget {
   const OutletPaymentMethodCreationScreen({super.key, this.data});
@@ -60,7 +61,7 @@ class _OutletPaymentMethodCreationScreenState
   @override
   Widget build(BuildContext context) {
     return OutletManagementCreationTemplate(
-      title: 'Tambah Metode Pembayaran',
+      title: t.add_arg(text: t.payment_method),
       isCreation: widget.data == null,
       submit: _submit,
       child: Form(
@@ -69,15 +70,16 @@ class _OutletPaymentMethodCreationScreenState
           children: [
             ModifiedTextFormField(
               controller: textEditingControllerPaymentMethodName,
-              labelName: 'Nama Metode Pembayaran',
+              labelName: t.payment_method_name,
               isCreation: widget.data == null,
-              validator: ((value) =>
-                  value?.isNotEmpty ?? false ? null : 'Salah'),
+              validator: ((value) => value?.isNotEmpty ?? false
+                  ? null
+                  : t.modified_text_form_widget.alert.cannot_be_empty),
             ),
             const SizedBox(height: 20),
             SwitchFormField(
               initialValue: sameAsAmount,
-              description: "Sama dengan Jumlah yang Dibelanjakan",
+              description: context.t.equals_amount_spent,
               onChanged: (val) => sameAsAmount = val,
             ),
             const SizedBox(height: 20),
@@ -85,7 +87,7 @@ class _OutletPaymentMethodCreationScreenState
               SwitchFormField(
                 initialValue: active,
                 onChanged: (val) => active = val,
-                description: 'Aktif',
+                description: t.active,
               ),
           ],
         ),

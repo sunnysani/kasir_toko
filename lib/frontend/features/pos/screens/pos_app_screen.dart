@@ -13,6 +13,7 @@ import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_filter_drawer.
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_product_list_view.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/search_bar.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
@@ -29,8 +30,8 @@ class PosAppScreen extends ConsumerWidget {
           context.push(OutletManagementScreen.routeName);
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Silakan Atur Informasi Toko terlebih dahulu'),
+          SnackBar(
+            content: Text(t.feature_pos.set_store_information_first),
             backgroundColor: AppColors.negativeColor,
           ),
         );
@@ -43,8 +44,8 @@ class PosAppScreen extends ConsumerWidget {
           context.replace(OutletProductManagementScreen.routeName);
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Silakan Tambah Minimal 1 Produk Aktif'),
+          SnackBar(
+            content: Text(t.feature_pos.at_least_1_active_product),
             backgroundColor: AppColors.negativeColor,
           ),
         );
@@ -57,8 +58,8 @@ class PosAppScreen extends ConsumerWidget {
           context.replace(OutletPaymentMethodManagementScreen.routeName);
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Silakan Tambah Minimal 1 Metode Pembayaran Aktif'),
+          SnackBar(
+            content: Text(t.feature_pos.at_least_1_active_payment_method),
             backgroundColor: AppColors.negativeColor,
           ),
         );
@@ -79,7 +80,7 @@ class PosAppScreen extends ConsumerWidget {
 
     if (posInformationState.isLoading || posQuantityState.isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Kasir')),
+        appBar: AppBar(title: Text(t.cashier)),
         body: Center(child: CircularProgressIndicator()),
       );
     }
@@ -88,7 +89,7 @@ class PosAppScreen extends ConsumerWidget {
       key: scaffoldKey,
       endDrawer: PosFilterDrawer(),
       appBar: AppBar(
-        title: Text('Kasir'),
+        title: Text(t.cashier),
         actions: posInformationState.value!.categoryList.isEmpty
             ? null
             : [
@@ -101,51 +102,32 @@ class PosAppScreen extends ConsumerWidget {
                 )
               ],
       ),
+      bottomNavigationBar: PosBottomSheet(),
       body: SafeArea(
-        child: Center(
-          child: Stack(
-            fit: StackFit.expand,
-            alignment: Alignment.center,
-            children: [
-              LayoutMaxWidth(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 90),
-                    child: Column(
-                      children: [
-                        CustomSearchBar(
-                          onChanged: ref
-                              .read(posFilterStateProvider.notifier)
-                              .setSearchString,
-                          hintText: 'Temukan dengan Nama atau Kode',
-                        ),
-                        const SizedBox(height: 20),
-                        if (posFilterState.searchString.isEmpty)
-                          PosCaregorizedProductsListView()
-                        else
-                          PosProductListView(
-                              products: posInformationState.value!.allProducts
-                                  .where((element) =>
-                                      element.product.name
-                                          .toLowerCase()
-                                          .contains(posFilterState.searchString
-                                              .toLowerCase()) ||
-                                      element.product.code
-                                          .toLowerCase()
-                                          .contains(posFilterState.searchString
-                                              .toLowerCase()))
-                                  .toList())
-                      ],
-                    ),
-                  ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: LayoutMaxWidth(
+            child: Column(
+              children: [
+                CustomSearchBar(
+                  onChanged:
+                      ref.read(posFilterStateProvider.notifier).setSearchString,
+                  hintText: t.feature_pos.found_with_name_or_code,
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: PosBottomSheet(),
-              ),
-            ],
+                const SizedBox(height: 20),
+                if (posFilterState.searchString.isEmpty)
+                  PosCaregorizedProductsListView()
+                else
+                  PosProductListView(
+                      products: posInformationState.value!.allProducts
+                          .where((element) =>
+                              element.product.name.toLowerCase().contains(
+                                  posFilterState.searchString.toLowerCase()) ||
+                              element.product.code.toLowerCase().contains(
+                                  posFilterState.searchString.toLowerCase()))
+                          .toList())
+              ],
+            ),
           ),
         ),
       ),

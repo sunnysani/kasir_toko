@@ -18,6 +18,10 @@ class CommonFunction {
     return true;
   }
 
+  static int determineDecimalCount(double? input) {
+    return (input ?? 0) % 1 == 0 ? 0 : 2;
+  }
+
   static Future<bool> outletValidationAtLeastOnePaymentMethod() async {
     if ((await InstanceDB.getActiveCounts())['paymentMethods']! < 1) {
       return false;

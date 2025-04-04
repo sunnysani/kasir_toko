@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:tokkoo_pos_lite/app_router.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_info.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
@@ -37,79 +38,83 @@ class MainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp.router(
-        key: rootNavigatorKey,
-        debugShowCheckedModeBanner: false,
-        title: 'Tokkoo PoS',
-        theme: ThemeData(
-          fontFamily: 'Roboto',
-          brightness: Brightness.light,
-          colorScheme: const ColorScheme(
+    return TranslationProvider(
+      child: ProviderScope(
+        child: MaterialApp.router(
+          key: rootNavigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Tokkoo PoS',
+          theme: ThemeData(
+            fontFamily: 'Roboto',
             brightness: Brightness.light,
-            primary: AppColors.mainColor,
-            onPrimary: Colors.white,
-            secondary: AppColors.accentColor,
-            onSecondary: Colors.white,
-            error: AppColors.negativeColor,
-            onError: Colors.white,
-            surface: AppColors.backgroundBaseColor,
-            onSurface: Colors.black,
-          ),
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: AppColors.mainColor,
-            titleTextStyle: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500),
-            foregroundColor: Colors.white,
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: AppColors.mainColor,
-            foregroundColor: Colors.white,
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              textStyle: WidgetStateProperty.all<TextStyle>(
-                const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-              foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-              backgroundColor:
-                  WidgetStateProperty.all<Color>(AppColors.mainColor),
-              minimumSize: WidgetStateProperty.all<Size>(
-                const Size(500, 50),
+            colorScheme: const ColorScheme(
+              brightness: Brightness.light,
+              primary: AppColors.mainColor,
+              onPrimary: Colors.white,
+              secondary: AppColors.accentColor,
+              onSecondary: Colors.white,
+              error: AppColors.negativeColor,
+              onError: Colors.white,
+              surface: AppColors.backgroundBaseColor,
+              onSurface: Colors.black,
+            ),
+            useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: AppColors.mainColor,
+              titleTextStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500),
+              foregroundColor: Colors.white,
+            ),
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: AppColors.mainColor,
+              foregroundColor: Colors.white,
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                textStyle: WidgetStateProperty.all<TextStyle>(
+                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                backgroundColor:
+                    WidgetStateProperty.all<Color>(AppColors.mainColor),
+                minimumSize: WidgetStateProperty.all<Size>(
+                  const Size(500, 50),
+                ),
               ),
             ),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            suffixIconColor: AppColors.mainColor,
-            focusColor: AppColors.mainColor,
-            fillColor: const Color.fromARGB(30, 124, 146, 153),
-            labelStyle:
-                const TextStyle(fontSize: 14, color: AppColors.inactiveColor),
-            enabledBorder: OutlineInputBorder(
+            inputDecorationTheme: InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              suffixIconColor: AppColors.mainColor,
+              focusColor: AppColors.mainColor,
+              fillColor: const Color.fromARGB(30, 124, 146, 153),
+              labelStyle:
+                  const TextStyle(fontSize: 14, color: AppColors.inactiveColor),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: AppColors.inactiveColor)),
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: AppColors.inactiveColor)),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: AppColors.mainColor, width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-                  const BorderSide(color: AppColors.mainColor, width: 1),
-              borderRadius: BorderRadius.circular(10),
+            cardTheme: const CardTheme(
+              surfaceTintColor: Colors.white,
+              elevation: 2,
             ),
+            dataTableTheme: const DataTableThemeData(
+              columnSpacing: 30,
+              horizontalMargin: BorderSide.strokeAlignOutside,
+            ),
+            dividerColor: AppColors.inactiveColor,
           ),
-          cardTheme: const CardTheme(
-            surfaceTintColor: Colors.white,
-            elevation: 2,
-          ),
-          dataTableTheme: const DataTableThemeData(
-            columnSpacing: 30,
-            horizontalMargin: BorderSide.strokeAlignOutside,
-          ),
-          dividerColor: AppColors.inactiveColor,
+          routerConfig: appRouter,
         ),
-        routerConfig: appRouter,
       ),
     );
   }

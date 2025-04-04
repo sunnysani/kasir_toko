@@ -6,6 +6,7 @@ import 'package:tokkoo_pos_lite/backend/models/drift_entity_order_row.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
 import 'package:tokkoo_pos_lite/frontend/features/report/widgets/report_print_select_method_bottomsheet.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class ReportMainScreenParam {
@@ -39,17 +40,19 @@ class ReportMainScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Waktu: ${DateFormat('yyyy-MM-dd / HH:mm:ss').format(orderRow.orderData.createdAt)}',
+                      t.feature_sales_report.time_arg(
+                          time_string: DateFormat('yyyy-MM-dd / HH:mm:ss')
+                              .format(orderRow.orderData.createdAt)),
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                     ListView(
                       shrinkWrap: true,
                     ),
                     Center(
-                      child: DataTable(columns: const [
-                        DataColumn(label: Text('Deskripsi')),
-                        DataColumn(label: Text('Kuantitas')),
-                        DataColumn(label: Text('Harga')),
+                      child: DataTable(columns: [
+                        DataColumn(label: Text(t.description)),
+                        DataColumn(label: Text(t.quantity)),
+                        DataColumn(label: Text(t.price)),
                       ], rows: [
                         ...orderRow.items.map((item) => DataRow(cells: [
                               DataCell(ConstrainedBox(
@@ -62,9 +65,14 @@ class ReportMainScreen extends StatelessWidget {
                               DataCell(Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(NumberFormat.currency(
-                                        symbol: 'Rp ', decimalDigits: 0)
-                                    .format(item.product.latestRevision.price *
-                                        item.itemData.quantity)),
+                                  symbol: '${InstanceDB.outlet.currency} ',
+                                  decimalDigits:
+                                      CommonFunction.determineDecimalCount(
+                                    (item.product.latestRevision.price *
+                                        item.itemData.quantity),
+                                  ),
+                                ).format(item.product.latestRevision.price *
+                                    item.itemData.quantity)),
                               )),
                             ]))
                       ]),
@@ -75,7 +83,7 @@ class ReportMainScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Jenis Pembayaran'),
+                        Text(t.payment_method),
                         Text(orderRow.paymentMethod?.name ?? "-"),
                       ],
                     ),
@@ -83,10 +91,12 @@ class ReportMainScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Total Harga'),
+                        Text(t.total_price),
                         Text(NumberFormat.currency(
-                                symbol: 'Rp ', decimalDigits: 0)
-                            .format(orderRow.orderData.totalPrice)),
+                          symbol: '${InstanceDB.outlet.currency} ',
+                          decimalDigits: CommonFunction.determineDecimalCount(
+                              orderRow.orderData.totalPrice),
+                        ).format(orderRow.orderData.totalPrice)),
                       ],
                     ),
                     if (orderRow.paymentMethod != null &&
@@ -99,21 +109,30 @@ class ReportMainScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Jumlah yang Dibayarkan'),
+                              Text(t.pay_amount),
                               Text(NumberFormat.currency(
-                                      symbol: 'Rp ', decimalDigits: 0)
-                                  .format(orderRow.orderData.payAmount)),
+                                symbol: '${InstanceDB.outlet.currency} ',
+                                decimalDigits:
+                                    CommonFunction.determineDecimalCount(
+                                        orderRow.orderData.payAmount),
+                              ).format(orderRow.orderData.payAmount)),
                             ],
                           ),
                           const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Kembalian'),
-                              Text(NumberFormat.currency(
-                                      symbol: 'Rp ', decimalDigits: 0)
-                                  .format(orderRow.orderData.payAmount -
-                                      orderRow.orderData.totalPrice)),
+                              Text(t.feature_pos.change),
+                              Builder(builder: (context) {
+                                final change = orderRow.orderData.payAmount -
+                                    orderRow.orderData.totalPrice;
+                                return Text(NumberFormat.currency(
+                                  symbol: '${InstanceDB.outlet.currency} ',
+                                  decimalDigits:
+                                      CommonFunction.determineDecimalCount(
+                                          change),
+                                ).format(change));
+                              }),
                             ],
                           ),
                         ],
@@ -170,8 +189,11 @@ class ReportMainScreen extends StatelessWidget {
     for (final paymentMethodName in paymentMethodTotalMapping.keys) {
       constructedPaymentMethodItems.add([
         paymentMethodName,
-        NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-            .format(paymentMethodTotalMapping[paymentMethodName]),
+        NumberFormat.currency(
+          symbol: '${InstanceDB.outlet.currency} ',
+          decimalDigits: CommonFunction.determineDecimalCount(
+              paymentMethodTotalMapping[paymentMethodName]),
+        ).format(paymentMethodTotalMapping[paymentMethodName]),
       ]);
     }
     constructedPaymentMethodItems.sort((a, b) {
@@ -198,9 +220,16 @@ class ReportMainScreen extends StatelessWidget {
       constructedOrderItems.add([
         product.name,
         productRevisionQuantityMapping[productRevisionId].toString(),
-        NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-            .format(productRevision.price),
-        NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
+        NumberFormat.currency(
+          symbol: '${InstanceDB.outlet.currency} ',
+          decimalDigits:
+              CommonFunction.determineDecimalCount(productRevision.price),
+        ).format(productRevision.price),
+        NumberFormat.currency(
+          symbol: '${InstanceDB.outlet.currency} ',
+          decimalDigits: CommonFunction.determineDecimalCount(
+              productRevisionPriceMapping[productRevisionId]),
+        ).format(
           productRevisionPriceMapping[productRevisionId],
         ),
       ]);
@@ -219,6 +248,7 @@ class ReportMainScreen extends StatelessWidget {
     final ScrollController scrollController2 = ScrollController();
 
     showDialog(
+      // ignore: use_build_context_synchronously
       context: context,
       builder: (ctx) => Dialog(
           shape: RoundedRectangleBorder(
@@ -231,14 +261,30 @@ class ReportMainScreen extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 children: [
+                  Text(t.feature_sales_report.total_income(
+                    income: NumberFormat.currency(
+                      symbol: '${InstanceDB.outlet.currency} ',
+                      decimalDigits: CommonFunction.determineDecimalCount(
+                        paymentMethodTotalMapping.values
+                            .map((item) => item)
+                            .reduce((a, b) => a + b),
+                      ),
+                    ).format(paymentMethodTotalMapping.values
+                        .map((item) => item)
+                        .reduce((a, b) => a + b)),
+                  )),
                   Text(
-                      'Total Pemasukan: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(paymentMethodTotalMapping.values.map((item) => item).reduce((a, b) => a + b))}'),
-                  Text(
-                      'Total Produk Terjual: ${productRevisionQuantityMapping.values.map((item) => item).reduce((a, b) => a + b)}'),
+                    t.feature_sales_report
+                        .total_product_sold(
+                            count: productRevisionQuantityMapping.values
+                                .map((item) => item)
+                                .reduce((a, b) => a + b))
+                        .toString(),
+                  ),
                   const SizedBox(height: 32),
                   const Divider(),
-                  const Text(
-                    'Berdasarkan Jenis Pembayaran',
+                  Text(
+                    t.feature_sales_report.based_on_payment_method,
                     style: TextStyle(fontWeight: FontWeight.w700),
                     textAlign: TextAlign.center,
                   ),
@@ -251,9 +297,9 @@ class ReportMainScreen extends StatelessWidget {
                         controller: scrollController1,
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            columns: const [
-                              DataColumn(label: Text('Metode Pembayaran')),
-                              DataColumn(label: Text('Jumlah Pemasukan')),
+                            columns: [
+                              DataColumn(label: Text(t.payment_method)),
+                              DataColumn(label: Text(t.total_income)),
                             ],
                             rows: constructedPaymentMethodItems
                                 .map((item) => DataRow(cells: [
@@ -268,8 +314,8 @@ class ReportMainScreen extends StatelessWidget {
                   // Based on Order
                   const SizedBox(height: 32),
                   const Divider(),
-                  const Text(
-                    'Berdasarkan Produk',
+                  Text(
+                    t.feature_sales_report.based_on_product,
                     style: TextStyle(fontWeight: FontWeight.w700),
                     textAlign: TextAlign.center,
                   ),
@@ -282,11 +328,11 @@ class ReportMainScreen extends StatelessWidget {
                         controller: scrollController2,
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            columns: const [
-                              DataColumn(label: Text('Deskripsi')),
-                              DataColumn(label: Text('Kuantitas')),
-                              DataColumn(label: Text('Harga Satuan')),
-                              DataColumn(label: Text('Total Harga')),
+                            columns: [
+                              DataColumn(label: Text(t.description)),
+                              DataColumn(label: Text(t.quantity)),
+                              DataColumn(label: Text(t.unit_price)),
+                              DataColumn(label: Text(t.total_price)),
                             ],
                             rows: constructedOrderItems
                                 .map((item) => DataRow(cells: [
@@ -312,7 +358,7 @@ class ReportMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Laporan Harian'),
+        title: Text(t.sales_report),
         actions: [
           IconButton(
               onPressed: () {
@@ -358,19 +404,35 @@ class ReportMainScreen extends StatelessWidget {
                             // ignore: use_build_context_synchronously
                             context.loaderOverlay.hide();
                           },
-                          child: const Text('Lihat Ringkasan Laporan'),
+                          child:
+                              Text(t.feature_sales_report.see_report_summary),
                         ),
                   child: ListView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       Text(
-                        'Laporan Tanggal: ${CommonFunction.sameDayDateTime(param.startTime, param.endTime) ? DateFormat('d MMM yyyy').format(param.startTime) : "${DateFormat('d MMM yyyy').format(param.startTime)} - ${DateFormat('d MMM yyyy').format(param.endTime)}"}',
+                        CommonFunction.sameDayDateTime(
+                                param.startTime, param.endTime)
+                            ? t.feature_sales_report.report_date_1_arg(
+                                date_string: DateFormat('yyyy/MM/dd')
+                                    .format(param.startTime))
+                            : t.feature_sales_report.report_date_2_args(
+                                date_string_1: DateFormat('yyyy/MM/dd')
+                                    .format(param.startTime),
+                                date_string_2: DateFormat('yyyy/MM/dd')
+                                    .format(param.endTime)),
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
-                      Text(
-                          'Hasil Total Penjualan: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(totalSale)}'),
+                      Text(t.feature_sales_report.total_income(
+                        income: NumberFormat.currency(
+                                symbol: '${InstanceDB.outlet.currency} ',
+                                decimalDigits:
+                                    CommonFunction.determineDecimalCount(
+                                        totalSale))
+                            .format(totalSale),
+                      )),
                       const SizedBox(height: 10),
                       ListView.builder(
                         shrinkWrap: true,
@@ -384,11 +446,17 @@ class ReportMainScreen extends StatelessWidget {
                               onTap: () => seeDetail(context, data[index]),
                               title: Text(
                                 NumberFormat.currency(
-                                        symbol: 'Rp ', decimalDigits: 0)
+                                        symbol:
+                                            '${InstanceDB.outlet.currency} ',
+                                        decimalDigits: CommonFunction
+                                            .determineDecimalCount(
+                                                orderData.totalPrice))
                                     .format(orderData.totalPrice),
                               ),
-                              subtitle: Text(
-                                  'Pukul: ${DateFormat('HH:mm').format(orderData.createdAt)}'),
+                              subtitle: Text(t.feature_sales_report.oclock(
+                                time_string: DateFormat('HH:mm')
+                                    .format(orderData.updatedAt),
+                              )),
                             ),
                           );
                         },

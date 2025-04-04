@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppColors {
   static const Color backgroundBaseColor = Color(0xFFFCFCFC);
@@ -41,4 +44,12 @@ class ButtonTextStyle {
 
 class AppSize {
   static const double maxWidth = 550;
+}
+
+class AppUtils {
+  static String regionOrigin =
+      PlatformDispatcher.instance.locale.toString().split('_')[1];
+  static String currencyOrigin =
+      NumberFormat.simpleCurrency(locale: AppUtils.regionOrigin).currencyName ??
+          "XXX";
 }

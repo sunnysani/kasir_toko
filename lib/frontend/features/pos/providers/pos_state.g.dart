@@ -58,7 +58,7 @@ final posInformationStateProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$PosInformationState
     = AutoDisposeAsyncNotifier<PosInformationStateReturnStruct>;
-String _$posQuantityStateHash() => r'50d13c57f952bd430a771ba183591e1a90ecd65e';
+String _$posQuantityStateHash() => r'98f6fba61df3c4aea22804f98e1d723c348d7da3';
 
 /// See also [PosQuantityState].
 @ProviderFor(PosQuantityState)

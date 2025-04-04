@@ -4,6 +4,7 @@ import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/prod
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_creation_template.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/modified_text_form_field.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/switch_form_field.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class OutletProductCategoryCreationScreen extends StatefulWidget {
   const OutletProductCategoryCreationScreen({super.key, this.data});
@@ -54,7 +55,7 @@ class _OutletProductCategoryCreationScreenState
   @override
   Widget build(BuildContext context) {
     return OutletManagementCreationTemplate(
-      title: 'Tambah Kategori Produk',
+      title: t.add_arg(text: t.product_category),
       isCreation: widget.data == null,
       submit: _submit,
       child: Form(
@@ -63,18 +64,19 @@ class _OutletProductCategoryCreationScreenState
           children: [
             ModifiedTextFormField(
               controller: textEditingControllerProductCategoryName,
-              labelName: 'Nama Kategori Produk',
+              labelName: t.product_category_name,
               isCreation: widget.data == null,
               value: widget.data?.name,
-              validator: ((value) =>
-                  value?.isNotEmpty ?? false ? null : 'Salah'),
+              validator: ((value) => value?.isNotEmpty ?? false
+                  ? null
+                  : t.modified_text_form_widget.alert.cannot_be_empty),
             ),
             const SizedBox(height: 20),
             if (widget.data != null)
               SwitchFormField(
                 initialValue: active,
                 onChanged: (val) => active = val,
-                description: 'Aktif',
+                description: t.active,
               )
           ],
         ),

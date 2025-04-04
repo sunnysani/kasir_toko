@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/text_list.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
@@ -42,7 +43,7 @@ class PosTabScreen extends StatelessWidget {
                       atLeastOneProduct &&
                       atLeastOnePaymentMehtod) {
                     return Text(
-                      'Konfigurasi Toko sudah lengkap',
+                      t.outlet_configuration_complete,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     );
@@ -52,15 +53,16 @@ class PosTabScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Sebelum kamu mengoperasikan kasir pastikan:',
+                        t.before_opreate_cashier_title,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                       TextList(
                         texts: [
-                          'Pastikan konfigurasi toko Anda telah benar',
-                          'Pastikan produk-produk di toko Anda sudah diaftarkan'
+                          t.before_opreate_cashier_item_1,
+                          t.before_opreate_cashier_item_2,
+                          t.before_opreate_cashier_item_3,
                         ],
                         type: TextListType.number,
                       ),
@@ -70,7 +72,7 @@ class PosTabScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () => context.push(PosAppScreen.routeName),
-                child: const Text('Masuk ke Halaman Kasir'))
+                child: Text(t.enter_pos_screen))
           ],
         ),
       ),

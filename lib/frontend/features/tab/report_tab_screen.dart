@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tokkoo_pos_lite/frontend/features/report/screens/report_main_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/hideable_text_form_field.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
@@ -20,7 +21,7 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   TextEditingController textFieldDateSelectorController = TextEditingController(
-      text: DateFormat('yyyy MM dd').format(DateTime.now()));
+      text: DateFormat('yyyy/MM/dd').format(DateTime.now()));
   TextEditingController textFieldCodeAccessController = TextEditingController();
 
   Future<void> selectDate(BuildContext context) async {
@@ -40,10 +41,10 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
     if (CommonFunction.sameDayDateTime(
         newSelectedDate.start, newSelectedDate.end)) {
       textFieldDateSelectorController.text =
-          DateFormat('yyyy MM dd').format(newSelectedDate.start);
+          DateFormat('yyyy/MM/dd').format(newSelectedDate.start);
     } else {
       textFieldDateSelectorController.text =
-          "${DateFormat('yyyy MM dd').format(newSelectedDate.start)} - ${DateFormat('yyyy MM dd').format(newSelectedDate.end)}";
+          "${DateFormat('yyyy/MM/dd').format(newSelectedDate.start)} - ${DateFormat('yyyy/MM/dd').format(newSelectedDate.end)}";
     }
   }
 
@@ -60,50 +61,54 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
     } else {
       await showDialog(
         context: context,
-        builder: (ctx) => Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            shrinkWrap: true,
-            children: [
-              const Text(
-                'Konfirmasi Kode',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 1.05,
+        builder: (ctx) => LayoutMaxWidth(
+          child: Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              shrinkWrap: true,
+              children: [
+                Text(
+                  t.feature_sales_report.confirm_access_code,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1.05,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              HideableTextFormField(
-                controller: textFieldCodeAccessController,
-                labelText: 'Kode Akses',
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                  onPressed: () {
-                    if (textFieldCodeAccessController.text == reportAccessKey) {
-                      Navigator.of(ctx).pop();
-                      context.push(
-                        ReportMainScreen.routeName,
-                        extra: ReportMainScreenParam(
-                            startTime: selectedStartDate,
-                            endTime: selectedEndDate),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Kode Salah!'),
-                          backgroundColor: AppColors.negativeColor,
-                        ),
-                      );
-                      Navigator.of(ctx).pop();
-                    }
-                  },
-                  child: const Text('Konfirmasi Kode'))
-            ],
+                const SizedBox(height: 20),
+                HideableTextFormField(
+                  controller: textFieldCodeAccessController,
+                  labelText: t.access_code,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                    onPressed: () {
+                      if (textFieldCodeAccessController.text ==
+                          reportAccessKey) {
+                        Navigator.of(ctx).pop();
+                        context.push(
+                          ReportMainScreen.routeName,
+                          extra: ReportMainScreenParam(
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text(t.feature_sales_report.wrong_access_code),
+                            backgroundColor: AppColors.negativeColor,
+                          ),
+                        );
+                        Navigator.of(ctx).pop();
+                      }
+                    },
+                    child: Text(t.confirm))
+              ],
+            ),
           ),
         ),
       );
@@ -123,7 +128,7 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
               readOnly: true,
               onTap: () => selectDate(context),
               decoration: InputDecoration(
-                labelText: 'Pilih Tanggal',
+                labelText: t.feature_sales_report.select_date,
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: AppColors.accentColor),
@@ -133,7 +138,7 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => seeReport(context),
-              child: const Text('Lihat Laporan'),
+              child: Text(t.feature_sales_report.see_report),
             )
           ],
         ),

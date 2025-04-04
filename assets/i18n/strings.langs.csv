@@ -1,0 +1,167 @@
+key,en,id
+outlet,Outlet,Outlet
+cashier,Cashier,Kasir
+sales_report,Sales Report,Data Penjualan
+others,Others,Lainnya
+active,Active,aktif
+save,Save,Simpan
+nonactive,Nonactive,Nonaktif
+add_arg(arg),Add $text,Tambah $text
+edit_arg(arg),Edit $text,Sunting $text
+access_code,Access Code,Kode Akses
+confirm,Confirm,Konfirmasi
+yes,Yes,Ya
+no,No,Tidak
+print,Print,Cetak
+total,Total,Total
+outlet_configuration_complete,Outlet configuration complete, Konfigurasi Outlet sudah lengkap
+before_opreate_cashier_title,"Before you operate cashier, make sure:","Sebelum kamu mengoperasikan kasir, pastikan:"
+before_opreate_cashier_item_1,"Your outlet configuration is correct & complete ","Konfigurasi outlet Anda telah benar & complete"
+before_opreate_cashier_item_2,"The products in your outlet have been registered","Produk-produk di outlet Anda sudah diaftarkan"
+before_opreate_cashier_item_3,"There must be at least 1 active payment method","Terdapat minimal 1 metode pembayaran aktif"
+enter_pos_screen,Enter Cashier Page,Masuk ke Halaman Kasir
+outlet_management,Outlet Management,Manajemen Outlet
+general_information,GENERAL INFORMATION,INFORMASI UMUM
+outlet_name,Outlet Name,Nama Outlet
+outlet_addess,Outlet Address,Alamat Toko
+outlet_phone_number,Outlet Phone Number,No. Telepon Outlet
+outlet_receipt_message,Message in Receipt,Pesan di Struk
+save_general_information,Save General Information,Simpan Informasi Umum
+configuration_successfully_saved,Configuration successfully saved,Konfigurasi berhasil disimpan
+product,Product,Produk
+manage_product,Manage Product,Atur Produk
+product_count(arg),Number of products available: $count,Jumlah produk tersedia: $count
+find_product_by_name_or_code,Find Products by name or code,Temukan Produk berdasarkan nama atau kode
+product_name,Product Name,Nama Produk
+price,Price,Harga
+quantity,Quantity,Kuantitas
+unit_price,Unit Price,Harga Satuan
+description,Description,Deskripsi
+total_price,Total Price,Total Harga
+total_payment,Total Payment,Jumlah Pembayaran
+pay_amount,Pay Amount,Jumlah yang Dibayarkan
+total_income,Total Income,Jumlah Pemasukan
+product_code,Product Code,Kode Produk
+product_receipt_same_as_product_name,Product Name on Receipt will be the same as Product Name,Nama Produk di Struk akan sama dengan Nama Produk
+product_name_on_receipt,Product Name on Receipt,Nama Produk di Struk
+no_product_category_registered,No product category registered, Tidak ada kategori produk terdaftar
+product_category,Product Category,Kategori Produk
+manage_product_category,Manage Product Category,Atur Kategory Produk
+product_category_count(arg),Number of product categories available: $count,Jumlah kategori produk tersedia: $count
+product_category_name,Product Category Name,Nama Kategori Produk
+find_product_category_based_on_name,Find Product Catgeory by name,Temukan Kategory Produk berdasarkan nama
+payment_method,Payment Method,Metode Pembayaran
+manage_payment_method,Manage Payment Method,Atur Metode Pembayaran
+payment_method_count(arg),Number of payment methods available: $count,Jumlah metode pembayaran tersedia: $count
+payment_method_name,Payment Method Name,Nama Metode Pembayaran
+find_payment_method_based_on_name,Find Payment Method by name nama,Temukan Metode Pembayaran berdasarkan nama
+equals_amount_spent,Equals Amount Spent,Sama dengan Jumlah yang Dibelanjakan
+feature_welcome.welcome,Welcome,Selamat Datang
+feature_welcome.thank_you_sentence,"Hi! Thank you for downloading Tokkoo PoS Lite. We are ready to help you get the best experience. Let's get started!","Hi! Thank you for downloading Tokkoo PoS Lite. We are ready to help you get the best experience. Let's get started!"
+feature_welcome.learn_app_usage,Learn App Usage,Pelajari Penggunaan Aplikasi
+feature_pos.set_store_information_first,Please Set Store Information First,Silakan Atur Informasi Toko terlebih dahulu
+feature_pos.at_least_1_active_product,Please Add At Least 1 Active Product,Silakan Tambah Minimal 1 Produk Aktif
+feature_pos.at_least_1_active_payment_method,Please Add At Least 1 Active Payment Method,Silakan Tambah Minimal 1 Matode Pembayaran Aktif
+feature_pos.found_with_name_or_code,Find by Name or Code,Temukan dengan Nama atau Kode
+feature_pos.proceed_payment,Proceed Payment,Lanjut Pembayaran
+feature_pos.total(arg),Total ($total),Total ($total)
+feature_pos.payment,Payment,Pembayaran
+feature_pos.payment_method_empty,Payment Method Empty,Metode Pembayaran Kosong
+feature_pos.change_is_less_then_0,Change is less then 0,Kembalian kurang dari 0
+feature_pos.confirm_payment,Confirm Payment,Konfirmasi Pembayaran
+feature_pos.order_summary.title,Order Summary,Ringkasan Pesanan
+feature_pos.change,Change,Kembalian
+feature_pos.show_category,Show Category,Tunjukkan Kategori
+feature_pos.receipt_has_not_been_printed,"Receipt has not been printed. Proceed?","Struk belum dicetak. Lanjutkan?"
+feature_pos.back_to_cashier_page,"Back to Cashier Page","Kembali ke Halaman Kasir"
+feature_pos.order_finished,Order Finished,Pemesanan Selesai
+feature_pos.dont_forget_to_print_receipt,Don't forget to print the receipt,Jangan lupa untuk cetak struk
+feature_pos.print_receipt,Print Receipt,Cetak Struk
+feature_sales_report.see_report,See Report,Lihat Laporan
+feature_sales_report.select_date,Select Date,Pilih Tanggal
+feature_sales_report.confirm_access_code,Confirm Access Code,Konfirmasi Kode Akses
+feature_sales_report.wrong_access_code,Access code wrong!,Kode akses salah!
+feature_sales_report.report,Report,Laporan
+feature_sales_report.time_arg(arg),Time: $time_string,Waktu: $time_string
+feature_sales_report.total_income(arg),Total Income: $income,Total Pemasukan: $income
+feature_sales_report.total_product_sold(arg),Total Product Sold: $count,Total Produk Terjual: $count
+feature_sales_report.based_on_payment_method,Based on Payment Method,Berdasarkan Metode Pembayaran
+feature_sales_report.based_on_product,Based on Product,Berdasarkan Produk
+feature_sales_report.see_report_summary,See Report Summary,Lihat Ringkasan Laporan
+feature_sales_report.report_date_1_arg(arg),Report Date: $date_string,Laporan Tanggal: $date_string
+feature_sales_report.report_date_2_args(arg),Report Date: $date_string_1 - $date_string_2,Laporan Tanggal: $date_string_1 - $date_string_2,
+feature_sales_report.oclock(arg),$time_string o'clock,Pukul $time_string
+feature_sales_report.end_time_more_than_start_time,End Time > Start Time,Waktu Selesai > Waktu Mulai
+feature_sales_report.e_journal,E-Journal,E-Journal
+feature_others.setting,Setting,Pengaturan
+feature_others.manage_accesss_code,Manage Access Code,Atur Kode Akses
+feature_others.access_code_has_not_been_setup,Access code has not been setup,Kode akses belum diatur
+feature_others.access_code_used_to_access_privillaged_data_and_setting,Access code used to access privilaged data & setting,Kode akses digunakan untuk mengakses data & pengaturan istimewa
+feature_others.add_access_code,Add Access Code,Tambah Kode Akses
+feature_others.access_code_successfully_saved,Access code successfully saved,Kode akses berhasil disimpan
+feature_others.access_code_is_configured,Access code is configured,Kode aksus sudah diatur
+feature_others.access_code_reset_text,"If you forget it, you can remove the access code by clicking Reset button below 3 times.","Jika Anda lupa, Anda dapat menghapus kode akses dengan mengklik tombol Atur Ulang di bawah 3 kali."
+feature_others.access_code_reset_button,Reset,Atur Ulang
+feature_others.access_code_has_been_reset,Access code has been reset,Kode akses berhasil diatur ulang
+feature_others.language,Language,Bahasa
+feature_others.information,Information,Informasi
+feature_others.application_usage_guide,Application Usage Guide,Panduan Penggunaan Aplikasi
+feature_others.printer_connection_guide,Printer Connection Guide,Panduan Koneksi Printer
+feature_others.website,Website,Halaman Web
+feature_others.website_not_available,Website not available yet,Website belum tersedia
+feature_others.application_usage_guide_content.title_1,"1. Manage Outlet Information","1. Atur Informasi Outlet"
+feature_others.application_usage_guide_content.desc_1,"Set the name, address, and phone number of the outlet for information on the receipt","Atur nama, alamat, dan no. telfon outlet untuk informasi di struk"
+feature_others.application_usage_guide_content.button_text_1,"Manage Outlet","Atur Outlet"
+feature_others.application_usage_guide_content.title_2,"2. Add Product Category","2. Tambahkan Kategori Produk"
+feature_others.application_usage_guide_content.desc_2,"Set Product Categories to make it easier to filter products","Atur Kategori Produk untuk memudahkan penyaringan produk"
+feature_others.application_usage_guide_content.button_text_2,"Manage Product Category","Atur Kategori Produk"
+feature_others.application_usage_guide_content.title_3,"3. Add Product","3. Tambahkan Produk"
+feature_others.application_usage_guide_content.desc_3,"Manage Products sold in the Outlet","Atur Produk yang dijual di dalam Outlet"
+feature_others.application_usage_guide_content.button_text_3,"Manage Product","Atur Produk"
+feature_others.application_usage_guide_content.title_4,"4. Add Payment Method","4. Tambahkan Metode Pembayaran"
+feature_others.application_usage_guide_content.desc_4,"Set the Payment Method provided in the outlet transaction","Atur Metode Pembayaran yang disediakan dalam transaksi toko"
+feature_others.application_usage_guide_content.button_text_4,"Manage Payment Method","Atur Metode Pembayaran"
+feature_others.application_usage_guide_content.title_5,"5. Operate Cashier","5. Operasikan Kasir"
+feature_others.application_usage_guide_content.desc_5,"Operate Point of Sale by selecting the products that customers purchase","Operasikan Point of Sale dengan memilih produk yang pelanggan beli"
+feature_others.application_usage_guide_content.button_text_5,"Operate Cashier","Operasikan Kasir"
+feature_others.printer_connection_guide_content.title_1,"1. Provide Printer Device","1. Sediakan Perangkat Cetak"
+feature_others.printer_connection_guide_content.desc_1,"The device needed is a Thermal Printer that has Bluetooth features with a paper width of 58mm.","Perangkat yang dibutuhkan adalah Thermal Printer yang memiliki fitur Bluetooth dengan lebar kertas 58mm"
+feature_others.printer_connection_guide_content.title_2,"2. Pair Device","2. Hubungkan Perangkat"
+feature_others.printer_connection_guide_content.desc_2,"Open settings and pair with the Thermal Printer device","Buka pengaturan dan pasangkan dengan perangkat Thermal Printer"
+feature_others.printer_connection_guide_content.button_text_2,"Open Bluetooth Settings","Buka Pengaturan Bluetooth"
+feature_others.printer_connection_guide_content.title_3,"3. Connects Printer","3. Hubungkan Printer"
+feature_others.printer_connection_guide_content.desc_3,'Click the "Not Connected (Idle)" text button to connect.','Klik tombol teks "Tidak Terhubung (Diam)". Untuk menghubungkan'
+feature_others.printer_connection_guide_content.title_4,"4. Choose Device","4. Pilih Perangkat"
+feature_others.printer_connection_guide_content.desc_4,"Select the device according to its name and Mac Address.","Pilih perangkat sesuai dengan nama dan Mac Address"
+feature_others.printer_connection_guide_content.title_5,"5. Device Connected","5. Perangkat Berhasil Terhubung"
+feature_others.printer_connection_guide_content.desc_5,'When the printer status displays the name, the device is successfully connected. Click the "Print" button to print','Saat status printer menampilkan nama, perangkat berhasil terhubung. Klik tombol "Cetak" untuk mencetak'
+feature_others.printer_connection_guide_content.button_text_5,"Test Printer","Tes Cetak"
+esc_strings.no_printer_selected,No printer selected,Tidak ada printer terpilih
+esc_strings.printing_in_progress,Printing in Progress,Sedang Mencetak
+esc_strings.time_arg(arg),Time: $time_string,Waktu: $time_string
+esc_strings.print_test_succeeded,Print test succeeded,Tes mencetak berhasil
+esc_strings.phone_number(arg),Phone Number: $phone_number,No. Telp: $phone_number
+esc_strings.method,Method,Metode
+esc_strings.payment,Payment,Pembayaran
+esc_strings.change,Change,Kembalian
+esc_strings.thank_you_for_coming,Thank you for coming,Terima kasih sudah datang
+esc_strings.journal,Journal,Journal
+esc_strings.cancelled,CANCELLED,DIBATALKAN
+esc_strings.income_report,INCOME REPORT,LAPORAN PENDAPATAN
+esc_strings.total,TOTAL,TOTAL
+esc_strings.product_sales,Product Sales,Penjualan Produk
+esc_strings.qty(arg),$qty qty,$qty jml
+esc_strings.income,Income,Pendapatan
+esc_strings.printer_status,Printer status:,Status printer:
+esc_strings.bluetooth_turned_off,Bluetooth turned off,Bluetooth mati
+esc_strings.not_connected,Not Connected,Tidak Terhubung
+esc_strings.printing,Printing,Mencetak
+esc_strings.idle,Idle,Diam
+esc_strings.paired_devices,Paired Devices,Perangkan yang Dikenali
+esc_strings.failed_to_connect_device,Failed to connect device,Gagal menghubungkan perangkat
+modified_text_form_widget.alert.empty(arg),"$item is empty","$item kosong"
+modified_text_form_widget.alert.not_filled_yet(arg),"$item not filled yet","$item belum diisi"
+modified_text_form_widget.alert.not_saved_yet(arg),"$item not saved yet","$item belum disimpan"
+modified_text_form_widget.alert.has_been_filled(arg),"$item has been filled","$item sudah diisi"
+modified_text_form_widget.alert.has_been_saved(arg),"$item has been saved","$item sudah disimpan"
+modified_text_form_widget.alert.cannot_be_empty,Cannot be empty,Tidak boleh kosong

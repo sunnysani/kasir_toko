@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_tile_template.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/search_bar.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 enum DataPassedType {
   productCategory,
@@ -60,7 +62,11 @@ class _OutletManagementTemplateState extends State<OutletManagementTemplate> {
   String? getTitleSubtitle(dynamic element) {
     switch (widget.dataPassedType) {
       case DataPassedType.product:
-        return 'Harga: ${NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(element.latestRevision.price)}';
+        return 'Harga: ${NumberFormat.currency(
+          symbol: '${InstanceDB.outlet.currency} ',
+          decimalDigits: CommonFunction.determineDecimalCount(
+              element.latestRevision.price),
+        ).format(element.latestRevision.price)}';
       default:
         return null;
     }

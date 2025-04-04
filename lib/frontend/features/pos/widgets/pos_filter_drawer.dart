@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class PosFilterDrawer extends ConsumerWidget {
   const PosFilterDrawer({super.key});
@@ -17,8 +18,8 @@ class PosFilterDrawer extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           children: [
-            const Text(
-              'Tunjukkan Kategori',
+            Text(
+              t.feature_pos.show_category,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),

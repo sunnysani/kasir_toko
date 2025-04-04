@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tokkoo_pos_lite/frontend/features/other/widgets/information/other_information_usage_dialog.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
@@ -43,13 +44,12 @@ class _AppRouterBottomNavigatorState extends State<AppRouterBottomNavigator> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   children: [
-                    const Text('Selamat Datang',
+                    Text(t.feature_welcome.welcome,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                     const Divider(),
                     const SizedBox(height: 8),
-                    const Text(
-                        'Halo! Terima kasih telah mengunduh Tokkoo PoS. Kami siap membantu Anda mendapatkan pengalaman terbaik. Mari mulai!'),
+                    Text(t.feature_welcome.thank_you_sentence),
                     const SizedBox(height: 16),
                     FilledButton(
                         onPressed: () {
@@ -61,7 +61,7 @@ class _AppRouterBottomNavigatorState extends State<AppRouterBottomNavigator> {
                               builder: (context) =>
                                   const OtherInformationUsageDialog());
                         },
-                        child: const Text('Pelajar Aplikasi'))
+                        child: Text(t.feature_welcome.learn_app_usage))
                   ],
                 ),
               ));
@@ -87,22 +87,22 @@ class _AppRouterBottomNavigatorState extends State<AppRouterBottomNavigator> {
             initialLocation: newIndex == widget.navigationShell.currentIndex,
           );
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.storefront_outlined),
-            label: 'Toko',
+            label: t.outlet,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.point_of_sale),
-            label: 'Kasir',
+            label: t.cashier,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.query_stats),
-            label: 'Data Penjualan',
+            label: t.sales_report,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.more_horiz),
-            label: 'Lainnya',
+            label: t.others,
           ),
         ],
       ),

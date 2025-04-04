@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_product_object.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PosProductListView extends ConsumerWidget {
   const PosProductListView({
@@ -41,8 +43,11 @@ class PosProductListView extends ConsumerWidget {
                 child: ListTile(
                   title: Text(products[index].product.name),
                   subtitle: Text(
-                    NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                        .format(products[index].latestRevision.price),
+                    NumberFormat.currency(
+                      symbol: '${InstanceDB.outlet.currency} ',
+                      decimalDigits: CommonFunction.determineDecimalCount(
+                          products[index].latestRevision.price),
+                    ).format(products[index].latestRevision.price),
                   ),
                   trailing: InputQuantity(
                     productID: products[index].product.id,

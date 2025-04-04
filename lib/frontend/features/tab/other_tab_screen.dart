@@ -3,6 +3,7 @@ import 'package:tokkoo_pos_lite/frontend/features/other/widgets/information/othe
 import 'package:tokkoo_pos_lite/frontend/features/other/widgets/information/other_information_usage_dialog.dart';
 import 'package:tokkoo_pos_lite/frontend/features/other/widgets/setting/other_setting_manage_data_access_code_dialog.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 
 class OtherTabScreenItem {
@@ -41,10 +42,10 @@ class OtherTabScreen extends StatelessWidget {
             children: [
               OtherTabScreenItem(
                 iconData: Icons.settings_outlined,
-                label: "Pengaturan",
+                label: t.feature_others.setting,
                 children: [
                   OtherTabScreenItemChild(
-                    label: "Atur Kode Akses Data Penjualan",
+                    label: t.feature_others.manage_accesss_code,
                     onTap: () {
                       showDialog(
                           context: context,
@@ -52,14 +53,23 @@ class OtherTabScreen extends StatelessWidget {
                               const OtherSettingManageDataAccessCodeDialog());
                     },
                   ),
+                  OtherTabScreenItemChild(
+                    label: t.feature_others.language,
+                    onTap: () {
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) =>
+                      //         const OtherSettingManageDataAccessCodeDialog());
+                    },
+                  ),
                 ],
               ),
               OtherTabScreenItem(
                 iconData: Icons.book_outlined,
-                label: "Informasi",
+                label: t.feature_others.information,
                 children: [
                   OtherTabScreenItemChild(
-                      label: "Panduan Penggunaan Aplikasi",
+                      label: t.feature_others.application_usage_guide,
                       onTap: () {
                         showDialog(
                             context: context,
@@ -67,7 +77,7 @@ class OtherTabScreen extends StatelessWidget {
                                 const OtherInformationUsageDialog());
                       }),
                   OtherTabScreenItemChild(
-                      label: "Panduan Koneksi Printer",
+                      label: t.feature_others.printer_connection_guide,
                       onTap: () {
                         showDialog(
                             context: context,
@@ -75,12 +85,13 @@ class OtherTabScreen extends StatelessWidget {
                                 const OtherInformationPrinterDialog());
                       }),
                   OtherTabScreenItemChild(
-                      label: "Website",
+                      label: t.feature_others.website,
                       onTap: () {
                         // launchUrl(Uri.parse('https://tokkoopos.com'));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Website belum tersedia'),
+                          SnackBar(
+                            content:
+                                Text(t.feature_others.website_not_available),
                             backgroundColor: AppColors.warningColor,
                           ),
                         );

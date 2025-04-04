@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/printer_status.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 
 enum ReportPrintType {
@@ -44,8 +45,8 @@ class _ReportPrintSelectDateBottomsheetState
         verticalPadding: 32,
         child: Column(
           children: [
-            const Text(
-              'Pilih Tanggal',
+            Text(
+              t.feature_sales_report.select_date,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -90,8 +91,9 @@ class _ReportPrintSelectDateBottomsheetState
                 if (selectedEndTime.compareTo(selectedStartTime) <= 0) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Waktu Selesai > Waktu Mulai'),
+                    SnackBar(
+                      content: Text(
+                          t.feature_sales_report.end_time_more_than_start_time),
                       backgroundColor: AppColors.negativeColor,
                     ),
                   );
@@ -119,7 +121,7 @@ class _ReportPrintSelectDateBottomsheetState
                 }
               },
               style: ButtonTextStyle.secondaryButtonStyle,
-              child: const Text('Cetak'),
+              child: Text(t.print),
             )
           ],
         ),

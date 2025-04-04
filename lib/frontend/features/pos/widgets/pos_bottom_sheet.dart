@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/proceed/pos_proceed_payment_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 
 class PosBottomSheet extends ConsumerWidget {
   const PosBottomSheet({super.key});
@@ -31,17 +34,22 @@ class PosBottomSheet extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Total (${quantityAndTotalPriceState.value?.totalQuantity ?? '-'})',
+                  t.feature_pos.total(
+                      total: quantityAndTotalPriceState.value?.totalQuantity ??
+                          '-'),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                // Text(
-                //   NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0).format(
-                //       quantityAndTotalPriceState.value?.totalPrice ?? 0),
-                //   style: const TextStyle(fontSize: 16),
-                // ),
+                Text(
+                  NumberFormat.currency(
+                    symbol: '${InstanceDB.outlet.currency} ',
+                    decimalDigits: CommonFunction.determineDecimalCount(
+                        quantityAndTotalPriceState.value?.totalPrice),
+                  ).format(quantityAndTotalPriceState.value?.totalPrice ?? 0),
+                  style: const TextStyle(fontSize: 16),
+                ),
               ],
             ),
             ElevatedButton(
@@ -72,7 +80,7 @@ class PosBottomSheet extends ConsumerWidget {
                     overlay.hide(); // Hide loader
                   }
                 },
-                child: const Text('Lanjut Pembayaran'))
+                child: Text(t.feature_pos.proceed_payment))
           ],
         ),
       ),

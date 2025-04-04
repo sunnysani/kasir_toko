@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/outlet/outlet_management_screen.dart';
-import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/payment_method/outlet_payment_method_management_screen.dart';
-import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/product_category/outlet_product_category_management_screen.dart';
-import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/product/outlet_product_management.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/carousel_with_dot_navigator.dart';
+import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class OtherInformationUsageDialogItemBottomAction {
   final String label;
@@ -38,113 +36,122 @@ class OtherInformationUsageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Panduan Penggunaan Aplikasi',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                Divider(),
-              ],
+    return LayoutMaxWidth(
+      child: Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(t.feature_others.application_usage_guide,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Divider(),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          CarouselWithDotNavigator(
-              height: 380,
-              items: [
-                OtherInformationUsageDialogItem(
-                  header: Image.asset("assets/images/tutorial-1.jpeg"),
-                  title: "1. Atur Informasi Toko",
-                  description: const Text(
-                      'Atur nama, alamat, dan no. telfon toko untuk informasi di struk'),
-                  bottomAction: OtherInformationUsageDialogItemBottomAction(
-                    label: 'Atur Toko',
-                    onTap: () => context.push(OutletManagementScreen.routeName),
+            const SizedBox(height: 8),
+            CarouselWithDotNavigator(
+                height: 380,
+                items: [
+                  OtherInformationUsageDialogItem(
+                    header: Image.asset("assets/images/tutorial-1.jpeg"),
+                    title: t
+                        .feature_others.application_usage_guide_content.title_1,
+                    description: Text(t
+                        .feature_others.application_usage_guide_content.desc_1),
+                    bottomAction: OtherInformationUsageDialogItemBottomAction(
+                      label: t.feature_others.application_usage_guide_content
+                          .button_text_1,
+                      onTap: () => context.push(PosAppScreen.routeName),
+                    ),
                   ),
-                ),
-                OtherInformationUsageDialogItem(
-                  header: Image.asset("assets/images/tutorial-2.jpeg"),
-                  title: "2. Tambahkan Kategori Produk",
-                  description: const Text(
-                      'Atur Kategori Produk untuk memudahkan penyaringan produk'),
-                  bottomAction: OtherInformationUsageDialogItemBottomAction(
-                    label: 'Atur Kategori Produk',
-                    onTap: () => context
-                        .push(OutletProductCategoryManagementScreen.routeName),
+                  OtherInformationUsageDialogItem(
+                    header: Image.asset("assets/images/tutorial-2.jpeg"),
+                    title: t
+                        .feature_others.application_usage_guide_content.title_2,
+                    description: Text(t
+                        .feature_others.application_usage_guide_content.desc_2),
+                    bottomAction: OtherInformationUsageDialogItemBottomAction(
+                      label: t.feature_others.application_usage_guide_content
+                          .button_text_2,
+                      onTap: () => context.push(PosAppScreen.routeName),
+                    ),
                   ),
-                ),
-                OtherInformationUsageDialogItem(
-                  header: Image.asset("assets/images/tutorial-3.jpeg"),
-                  title: "3. Tambahkan Produk",
-                  description:
-                      const Text('Atur Produk yang dijual di dalam Toko'),
-                  bottomAction: OtherInformationUsageDialogItemBottomAction(
-                    label: 'Atur Produk',
-                    onTap: () =>
-                        context.push(OutletProductManagementScreen.routeName),
+                  OtherInformationUsageDialogItem(
+                    header: Image.asset("assets/images/tutorial-3.jpeg"),
+                    title: t
+                        .feature_others.application_usage_guide_content.title_3,
+                    description: Text(t
+                        .feature_others.application_usage_guide_content.desc_3),
+                    bottomAction: OtherInformationUsageDialogItemBottomAction(
+                      label: t.feature_others.application_usage_guide_content
+                          .button_text_3,
+                      onTap: () => context.push(PosAppScreen.routeName),
+                    ),
                   ),
-                ),
-                OtherInformationUsageDialogItem(
-                  header: Image.asset("assets/images/tutorial-4.jpeg"),
-                  title: "4. Tambahkan Metode Pembayaran",
-                  description: const Text(
-                      'Atur Metode Pembayaran yang disediakan dalam transaksi toko'),
-                  bottomAction: OtherInformationUsageDialogItemBottomAction(
-                    label: 'Atur Metode Pembayaran',
-                    onTap: () => context
-                        .push(OutletPaymentMethodManagementScreen.routeName),
+                  OtherInformationUsageDialogItem(
+                    header: Image.asset("assets/images/tutorial-4.jpeg"),
+                    title: t
+                        .feature_others.application_usage_guide_content.title_4,
+                    description: Text(t
+                        .feature_others.application_usage_guide_content.desc_4),
+                    bottomAction: OtherInformationUsageDialogItemBottomAction(
+                      label: t.feature_others.application_usage_guide_content
+                          .button_text_4,
+                      onTap: () => context.push(PosAppScreen.routeName),
+                    ),
                   ),
-                ),
-                OtherInformationUsageDialogItem(
-                  header: Image.asset("assets/images/tutorial-5.jpeg"),
-                  title: "5. Operasikan Kasir",
-                  description: const Text(
-                      'Operasikan Point of Sale dengan memilih produk yang pelanggan beli'),
-                  bottomAction: OtherInformationUsageDialogItemBottomAction(
-                    label: 'Operasikan Kasir',
-                    onTap: () => context.push(PosAppScreen.routeName),
+                  OtherInformationUsageDialogItem(
+                    header: Image.asset("assets/images/tutorial-5.jpeg"),
+                    title: t
+                        .feature_others.application_usage_guide_content.title_5,
+                    description: Text(t
+                        .feature_others.application_usage_guide_content.desc_5),
+                    bottomAction: OtherInformationUsageDialogItemBottomAction(
+                      label: t.feature_others.application_usage_guide_content
+                          .button_text_5,
+                      onTap: () => context.push(PosAppScreen.routeName),
+                    ),
                   ),
-                ),
-              ]
-                  .map((item) => ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        children: [
-                          SizedBox(height: 240, child: item.header),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  item.title,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                ]
+                    .map((item) => ListView(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          children: [
+                            SizedBox(height: 240, child: item.header),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    item.title,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              if (item.titleTrailing != null)
-                                item.titleTrailing!,
-                            ],
-                          ),
-                          item.description,
-                          if (item.bottomAction != null)
-                            TextButton(
-                              onPressed: item.bottomAction!.onTap,
-                              child: Text(item.bottomAction!.label),
-                            )
-                        ],
-                      ))
-                  .toList()),
-        ],
+                                if (item.titleTrailing != null)
+                                  item.titleTrailing!,
+                              ],
+                            ),
+                            item.description,
+                            if (item.bottomAction != null)
+                              TextButton(
+                                onPressed: item.bottomAction!.onTap,
+                                child: Text(item.bottomAction!.label),
+                              )
+                          ],
+                        ))
+                    .toList()),
+          ],
+        ),
       ),
     );
   }

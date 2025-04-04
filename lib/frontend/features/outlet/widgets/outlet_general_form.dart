@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/modified_text_form_field.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 
 class OutletGeneralForm extends StatefulWidget {
@@ -42,8 +43,8 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Konfigurasi berhasil disimpan'),
+      SnackBar(
+        content: Text(t.configuration_successfully_saved),
         backgroundColor: AppColors.positiveColor,
       ),
     );
@@ -59,8 +60,8 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
     return Column(
       children: [
         if (!widget.hideHeaderTitle)
-          const Text(
-            'INFORMASI UMUM',
+          Text(
+            t.general_information,
             style: TextStyle(
                 fontFamily: 'Montserrat', wordSpacing: 10, fontSize: 20),
           ),
@@ -70,7 +71,7 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
             children: [
               ModifiedTextFormField(
                 controller: textEditingControllerName,
-                labelName: 'Nama Toko',
+                labelName: t.outlet_name,
                 isOkEmpty: false,
                 value: InstanceDB.outlet.name,
                 isCreation: false,
@@ -78,7 +79,7 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
               const SizedBox(height: 20),
               ModifiedTextFormField(
                 controller: textEditingControllerAddress,
-                labelName: 'Alamat Toko',
+                labelName: t.outlet_addess,
                 isOkEmpty: false,
                 isCreation: false,
                 value: InstanceDB.outlet.address,
@@ -86,7 +87,7 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
               const SizedBox(height: 20),
               ModifiedTextFormField(
                 controller: textEditingControllerPhoneNumber,
-                labelName: 'No. Telepon Toko',
+                labelName: t.outlet_phone_number,
                 isOkEmpty: false,
                 isCreation: false,
                 value: InstanceDB.outlet.phoneNumber,
@@ -94,7 +95,7 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
               const SizedBox(height: 20),
               ModifiedTextFormField(
                 controller: textEditingControllerReceiptMessage,
-                labelName: 'Pesan di Struk',
+                labelName: t.outlet_receipt_message,
                 isOkEmpty: true,
                 isCreation: false,
                 maxLines: 3,
@@ -107,7 +108,7 @@ class _OutletGeneralFormState extends State<OutletGeneralForm> {
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: _submit,
-          child: const Text('Simpan Informasi Umum'),
+          child: Text(t.save_general_information),
         ),
       ],
     );

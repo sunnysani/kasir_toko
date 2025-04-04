@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tokkoo_pos_lite/backend/provider/esc_printer.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
@@ -19,8 +20,8 @@ class SelectEscPrinterWidget extends ConsumerWidget {
           vertical: 16,
         ),
         children: [
-          const Text(
-            'Perangkat yang Dikenali',
+          Text(
+            t.esc_strings.paired_devices,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -54,9 +55,9 @@ class SelectEscPrinterWidget extends ConsumerWidget {
                             if (connected == false) {
                               // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Gagal menghubungkan perangkat'),
+                                SnackBar(
+                                  content: Text(
+                                      t.esc_strings.failed_to_connect_device),
                                   backgroundColor: AppColors.negativeColor,
                                 ),
                               );

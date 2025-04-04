@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/widgets/outlet_management_template.dart';
 import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/payment_method/creation/outlet_payment_method_creation_screen.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class OutletPaymentMethodManagementScreen extends StatelessWidget {
   const OutletPaymentMethodManagementScreen({super.key});
@@ -15,8 +16,8 @@ class OutletPaymentMethodManagementScreen extends StatelessWidget {
         builder: (context, snapshot) {
           return OutletManagementTemplate(
             creationRoute: OutletPaymentMethodCreationScreen.routeName,
-            appBarTitle: 'Metode Pembayaran',
-            searchBarText: 'Temukan Metode Pembayaran berdasarkan nama',
+            appBarTitle: t.payment_method,
+            searchBarText: t.find_payment_method_based_on_name,
             isLoading: snapshot.connectionState == ConnectionState.waiting,
             dataList: snapshot.data,
             dataPassedType: DataPassedType.paymentMethod,

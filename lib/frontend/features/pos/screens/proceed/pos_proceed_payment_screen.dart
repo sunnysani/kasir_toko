@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +8,9 @@ import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/pos_app_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/screens/proceed/pos_proceed_receipt_screen.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_with_bottom_button.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
+import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:tokkoo_pos_lite/utils/other/number_input_formatter.dart';
 
 class PosProceedPaymentScreen extends ConsumerStatefulWidget {
@@ -56,7 +57,7 @@ class _PosProceedPaymentScreenState
 
     if (proceededOrderRowState == null || paymentMethodListState.isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Pembayaran')),
+        appBar: AppBar(title: Text(t.feature_pos.payment)),
         body: Center(child: CircularProgressIndicator()),
       );
     }
@@ -64,8 +65,8 @@ class _PosProceedPaymentScreenState
     Future<void> confirmPayment() async {
       if (selectedPaymentMethod == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Metode Pembayaran Kosong'),
+          SnackBar(
+            content: Text(t.feature_pos.payment_method_empty),
             backgroundColor: AppColors.negativeColor,
           ),
         );
@@ -73,8 +74,8 @@ class _PosProceedPaymentScreenState
       }
       if (change < 0) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Kembalian kurang dari 0'),
+          SnackBar(
+            content: Text(context.t.feature_pos.change_is_less_then_0),
             backgroundColor: AppColors.negativeColor,
           ),
         );
@@ -103,25 +104,25 @@ class _PosProceedPaymentScreenState
     }
 
     return LayoutWithBottomButton(
-        title: 'Pembayaran',
+        title: context.t.feature_pos.payment,
         bottomButton: ElevatedButton(
           onPressed: confirmPayment,
-          child: const Text('Konfirmasi Pembayaran'),
+          child: Text(t.feature_pos.confirm_payment),
         ),
         child: Column(children: [
           // Order Summary
-          const Text(
-            'Ringkasan Pesanan',
+          Text(
+            t.feature_pos.order_summary.title,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Deskripsi')),
-                DataColumn(label: Text('Kuantitas')),
-                DataColumn(label: Text('Total Harga'))
+              columns: [
+                DataColumn(label: Text(t.feature_pos.order_summary.title)),
+                DataColumn(label: Text(t.quantity)),
+                DataColumn(label: Text(t.total_price)),
               ],
               rows: [
                 for (final item in proceededOrderRowState.items)
@@ -134,10 +135,13 @@ class _PosProceedPaymentScreenState
                     )),
                     DataCell(Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                          NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                              .format(item.product.latestRevision.price *
-                                  item.itemData.quantity)),
+                      child: Text(NumberFormat.currency(
+                        symbol: '${InstanceDB.outlet.currency} ',
+                        decimalDigits: CommonFunction.determineDecimalCount(
+                            (item.product.latestRevision.price *
+                                item.itemData.quantity)),
+                      ).format(item.product.latestRevision.price *
+                          item.itemData.quantity)),
                     ))
                   ])
               ],
@@ -151,8 +155,11 @@ class _PosProceedPaymentScreenState
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text('Total'),
-                  Text(NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
-                      .format(proceededOrderRowState.orderData.totalPrice))
+                  Text(NumberFormat.currency(
+                    symbol: '${InstanceDB.outlet.currency} ',
+                    decimalDigits: CommonFunction.determineDecimalCount(
+                        proceededOrderRowState.orderData.totalPrice),
+                  ).format(proceededOrderRowState.orderData.totalPrice))
                 ],
               ),
               const SizedBox(height: 20),
@@ -163,8 +170,7 @@ class _PosProceedPaymentScreenState
                             Brightness.dark
                         ? Colors.white
                         : Colors.black),
-                decoration:
-                    const InputDecoration(labelText: 'Metode Pembayaran'),
+                decoration: InputDecoration(labelText: t.payment_method),
                 isExpanded: true,
                 items: paymentMethodListState.value!
                     .map((item) => DropdownMenuItem(
@@ -190,8 +196,8 @@ class _PosProceedPaymentScreenState
                 keyboardType: TextInputType.number,
                 inputFormatters: [NumberInputFormatter()],
                 decoration: InputDecoration(
-                  prefix: const Text('Rp '),
-                  label: const Text('Jumlah Pembayaran'),
+                  prefix: Text('${InstanceDB.outlet.currency} '),
+                  label: Text(t.total_payment),
                   filled: selectedPaymentMethod?.sameAsAmount ?? false,
                 ),
               ),
@@ -200,11 +206,14 @@ class _PosProceedPaymentScreenState
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    "Kembalian",
+                    t.feature_pos.change,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    NumberFormat.currency(symbol: 'Rp ', decimalDigits: 0)
+                    NumberFormat.currency(
+                            symbol: '${InstanceDB.outlet.currency} ',
+                            decimalDigits:
+                                CommonFunction.determineDecimalCount(change))
                         .format(change),
                   )
                 ],

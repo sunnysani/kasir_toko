@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/text_alert.dart';
+import 'package:tokkoo_pos_lite/gen/strings.g.dart';
 
 class ModifiedTextFormField extends StatefulWidget {
   const ModifiedTextFormField({
@@ -44,13 +45,14 @@ class _ModifiedTextFormFieldState extends State<ModifiedTextFormField> {
       if (widget.isOkEmpty) {
         setState(() {
           textAlertType = TextAlertType.ok;
-          textAlertMessage =
-              widget.okEmptyMessage ?? '${widget.labelName} kosong';
+          textAlertMessage = widget.okEmptyMessage ??
+              t.modified_text_form_widget.alert.empty(item: widget.labelName);
         });
       } else {
         setState(() {
           textAlertType = TextAlertType.error;
-          textAlertMessage = '${widget.labelName} belum terisi';
+          textAlertMessage = t.modified_text_form_widget.alert
+              .not_filled_yet(item: widget.labelName);
         });
       }
     } else {
@@ -58,15 +60,19 @@ class _ModifiedTextFormFieldState extends State<ModifiedTextFormField> {
         setState(() {
           textAlertType = TextAlertType.ok;
           textAlertMessage = widget.isCreation
-              ? '${widget.labelName} sudah terisi'
-              : '${widget.labelName} sudah tersimpan';
+              ? t.modified_text_form_widget.alert
+                  .has_been_filled(item: widget.labelName)
+              : t.modified_text_form_widget.alert
+                  .has_been_saved(item: widget.labelName);
         });
       } else {
         setState(() {
           textAlertType = TextAlertType.warning;
           textAlertMessage = widget.isCreation
-              ? '${widget.labelName} belum terisi'
-              : '${widget.labelName} belum tersimpan';
+              ? t.modified_text_form_widget.alert
+                  .not_filled_yet(item: widget.labelName)
+              : t.modified_text_form_widget.alert
+                  .not_saved_yet(item: widget.labelName);
         });
       }
     }

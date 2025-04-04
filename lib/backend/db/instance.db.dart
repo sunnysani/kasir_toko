@@ -16,6 +16,7 @@ import 'package:tokkoo_pos_lite/backend/models/drift_entity_product_revision.dar
 import 'package:tokkoo_pos_lite/backend/models/drift_relation_product_product_category.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_product_object.dart';
+import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
 
 part 'instance.db.g.dart';
@@ -37,7 +38,7 @@ class InstanceDB extends _$InstanceDB {
   static late DriftEntityOutletData outlet;
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (m) async {
@@ -53,6 +54,21 @@ class InstanceDB extends _$InstanceDB {
           for (final trigger in TriggerDB.triggers) {
             await customStatement(trigger);
           }
+        }
+
+        if (to == 5 || to == 6) {
+          final pragmas = await m.database
+              .customSelect('PRAGMA table_info(drift_entity_outlet);')
+              .get();
+          final hasCurrencyColumn =
+              pragmas.any((row) => row.data['name'] == 'currency');
+          if (!hasCurrencyColumn) {
+            await m.addColumn(driftEntityOutlet, driftEntityOutlet.currency);
+          }
+
+          await customStatement(
+            "UPDATE drift_entity_outlet SET currency='${AppUtils.currencyOrigin}'",
+          );
         }
       });
 
@@ -73,6 +89,7 @@ class InstanceDB extends _$InstanceDB {
         address: "",
         phoneNumber: "",
         receiptMessage: "",
+        currency: Value(AppUtils.currencyOrigin),
       );
 
       final insertedRow =

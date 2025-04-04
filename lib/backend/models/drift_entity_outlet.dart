@@ -10,4 +10,6 @@ class DriftEntityOutlet extends Table {
   TextColumn get address => text()();
   TextColumn get phoneNumber => text()();
   TextColumn get receiptMessage => text()();
+
+  TextColumn get currency => text().withDefault(Constant('XXX'))();
 }
