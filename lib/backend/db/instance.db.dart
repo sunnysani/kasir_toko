@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tokkoo_pos_lite/backend/db/db_temp_classes.dart';
@@ -16,7 +18,6 @@ import 'package:tokkoo_pos_lite/backend/models/drift_entity_product_revision.dar
 import 'package:tokkoo_pos_lite/backend/models/drift_relation_product_product_category.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_product_object.dart';
-import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
 
 part 'instance.db.g.dart';
@@ -67,7 +68,7 @@ class InstanceDB extends _$InstanceDB {
           }
 
           await customStatement(
-            "UPDATE drift_entity_outlet SET currency='${AppUtils.currencyOrigin}'",
+            "UPDATE drift_entity_outlet SET currency='${NumberFormat.simpleCurrency(locale: PlatformDispatcher.instance.locale.toString()).currencySymbol}'",
           );
         }
       });
@@ -89,7 +90,9 @@ class InstanceDB extends _$InstanceDB {
         address: "",
         phoneNumber: "",
         receiptMessage: "",
-        currency: Value(AppUtils.currencyOrigin),
+        currency: Value(NumberFormat.simpleCurrency(
+                locale: PlatformDispatcher.instance.locale.toString())
+            .currencySymbol),
       );
 
       final insertedRow =

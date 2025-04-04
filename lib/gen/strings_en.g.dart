@@ -66,7 +66,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	String get outlet_name => 'Outlet Name';
 	String get outlet_addess => 'Outlet Address';
 	String get outlet_phone_number => 'Outlet Phone Number';
-	String get outlet_receipt_message => 'Message in Receipt';
+	String get outlet_receipt_message => 'Message on Receipt';
 	String get save_general_information => 'Save General Information';
 	String get configuration_successfully_saved => 'Configuration successfully saved';
 	String get product => 'Product';
@@ -186,6 +186,7 @@ class TranslationsFeatureOthersEn {
 	String get access_code_reset_button => 'Reset';
 	String get access_code_has_been_reset => 'Access code has been reset';
 	String get language => 'Language';
+	String get change_language => 'Change Language';
 	String get information => 'Information';
 	String get application_usage_guide => 'Application Usage Guide';
 	String get printer_connection_guide => 'Printer Connection Guide';
@@ -224,6 +225,7 @@ class TranslationsEscStringsEn {
 	String get printing => 'Printing';
 	String get idle => 'Idle';
 	String get paired_devices => 'Paired Devices';
+	String get cannot_find_device => 'Cannot find device? Pair device!';
 	String get failed_to_connect_device => 'Failed to connect device';
 }
 
@@ -339,7 +341,7 @@ extension on Translations {
 			case 'outlet_name': return 'Outlet Name';
 			case 'outlet_addess': return 'Outlet Address';
 			case 'outlet_phone_number': return 'Outlet Phone Number';
-			case 'outlet_receipt_message': return 'Message in Receipt';
+			case 'outlet_receipt_message': return 'Message on Receipt';
 			case 'save_general_information': return 'Save General Information';
 			case 'configuration_successfully_saved': return 'Configuration successfully saved';
 			case 'product': return 'Product';
@@ -417,6 +419,7 @@ extension on Translations {
 			case 'feature_others.access_code_reset_button': return 'Reset';
 			case 'feature_others.access_code_has_been_reset': return 'Access code has been reset';
 			case 'feature_others.language': return 'Language';
+			case 'feature_others.change_language': return 'Change Language';
 			case 'feature_others.information': return 'Information';
 			case 'feature_others.application_usage_guide': return 'Application Usage Guide';
 			case 'feature_others.printer_connection_guide': return 'Printer Connection Guide';
@@ -471,6 +474,7 @@ extension on Translations {
 			case 'esc_strings.printing': return 'Printing';
 			case 'esc_strings.idle': return 'Idle';
 			case 'esc_strings.paired_devices': return 'Paired Devices';
+			case 'esc_strings.cannot_find_device': return 'Cannot find device? Pair device!';
 			case 'esc_strings.failed_to_connect_device': return 'Failed to connect device';
 			case 'modified_text_form_widget.alert.empty': return ({required Object item}) => '${item} is empty';
 			case 'modified_text_form_widget.alert.not_filled_yet': return ({required Object item}) => '${item} not filled yet';

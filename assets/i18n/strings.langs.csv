@@ -26,7 +26,7 @@ general_information,GENERAL INFORMATION,INFORMASI UMUM
 outlet_name,Outlet Name,Nama Outlet
 outlet_addess,Outlet Address,Alamat Toko
 outlet_phone_number,Outlet Phone Number,No. Telepon Outlet
-outlet_receipt_message,Message in Receipt,Pesan di Struk
+outlet_receipt_message,Message on Receipt,Pesan di Struk
 save_general_information,Save General Information,Simpan Informasi Umum
 configuration_successfully_saved,Configuration successfully saved,Konfigurasi berhasil disimpan
 product,Product,Produk
@@ -104,6 +104,7 @@ feature_others.access_code_reset_text,"If you forget it, you can remove the acce
 feature_others.access_code_reset_button,Reset,Atur Ulang
 feature_others.access_code_has_been_reset,Access code has been reset,Kode akses berhasil diatur ulang
 feature_others.language,Language,Bahasa
+feature_others.change_language,Change Language,Ganti Bahasa
 feature_others.information,Information,Informasi
 feature_others.application_usage_guide,Application Usage Guide,Panduan Penggunaan Aplikasi
 feature_others.printer_connection_guide,Printer Connection Guide,Panduan Koneksi Printer
@@ -158,6 +159,7 @@ esc_strings.not_connected,Not Connected,Tidak Terhubung
 esc_strings.printing,Printing,Mencetak
 esc_strings.idle,Idle,Diam
 esc_strings.paired_devices,Paired Devices,Perangkan yang Dikenali
+esc_strings.cannot_find_device,"Cannot find device? Pair device!","Tidak menemukan perangkat? Kenali perangkat!"
 esc_strings.failed_to_connect_device,Failed to connect device,Gagal menghubungkan perangkat
 modified_text_form_widget.alert.empty(arg),"$item is empty","$item kosong"
 modified_text_form_widget.alert.not_filled_yet(arg),"$item not filled yet","$item belum diisi"

@@ -6,7 +6,7 @@ class PreferredLanguage with ChangeNotifier {
 
   PreferredLanguage() {
     _selectedLanguage =
-        AppSettings.sharedPreferences.getString('preferredLang');
+        AppSettings.sharedPreferences.getString('PREFERRED_LANGUAGE');
   }
 
   String get selectedLanguage {
@@ -14,7 +14,7 @@ class PreferredLanguage with ChangeNotifier {
   }
 
   void switchLanguage(String lang) async {
-    AppSettings.sharedPreferences.setString('preferredLang', lang);
+    AppSettings.sharedPreferences.setString('PREFERRED_LANGUAGE', lang);
     _selectedLanguage = lang;
     notifyListeners();
   }

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,12 +9,9 @@ class AppSettings {
     sharedPreferences = await SharedPreferences.getInstance();
 
     // setLanguage
-    if (!AppSettings.sharedPreferences.containsKey('preferredLang')) {
-      if (Platform.localeName.startsWith('id')) {
-        AppSettings.sharedPreferences.setString('preferredLang', 'id');
-      } else {
-        AppSettings.sharedPreferences.setString('preferredLang', 'en');
-      }
+    if (!AppSettings.sharedPreferences.containsKey('PREFERRED_LANGUAGE')) {
+      AppSettings.sharedPreferences.setString('PREFERRED_LANGUAGE',
+          PlatformDispatcher.instance.locale.languageCode);
     }
   }
 }

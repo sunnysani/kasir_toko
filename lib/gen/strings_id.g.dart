@@ -185,6 +185,7 @@ class _TranslationsFeatureOthersId extends TranslationsFeatureOthersEn {
 	@override String get access_code_reset_button => 'Atur Ulang';
 	@override String get access_code_has_been_reset => 'Kode akses berhasil diatur ulang';
 	@override String get language => 'Bahasa';
+	@override String get change_language => 'Ganti Bahasa';
 	@override String get information => 'Informasi';
 	@override String get application_usage_guide => 'Panduan Penggunaan Aplikasi';
 	@override String get printer_connection_guide => 'Panduan Koneksi Printer';
@@ -223,6 +224,7 @@ class _TranslationsEscStringsId extends TranslationsEscStringsEn {
 	@override String get printing => 'Mencetak';
 	@override String get idle => 'Diam';
 	@override String get paired_devices => 'Perangkan yang Dikenali';
+	@override String get cannot_find_device => 'Tidak menemukan perangkat? Kenali perangkat!';
 	@override String get failed_to_connect_device => 'Gagal menghubungkan perangkat';
 }
 
@@ -416,6 +418,7 @@ extension on TranslationsId {
 			case 'feature_others.access_code_reset_button': return 'Atur Ulang';
 			case 'feature_others.access_code_has_been_reset': return 'Kode akses berhasil diatur ulang';
 			case 'feature_others.language': return 'Bahasa';
+			case 'feature_others.change_language': return 'Ganti Bahasa';
 			case 'feature_others.information': return 'Informasi';
 			case 'feature_others.application_usage_guide': return 'Panduan Penggunaan Aplikasi';
 			case 'feature_others.printer_connection_guide': return 'Panduan Koneksi Printer';
@@ -470,6 +473,7 @@ extension on TranslationsId {
 			case 'esc_strings.printing': return 'Mencetak';
 			case 'esc_strings.idle': return 'Diam';
 			case 'esc_strings.paired_devices': return 'Perangkan yang Dikenali';
+			case 'esc_strings.cannot_find_device': return 'Tidak menemukan perangkat? Kenali perangkat!';
 			case 'esc_strings.failed_to_connect_device': return 'Gagal menghubungkan perangkat';
 			case 'modified_text_form_widget.alert.empty': return ({required Object item}) => '${item} kosong';
 			case 'modified_text_form_widget.alert.not_filled_yet': return ({required Object item}) => '${item} belum diisi';

@@ -62,7 +62,7 @@ class OtherInformationPrinterDialog extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             CarouselWithDotNavigator(
-                height: 380,
+                height: 400,
                 items: [
                   OtherInformationPrinterDialogItem(
                     header:

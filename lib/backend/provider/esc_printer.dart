@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokkoo_pos_lite/backend/db/instance.db.dart';
 import 'package:tokkoo_pos_lite/backend/models/drift_entity_order_row.dart';
 import 'package:tokkoo_pos_lite/backend/models/useable/drift_usable_order_row.dart';
 import 'package:tokkoo_pos_lite/gen/strings.g.dart';
+import 'package:tokkoo_pos_lite/main.dart';
 import 'package:tokkoo_pos_lite/utils/common/constant.common.dart';
 import 'package:tokkoo_pos_lite/utils/common/function.common.dart';
 import 'package:tokkoo_pos_lite/utils/start_configs/app_settings.dart';
@@ -57,26 +59,38 @@ class EscPrinterNotifier extends Notifier<EscPrinter> {
     final latestName = AppSettings.sharedPreferences
         .getString('LATEST_CONNECTED_PRINTER_NAME');
     if (latestMac != null && latestName != null) {
-      selectDevice(BluetoothInfo(name: latestName, macAdress: latestMac));
+      selectDevice(BluetoothInfo(name: latestName, macAdress: latestMac))
+          .then((connected) {
+        if (!connected) {
+          AppSettings.sharedPreferences
+              .remove("LATEST_CONNECTED_PRINTER_MAC_ADDRESS");
+        }
+      });
     }
   }
 
   Future<bool> selectDevice(BluetoothInfo device) async {
-    if (state.selectedDevice != null) {
-      await PrintBluetoothThermal.disconnect;
-    }
+    rootNavigatorKey.currentContext?.loaderOverlay.show();
 
-    final connected = await PrintBluetoothThermal.connect(
-        macPrinterAddress: device.macAdress);
-    if (connected) {
-      await AppSettings.sharedPreferences
-          .setString('LATEST_CONNECTED_PRINTER_MAC_ADDRESS', device.macAdress);
-      await AppSettings.sharedPreferences
-          .setString('LATEST_CONNECTED_PRINTER_NAME', device.name);
-      state = state.copyWith(selectedDevice: device);
-      return true;
+    try {
+      await PrintBluetoothThermal.disconnect;
+
+      final connected = await PrintBluetoothThermal.connect(
+          macPrinterAddress: device.macAdress);
+      if (connected) {
+        await AppSettings.sharedPreferences.setString(
+            'LATEST_CONNECTED_PRINTER_MAC_ADDRESS', device.macAdress);
+        await AppSettings.sharedPreferences
+            .setString('LATEST_CONNECTED_PRINTER_NAME', device.name);
+        state = state.copyWith(selectedDevice: device);
+        return true;
+      }
+      return false;
+    } catch (_) {
+      return false;
+    } finally {
+      rootNavigatorKey.currentContext?.loaderOverlay.hide();
     }
-    return false;
   }
 
   Future<bool> isBluetoothEnabled() async {

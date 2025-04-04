@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tokkoo_pos_lite/frontend/features/other/widgets/information/other_information_printer_dialog.dart';
 import 'package:tokkoo_pos_lite/frontend/features/other/widgets/information/other_information_usage_dialog.dart';
+import 'package:tokkoo_pos_lite/frontend/features/other/widgets/setting/change_language_dialog.dart';
 import 'package:tokkoo_pos_lite/frontend/features/other/widgets/setting/other_setting_manage_data_access_code_dialog.dart';
 import 'package:tokkoo_pos_lite/frontend/widgets/shared/layouts/layout_max_width.dart';
 import 'package:tokkoo_pos_lite/gen/strings.g.dart';
@@ -56,10 +57,9 @@ class OtherTabScreen extends StatelessWidget {
                   OtherTabScreenItemChild(
                     label: t.feature_others.language,
                     onTap: () {
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (context) =>
-                      //         const OtherSettingManageDataAccessCodeDialog());
+                      showDialog(
+                          context: context,
+                          builder: (context) => const ChangeLanguageDialog());
                     },
                   ),
                 ],
