@@ -45,7 +45,7 @@ class _PosProceedReceiptScreenState
                     context.pop();
                     context.pop();
                   },
-                  child: const Text('Ya')),
+                  child: Text(t.yes)),
             ],
           ),
         ),

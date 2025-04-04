@@ -14,6 +14,7 @@ yes,Yes,Ya
 no,No,Tidak
 print,Print,Cetak
 total,Total,Total
+summary,Summary,Ringkasan
 outlet_configuration_complete,Outlet configuration complete, Konfigurasi Outlet sudah lengkap
 before_opreate_cashier_title,"Before you operate cashier, make sure:","Sebelum kamu mengoperasikan kasir, pastikan:"
 before_opreate_cashier_item_1,"Your outlet configuration is correct & complete ","Konfigurasi outlet Anda telah benar & complete"
@@ -90,7 +91,6 @@ feature_sales_report.based_on_product,Based on Product,Berdasarkan Produk
 feature_sales_report.see_report_summary,See Report Summary,Lihat Ringkasan Laporan
 feature_sales_report.report_date_1_arg(arg),Report Date: $date_string,Laporan Tanggal: $date_string
 feature_sales_report.report_date_2_args(arg),Report Date: $date_string_1 - $date_string_2,Laporan Tanggal: $date_string_1 - $date_string_2,
-feature_sales_report.oclock(arg),$time_string o'clock,Pukul $time_string
 feature_sales_report.end_time_more_than_start_time,End Time > Start Time,Waktu Selesai > Waktu Mulai
 feature_sales_report.e_journal,E-Journal,E-Journal
 feature_others.setting,Setting,Pengaturan

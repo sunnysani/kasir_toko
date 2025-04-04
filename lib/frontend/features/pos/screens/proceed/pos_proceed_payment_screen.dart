@@ -154,7 +154,7 @@ class _PosProceedPaymentScreenState
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('Total'),
+                  Text(t.total),
                   Text(NumberFormat.currency(
                     symbol: '${InstanceDB.outlet.currency} ',
                     decimalDigits: CommonFunction.determineDecimalCount(

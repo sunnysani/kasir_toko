@@ -53,6 +53,7 @@ class TranslationsId extends Translations {
 	@override String get no => 'Tidak';
 	@override String get print => 'Cetak';
 	@override String get total => 'Total';
+	@override String get summary => 'Ringkasan';
 	@override String get outlet_configuration_complete => ' Konfigurasi Outlet sudah lengkap';
 	@override String get before_opreate_cashier_title => 'Sebelum kamu mengoperasikan kasir, pastikan:';
 	@override String get before_opreate_cashier_item_1 => 'Konfigurasi outlet Anda telah benar & complete';
@@ -162,7 +163,6 @@ class _TranslationsFeatureSalesReportId extends TranslationsFeatureSalesReportEn
 	@override String get see_report_summary => 'Lihat Ringkasan Laporan';
 	@override String report_date_1_arg({required Object date_string}) => 'Laporan Tanggal: ${date_string}';
 	@override String report_date_2_args({required Object date_string_1, required Object date_string_2}) => 'Laporan Tanggal: ${date_string_1} - ${date_string_2}';
-	@override String oclock({required Object time_string}) => 'Pukul ${time_string}';
 	@override String get end_time_more_than_start_time => 'Waktu Selesai > Waktu Mulai';
 	@override String get e_journal => 'E-Journal';
 }
@@ -326,6 +326,7 @@ extension on TranslationsId {
 			case 'no': return 'Tidak';
 			case 'print': return 'Cetak';
 			case 'total': return 'Total';
+			case 'summary': return 'Ringkasan';
 			case 'outlet_configuration_complete': return ' Konfigurasi Outlet sudah lengkap';
 			case 'before_opreate_cashier_title': return 'Sebelum kamu mengoperasikan kasir, pastikan:';
 			case 'before_opreate_cashier_item_1': return 'Konfigurasi outlet Anda telah benar & complete';
@@ -402,7 +403,6 @@ extension on TranslationsId {
 			case 'feature_sales_report.see_report_summary': return 'Lihat Ringkasan Laporan';
 			case 'feature_sales_report.report_date_1_arg': return ({required Object date_string}) => 'Laporan Tanggal: ${date_string}';
 			case 'feature_sales_report.report_date_2_args': return ({required Object date_string_1, required Object date_string_2}) => 'Laporan Tanggal: ${date_string_1} - ${date_string_2}';
-			case 'feature_sales_report.oclock': return ({required Object time_string}) => 'Pukul ${time_string}';
 			case 'feature_sales_report.end_time_more_than_start_time': return 'Waktu Selesai > Waktu Mulai';
 			case 'feature_sales_report.e_journal': return 'E-Journal';
 			case 'feature_others.setting': return 'Pengaturan';

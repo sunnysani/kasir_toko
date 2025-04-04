@@ -54,6 +54,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	String get no => 'No';
 	String get print => 'Print';
 	String get total => 'Total';
+	String get summary => 'Summary';
 	String get outlet_configuration_complete => 'Outlet configuration complete';
 	String get before_opreate_cashier_title => 'Before you operate cashier, make sure:';
 	String get before_opreate_cashier_item_1 => 'Your outlet configuration is correct & complete ';
@@ -163,7 +164,6 @@ class TranslationsFeatureSalesReportEn {
 	String get see_report_summary => 'See Report Summary';
 	String report_date_1_arg({required Object date_string}) => 'Report Date: ${date_string}';
 	String report_date_2_args({required Object date_string_1, required Object date_string_2}) => 'Report Date: ${date_string_1} - ${date_string_2}';
-	String oclock({required Object time_string}) => '${time_string} o\'clock';
 	String get end_time_more_than_start_time => 'End Time > Start Time';
 	String get e_journal => 'E-Journal';
 }
@@ -327,6 +327,7 @@ extension on Translations {
 			case 'no': return 'No';
 			case 'print': return 'Print';
 			case 'total': return 'Total';
+			case 'summary': return 'Summary';
 			case 'outlet_configuration_complete': return 'Outlet configuration complete';
 			case 'before_opreate_cashier_title': return 'Before you operate cashier, make sure:';
 			case 'before_opreate_cashier_item_1': return 'Your outlet configuration is correct & complete ';
@@ -403,7 +404,6 @@ extension on Translations {
 			case 'feature_sales_report.see_report_summary': return 'See Report Summary';
 			case 'feature_sales_report.report_date_1_arg': return ({required Object date_string}) => 'Report Date: ${date_string}';
 			case 'feature_sales_report.report_date_2_args': return ({required Object date_string_1, required Object date_string_2}) => 'Report Date: ${date_string_1} - ${date_string_2}';
-			case 'feature_sales_report.oclock': return ({required Object time_string}) => '${time_string} o\'clock';
 			case 'feature_sales_report.end_time_more_than_start_time': return 'End Time > Start Time';
 			case 'feature_sales_report.e_journal': return 'E-Journal';
 			case 'feature_others.setting': return 'Setting';
