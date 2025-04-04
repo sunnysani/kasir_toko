@@ -14,81 +14,84 @@ class SelectEscPrinterWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-        ),
-        children: [
-          Text(
-            t.esc_strings.paired_devices,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: AppSize.maxWidth),
+      child: Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+          ),
+          children: [
+            Text(
+              t.esc_strings.paired_devices,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 450,
-            child: FutureBuilder(
-                future: PrintBluetoothThermal.pairedBluetooths,
-                builder: (ftrBuilderContext, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 450,
+              child: FutureBuilder(
+                  future: PrintBluetoothThermal.pairedBluetooths,
+                  builder: (ftrBuilderContext, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  if (snapshot.data == null) return const SizedBox();
+                    if (snapshot.data == null) return const SizedBox();
 
-                  return Scrollbar(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (listViewContext, index) {
-                        final item = snapshot.data![index];
+                    return Scrollbar(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (listViewContext, index) {
+                          final item = snapshot.data![index];
 
-                        return ListTile(
-                          onTap: () async {
-                            final connected = await ref
-                                .read(escPrinterProvider.notifier)
-                                .selectDevice(item);
+                          return ListTile(
+                            onTap: () async {
+                              final connected = await ref
+                                  .read(escPrinterProvider.notifier)
+                                  .selectDevice(item);
 
-                            if (connected == false) {
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(listViewContext)
-                                  .showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      t.esc_strings.failed_to_connect_device),
-                                  backgroundColor: AppColors.negativeColor,
-                                ),
-                              );
-                            }
+                              if (connected == false) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(listViewContext)
+                                    .showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        t.esc_strings.failed_to_connect_device),
+                                    backgroundColor: AppColors.negativeColor,
+                                  ),
+                                );
+                              }
 
-                            if (context.mounted && connected) {
-                              context.pop();
-                            }
-                          },
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          title: Text(item.name),
-                          subtitle: Text(item.macAdress),
-                        );
-                      },
-                    ),
-                  );
-                }),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            child: TextButton(
-                onPressed: () => app_settings_lib.AppSettings.openAppSettings(
-                    type: app_settings_lib.AppSettingsType.bluetooth),
-                child: Text(t.esc_strings.cannot_find_device)),
-          ),
-        ],
+                              if (context.mounted && connected) {
+                                context.pop();
+                              }
+                            },
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            title: Text(item.name),
+                            subtitle: Text(item.macAdress),
+                          );
+                        },
+                      ),
+                    );
+                  }),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              child: TextButton(
+                  onPressed: () => app_settings_lib.AppSettings.openAppSettings(
+                      type: app_settings_lib.AppSettingsType.bluetooth),
+                  child: Text(t.esc_strings.cannot_find_device)),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -67,6 +67,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	String get outlet_addess => 'Outlet Address';
 	String get outlet_phone_number => 'Outlet Phone Number';
 	String get outlet_receipt_message => 'Message on Receipt';
+	String get currency_symbol => 'Currency Symbol';
 	String get save_general_information => 'Save General Information';
 	String get configuration_successfully_saved => 'Configuration successfully saved';
 	String get product => 'Product';
@@ -124,9 +125,9 @@ class TranslationsFeaturePosEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get set_store_information_first => 'Please Set Store Information First';
-	String get at_least_1_active_product => 'Please Add At Least 1 Active Product';
-	String get at_least_1_active_payment_method => 'Please Add At Least 1 Active Payment Method';
+	String get set_store_information_first => 'Please set outlet information first';
+	String get at_least_1_active_product => 'Please add at east 1 active Product';
+	String get at_least_1_active_payment_method => 'Please add at east 1 active Payment Method';
 	String get found_with_name_or_code => 'Find by Name or Code';
 	String get proceed_payment => 'Proceed Payment';
 	String total({required Object total}) => 'Total (${total})';
@@ -142,6 +143,7 @@ class TranslationsFeaturePosEn {
 	String get order_finished => 'Order Finished';
 	String get dont_forget_to_print_receipt => 'Don\'t forget to print the receipt';
 	String get print_receipt => 'Print Receipt';
+	String get latest_10_transactions => '10 Latest Transactions';
 }
 
 // Path: feature_sales_report
@@ -342,6 +344,7 @@ extension on Translations {
 			case 'outlet_addess': return 'Outlet Address';
 			case 'outlet_phone_number': return 'Outlet Phone Number';
 			case 'outlet_receipt_message': return 'Message on Receipt';
+			case 'currency_symbol': return 'Currency Symbol';
 			case 'save_general_information': return 'Save General Information';
 			case 'configuration_successfully_saved': return 'Configuration successfully saved';
 			case 'product': return 'Product';
@@ -375,9 +378,9 @@ extension on Translations {
 			case 'feature_welcome.welcome': return 'Welcome';
 			case 'feature_welcome.thank_you_sentence': return 'Hi! Thank you for downloading Tokkoo PoS Lite. We are ready to help you get the best experience. Let\'s get started!';
 			case 'feature_welcome.learn_app_usage': return 'Learn App Usage';
-			case 'feature_pos.set_store_information_first': return 'Please Set Store Information First';
-			case 'feature_pos.at_least_1_active_product': return 'Please Add At Least 1 Active Product';
-			case 'feature_pos.at_least_1_active_payment_method': return 'Please Add At Least 1 Active Payment Method';
+			case 'feature_pos.set_store_information_first': return 'Please set outlet information first';
+			case 'feature_pos.at_least_1_active_product': return 'Please add at east 1 active Product';
+			case 'feature_pos.at_least_1_active_payment_method': return 'Please add at east 1 active Payment Method';
 			case 'feature_pos.found_with_name_or_code': return 'Find by Name or Code';
 			case 'feature_pos.proceed_payment': return 'Proceed Payment';
 			case 'feature_pos.total': return ({required Object total}) => 'Total (${total})';
@@ -393,6 +396,7 @@ extension on Translations {
 			case 'feature_pos.order_finished': return 'Order Finished';
 			case 'feature_pos.dont_forget_to_print_receipt': return 'Don\'t forget to print the receipt';
 			case 'feature_pos.print_receipt': return 'Print Receipt';
+			case 'feature_pos.latest_10_transactions': return '10 Latest Transactions';
 			case 'feature_sales_report.see_report': return 'See Report';
 			case 'feature_sales_report.select_date': return 'Select Date';
 			case 'feature_sales_report.confirm_access_code': return 'Confirm Access Code';

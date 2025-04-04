@@ -27,6 +27,7 @@ outlet_name,Outlet Name,Nama Outlet
 outlet_addess,Outlet Address,Alamat Toko
 outlet_phone_number,Outlet Phone Number,No. Telepon Outlet
 outlet_receipt_message,Message on Receipt,Pesan di Struk
+currency_symbol,Currency Symbol,Simbol Mata Uang
 save_general_information,Save General Information,Simpan Informasi Umum
 configuration_successfully_saved,Configuration successfully saved,Konfigurasi berhasil disimpan
 product,Product,Produk
@@ -60,9 +61,9 @@ equals_amount_spent,Equals Amount Spent,Sama dengan Jumlah yang Dibelanjakan
 feature_welcome.welcome,Welcome,Selamat Datang
 feature_welcome.thank_you_sentence,"Hi! Thank you for downloading Tokkoo PoS Lite. We are ready to help you get the best experience. Let's get started!","Hi! Thank you for downloading Tokkoo PoS Lite. We are ready to help you get the best experience. Let's get started!"
 feature_welcome.learn_app_usage,Learn App Usage,Pelajari Penggunaan Aplikasi
-feature_pos.set_store_information_first,Please Set Store Information First,Silakan Atur Informasi Toko terlebih dahulu
-feature_pos.at_least_1_active_product,Please Add At Least 1 Active Product,Silakan Tambah Minimal 1 Produk Aktif
-feature_pos.at_least_1_active_payment_method,Please Add At Least 1 Active Payment Method,Silakan Tambah Minimal 1 Matode Pembayaran Aktif
+feature_pos.set_store_information_first,Please set outlet information first,Silakan atur informasi outlet terlebih dahulu
+feature_pos.at_least_1_active_product,Please add at east 1 active Product,Silakan tambah minimal 1 Produk aktif
+feature_pos.at_least_1_active_payment_method,Please add at east 1 active Payment Method,Silakan tambah minimal 1 Matode Pembayaran aktif
 feature_pos.found_with_name_or_code,Find by Name or Code,Temukan dengan Nama atau Kode
 feature_pos.proceed_payment,Proceed Payment,Lanjut Pembayaran
 feature_pos.total(arg),Total ($total),Total ($total)
@@ -78,6 +79,7 @@ feature_pos.back_to_cashier_page,"Back to Cashier Page","Kembali ke Halaman Kasi
 feature_pos.order_finished,Order Finished,Pemesanan Selesai
 feature_pos.dont_forget_to_print_receipt,Don't forget to print the receipt,Jangan lupa untuk cetak struk
 feature_pos.print_receipt,Print Receipt,Cetak Struk
+feature_pos.latest_10_transactions,10 Latest Transactions,10 Transaksi Terakhir
 feature_sales_report.see_report,See Report,Lihat Laporan
 feature_sales_report.select_date,Select Date,Pilih Tanggal
 feature_sales_report.confirm_access_code,Confirm Access Code,Konfirmasi Kode Akses

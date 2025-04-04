@@ -6,6 +6,7 @@ class CommonFunction {
     if (outlet.name.isEmpty) return false;
     if (outlet.address.isEmpty) return false;
     if (outlet.phoneNumber.isEmpty) return false;
+    if (outlet.currency.isEmpty) return false;
 
     return true;
   }

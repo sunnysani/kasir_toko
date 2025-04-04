@@ -8,6 +8,7 @@ import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/paym
 import 'package:tokkoo_pos_lite/frontend/features/outlet/screens/management/product/outlet_product_management.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/providers/pos_state.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_bottom_sheet.dart';
+import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_brief_history_dialog.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_categorized_product_list_view.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_filter_drawer.dart';
 import 'package:tokkoo_pos_lite/frontend/features/pos/widgets/pos_product_list_view.dart';
@@ -93,12 +94,16 @@ class PosAppScreen extends ConsumerWidget {
         actions: posInformationState.value!.categoryList.isEmpty
             ? null
             : [
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: IconButton(
-                    icon: const Icon(Icons.filter_alt),
-                    onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
+                IconButton(
+                  icon: const Icon(Icons.history),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => PosBriefHistoryDialog(),
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.filter_alt),
+                  onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
                 )
               ],
       ),

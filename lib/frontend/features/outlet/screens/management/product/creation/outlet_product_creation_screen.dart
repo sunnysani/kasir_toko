@@ -151,7 +151,7 @@ class _OutletProductCreationScreenState
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                               width: 1, color: AppColors.inactiveColor)),
                       child: TextButton(
@@ -169,7 +169,7 @@ class _OutletProductCreationScreenState
                     key: _formMultiSelect,
                     scroll: false,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       border:
                           Border.all(width: 1, color: AppColors.inactiveColor),
                     ),

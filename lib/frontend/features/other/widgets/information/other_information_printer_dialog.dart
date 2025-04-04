@@ -42,7 +42,7 @@ class OtherInformationPrinterDialog extends ConsumerWidget {
     return LayoutMaxWidth(
       child: Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: ListView(
           shrinkWrap: true,

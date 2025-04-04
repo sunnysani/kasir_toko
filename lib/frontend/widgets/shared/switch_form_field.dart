@@ -32,7 +32,7 @@ class _SwitchFormFieldState extends State<SwitchFormField> {
       constraints: const BoxConstraints(maxWidth: 550),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: AppColors.inactiveColor)),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         height: 60,

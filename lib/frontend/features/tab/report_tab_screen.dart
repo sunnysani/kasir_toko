@@ -64,7 +64,7 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
         builder: (ctx) => LayoutMaxWidth(
           child: Dialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               shrinkWrap: true,
@@ -130,7 +130,7 @@ class _ReportTabScreenState extends State<ReportTabScreen> {
               decoration: InputDecoration(
                 labelText: t.feature_sales_report.select_date,
                 disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(color: AppColors.accentColor),
                 ),
               ),

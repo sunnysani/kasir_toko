@@ -66,6 +66,7 @@ class TranslationsId extends Translations {
 	@override String get outlet_addess => 'Alamat Toko';
 	@override String get outlet_phone_number => 'No. Telepon Outlet';
 	@override String get outlet_receipt_message => 'Pesan di Struk';
+	@override String get currency_symbol => 'Simbol Mata Uang';
 	@override String get save_general_information => 'Simpan Informasi Umum';
 	@override String get configuration_successfully_saved => 'Konfigurasi berhasil disimpan';
 	@override String get product => 'Produk';
@@ -123,9 +124,9 @@ class _TranslationsFeaturePosId extends TranslationsFeaturePosEn {
 	final TranslationsId _root; // ignore: unused_field
 
 	// Translations
-	@override String get set_store_information_first => 'Silakan Atur Informasi Toko terlebih dahulu';
-	@override String get at_least_1_active_product => 'Silakan Tambah Minimal 1 Produk Aktif';
-	@override String get at_least_1_active_payment_method => 'Silakan Tambah Minimal 1 Matode Pembayaran Aktif';
+	@override String get set_store_information_first => 'Silakan atur informasi outlet terlebih dahulu';
+	@override String get at_least_1_active_product => 'Silakan tambah minimal 1 Produk aktif';
+	@override String get at_least_1_active_payment_method => 'Silakan tambah minimal 1 Matode Pembayaran aktif';
 	@override String get found_with_name_or_code => 'Temukan dengan Nama atau Kode';
 	@override String get proceed_payment => 'Lanjut Pembayaran';
 	@override String total({required Object total}) => 'Total (${total})';
@@ -141,6 +142,7 @@ class _TranslationsFeaturePosId extends TranslationsFeaturePosEn {
 	@override String get order_finished => 'Pemesanan Selesai';
 	@override String get dont_forget_to_print_receipt => 'Jangan lupa untuk cetak struk';
 	@override String get print_receipt => 'Cetak Struk';
+	@override String get latest_10_transactions => '10 Transaksi Terakhir';
 }
 
 // Path: feature_sales_report
@@ -341,6 +343,7 @@ extension on TranslationsId {
 			case 'outlet_addess': return 'Alamat Toko';
 			case 'outlet_phone_number': return 'No. Telepon Outlet';
 			case 'outlet_receipt_message': return 'Pesan di Struk';
+			case 'currency_symbol': return 'Simbol Mata Uang';
 			case 'save_general_information': return 'Simpan Informasi Umum';
 			case 'configuration_successfully_saved': return 'Konfigurasi berhasil disimpan';
 			case 'product': return 'Produk';
@@ -374,9 +377,9 @@ extension on TranslationsId {
 			case 'feature_welcome.welcome': return 'Selamat Datang';
 			case 'feature_welcome.thank_you_sentence': return 'Hi! Thank you for downloading Tokkoo PoS Lite. We are ready to help you get the best experience. Let\'s get started!';
 			case 'feature_welcome.learn_app_usage': return 'Pelajari Penggunaan Aplikasi';
-			case 'feature_pos.set_store_information_first': return 'Silakan Atur Informasi Toko terlebih dahulu';
-			case 'feature_pos.at_least_1_active_product': return 'Silakan Tambah Minimal 1 Produk Aktif';
-			case 'feature_pos.at_least_1_active_payment_method': return 'Silakan Tambah Minimal 1 Matode Pembayaran Aktif';
+			case 'feature_pos.set_store_information_first': return 'Silakan atur informasi outlet terlebih dahulu';
+			case 'feature_pos.at_least_1_active_product': return 'Silakan tambah minimal 1 Produk aktif';
+			case 'feature_pos.at_least_1_active_payment_method': return 'Silakan tambah minimal 1 Matode Pembayaran aktif';
 			case 'feature_pos.found_with_name_or_code': return 'Temukan dengan Nama atau Kode';
 			case 'feature_pos.proceed_payment': return 'Lanjut Pembayaran';
 			case 'feature_pos.total': return ({required Object total}) => 'Total (${total})';
@@ -392,6 +395,7 @@ extension on TranslationsId {
 			case 'feature_pos.order_finished': return 'Pemesanan Selesai';
 			case 'feature_pos.dont_forget_to_print_receipt': return 'Jangan lupa untuk cetak struk';
 			case 'feature_pos.print_receipt': return 'Cetak Struk';
+			case 'feature_pos.latest_10_transactions': return '10 Transaksi Terakhir';
 			case 'feature_sales_report.see_report': return 'Lihat Laporan';
 			case 'feature_sales_report.select_date': return 'Pilih Tanggal';
 			case 'feature_sales_report.confirm_access_code': return 'Konfirmasi Kode Akses';

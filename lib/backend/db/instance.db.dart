@@ -113,6 +113,7 @@ class InstanceDB extends _$InstanceDB {
     required String address,
     required String phoneNumber,
     required String receiptMessage,
+    required String currencySymbol,
   }) async {
     await (db.update(db.driftEntityOutlet)
           ..where((t) => t.id.equals(outlet.id)))
@@ -123,6 +124,7 @@ class InstanceDB extends _$InstanceDB {
       receiptMessage: Value(
         receiptMessage,
       ),
+      currency: Value(currencySymbol),
     ));
 
     outlet = await (db.select(db.driftEntityOutlet)
@@ -576,6 +578,54 @@ class InstanceDB extends _$InstanceDB {
             t.createdAt.isBetweenValues(startDateTime, endDateTime) &
             t.status.equals(OrderStatus.paid.name));
     }
+
+    final orderRows = await query.get();
+
+    for (final orderRow in orderRows) {
+      List<DriftUsableOrderRowItem> usableOrderRowInsertedItem = [];
+
+      final orderRowItems = await (db.select(db.driftEntityOrderRowItem)
+            ..where((t) => t.orderRow.equals(orderRow.id)))
+          .get();
+      for (final orderRowItem in orderRowItems) {
+        final productRevision = await (db.select(db.driftEntityProductRevision)
+              ..where((t) => t.id.equals(orderRowItem.productRevision)))
+            .getSingle();
+        final product = await (db.select(db.driftEntityProduct)
+              ..where((t) => t.id.equals(productRevision.product)))
+            .getSingle();
+        // Category is not needed, so assign empty list
+        usableOrderRowInsertedItem.add(DriftUsableOrderRowItem(orderRowItem,
+            DriftUsableProductObject(product, productRevision, [])));
+      }
+
+      late final DriftEntityPaymentMethodData? paymentMethod;
+      if (orderRow.paymentMethod == null) {
+        paymentMethod = null;
+      } else {
+        paymentMethod = await (db.select(db.driftEntityPaymentMethod)
+              ..where((t) => t.id.equals(orderRow.paymentMethod!)))
+            .getSingle();
+      }
+
+      retRow.add(DriftUsableOrderRow(
+          orderRow, usableOrderRowInsertedItem, paymentMethod));
+    }
+
+    return retRow;
+  }
+
+  static Future<List<DriftUsableOrderRow>> getLatestOrderRowList(
+      {int limit = 10}) async {
+    final List<DriftUsableOrderRow> retRow = [];
+
+    late final SimpleSelectStatement<$DriftEntityOrderRowTable,
+        DriftEntityOrderRowData> query;
+
+    query = db.select(db.driftEntityOrderRow)
+      ..where((t) => t.status.equals(OrderStatus.paid.name))
+      ..orderBy([(t) => OrderingTerm.desc(t.createdAt)])
+      ..limit(10);
 
     final orderRows = await query.get();
 

@@ -25,7 +25,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         width: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.mainColor),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

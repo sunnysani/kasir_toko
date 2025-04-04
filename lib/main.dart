@@ -100,16 +100,16 @@ class MainWidget extends StatelessWidget {
                 labelStyle: const TextStyle(
                     fontSize: 14, color: AppColors.inactiveColor),
                 enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                     borderSide:
                         const BorderSide(color: AppColors.inactiveColor)),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide:
                       const BorderSide(color: AppColors.mainColor, width: 1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               cardTheme: const CardTheme(
